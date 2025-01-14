@@ -1,11 +1,22 @@
 
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-function App() {
+import theme from "./utils/theme";
+
+import { AppRouter } from "./routes";
+
+import { Box } from "@mui/system";
+
+
+export default function App() {
+
+
   return (
-    <div >
-      <h1> Hello Insight eye  </h1>
-    </div>
+    <ThemeProvider theme={createTheme(theme)}>
+      <Box sx={{ background: "#f6f8f9 " }}>
+        <AppRouter />
+      </Box>
+
+    </ThemeProvider>
   );
 }
-
-export default App;
