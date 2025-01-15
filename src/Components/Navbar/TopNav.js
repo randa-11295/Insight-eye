@@ -32,19 +32,16 @@ const TopNav = (props) => {
   const navStyle = {
     width: { md: `calc(100% - ${props.drawerWidth}px)` },
     m: "auto",
-    background: { md: "#fff" },
-    color: { md: "#000" },
   };
 
   return (
-    <AppBar position="fixed" color="secondary" sx={navStyle}>
+    <AppBar position="fixed"  sx={navStyle}>
       <Toolbar>
         <IconButton
-          color="inherit"
           aria-label="open drawer"
           edge="start"
           onClick={props.openHandel}
-          sx={{ mr: 2, display: { md: "none" } }}
+          sx={{ display: { md: "none" } }}
         >
           <MenuIcon />
         </IconButton>

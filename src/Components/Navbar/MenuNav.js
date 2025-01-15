@@ -72,8 +72,7 @@ export default function MenuNav(props) {
 }
 
 const iconStyle = {
-  bgcolor: { xs: "#fff", md: "secondary.main" },
-  color: { xs: "secondary.main", md: "#fff" },
+
   width: 35,
   height: 35,
   textTransform: "uppercase",

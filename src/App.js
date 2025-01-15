@@ -1,5 +1,5 @@
 
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 
 import theme from "./utils/theme";
 
@@ -12,8 +12,8 @@ export default function App() {
 
 
   return (
-    <ThemeProvider theme={createTheme(theme)}>
-      <Box sx={{ background: "#f6f8f9 " }}>
+    <ThemeProvider theme={theme}>
+      <Box >
         <AppRouter />
       </Box>
 

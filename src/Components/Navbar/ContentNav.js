@@ -24,8 +24,6 @@ const ContentNav = (props) => {
 
 
   const listStyle = (url, path) => ({
-    background: url === path ? "white" : "inherit",
-    color: url === path ? "secondary.main" : "inherit",
     borderRadius: 2,
   });
 
@@ -40,14 +38,12 @@ const ContentNav = (props) => {
   };
   return (
     <Box sx={boxStyle}>
-      <Toolbar sx={logoStyle} onClick={openInNewTab}></Toolbar>
+      <Toolbar sx={logoStyle} onClick={openInNewTab}>test</Toolbar>
       {navbarContentArr.map((navGroup, indx) => (
         <Box px={1} key={uuid()}>
           <List
             sx={{
               py: 1,
-              borderBottom: indx === navbarContentArr.length - 1 ? 0 : 1,
-              borderColor: "#CCCECF",
             }}
           >
             {navGroup.map((el) => (
@@ -87,13 +83,11 @@ const logoStyle = {
   backgroundSize: "contain",
   backgroundRepeat: "no-repeat",
   backgroundPosition: "center",
-  backgroundColor: "red",
   cursor: "pointer",
+  background : "red", 
 };
 
 const boxStyle = {
-  bgcolor: "secondary.main",
-  color: "#fff",
   height: "100vh",
   overflow: "auto",
 };
