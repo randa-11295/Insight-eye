@@ -39,7 +39,5 @@ const BoxStyle = {
   flexGrow: 1,
   p: 3,
   m :" 80px 20px 30px 20px",
-  background: "green" ,
   width: { xs: "100vw", md: `calc(100% - ${drawerWidth}px)` },
-border : "10px solid red"
 };

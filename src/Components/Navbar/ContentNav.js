@@ -80,11 +80,9 @@ export default ContentNav;
 
 const logoStyle = {
 
-  backgroundSize: "contain",
-  backgroundRepeat: "no-repeat",
-  backgroundPosition: "center",
+
   cursor: "pointer",
-  background : "red", 
+
 };
 
 const boxStyle = {
