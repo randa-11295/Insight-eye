@@ -5,7 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import HomePage from "../Pages/Home";
-
+import Dashboard from "../Pages/Dashboard";
 
 export const AppRouter = () => {
 
@@ -13,11 +13,9 @@ export const AppRouter = () => {
     <Router>
       <Routes>
         <Route path="" element={<HomePage />}>
-          <Route path="/" element={<h1>home</h1>} />
-          <Route path="/test" element={<h1>test</h1>} />
-
-
-
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/stream" element={<h1>Stream</h1>} />
+          <Route path="/search" element={<h1>search</h1>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Route>
       </Routes>

@@ -1,7 +1,6 @@
 import Toolbar from "@mui/material/Toolbar";
 import { navbarContentArr } from "../../utils/StaticVariables";
-
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
   List,
@@ -12,10 +11,14 @@ import {
 } from "@mui/material";
 import { v4 as uuid } from "uuid";
 import logoImg from "../../Images/logo.png"
+
 const ContentNav = (props) => {
-  let location = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-
+  const changeRouteHandel = (url) => {
+    url ? navigate(url) : alert("log out ")
+  }
 
   const listStyle = (url, path) => ({
     borderRadius: 2,
@@ -28,7 +31,7 @@ const ContentNav = (props) => {
   return (
     <Box sx={boxStyle}>
       <Toolbar sx={logoStyle} onClick={() => { console.log("logo") }}>
-        <img src={logoImg} alt="logo"  style={{width : "75%" , margin : " 10px auto"}}
+        <img src={logoImg} alt="logo" style={{ width: "75%", margin: " 10px auto" }}
         /></Toolbar>
       {navbarContentArr.map((el) => (
         <Box px={1} key={uuid()} >
@@ -39,8 +42,7 @@ const ContentNav = (props) => {
               key={el.url}
               disablePadding
               onClick={() => {
-                // changeRouteHandel(el.url);
-                console.log(el.url);
+                changeRouteHandel(el.url);
               }}
             >
               <ListItemButton
