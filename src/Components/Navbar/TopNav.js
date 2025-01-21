@@ -24,7 +24,7 @@ const TopNav = (props) => {
       (`${newRoute}`)
       );
     } else {
-      setRoute("home");
+      setRoute("Dashboard");
     }
 
   }, [location.pathname]);

@@ -1,7 +1,12 @@
+import { Box } from "@mui/material"
 const Dashboard = () => {
-    return (<h2>
-        Dashboard
-    </h2>)
+    return (
+        <Box >
+            <h2>
+                Dashboard
+            </h2>
+        </Box>
+    )
 }
 
 export default Dashboard 
