@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-// import ContentNav from "./ContentNav";
+import ContentNav from "./ContentNav";
 
 const SideNav = (props) => {
 
@@ -23,10 +23,12 @@ const SideNav = (props) => {
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             width: props.drawerWidth,
+            
+
           },
         }}
       >
-        {/* <ContentNav mob  openHandel={props.openHandel}/> */} test
+        <ContentNav mob  openHandel={props.openHandel}/> 
       </Drawer>
 
       <Drawer
@@ -37,11 +39,13 @@ const SideNav = (props) => {
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             width: props.drawerWidth,
+           
+
           },
         }}
         open
       >
-        {/* <ContentNav /> */}
+        <ContentNav />
       </Drawer>
     </Box>
   );
