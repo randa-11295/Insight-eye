@@ -11,7 +11,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { v4 as uuid } from "uuid";
-
+import logoImg from "../../Images/logo.png"
 const ContentNav = (props) => {
   let location = useLocation();
 
@@ -27,7 +27,9 @@ const ContentNav = (props) => {
 
   return (
     <Box sx={boxStyle}>
-      <Toolbar sx={logoStyle} onClick={() => { console.log("logo") }}>test</Toolbar>
+      <Toolbar sx={logoStyle} onClick={() => { console.log("logo") }}>
+        <img src={logoImg} alt="logo"  style={{width : "75%" , margin : " 10px auto"}}
+        /></Toolbar>
       {navbarContentArr.map((el) => (
         <Box px={1} key={uuid()} >
           <List   >
