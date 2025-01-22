@@ -4,14 +4,12 @@ const theme = createTheme({
     palette: {
         mode: 'dark',
         primary: {
-            main: '#36938d', // Your preferred teal color
+            main: '#36938d', 
         },
         secondary: {
-            main: '#F69722', // Your preferred dark blue
+            main: '#F69722', 
         },
-
     },
 });
 
 export default theme;
-// 
