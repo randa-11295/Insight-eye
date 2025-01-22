@@ -32,6 +32,7 @@ const TopNav = (props) => {
   const navStyle = {
     width: { md: `calc(100% - ${props.drawerWidth}px)` },
     m: "auto",
+    background :"#121212"
   };
 
   return (
