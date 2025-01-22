@@ -1,11 +1,13 @@
-import { Box } from "@mui/material"
+import Holder from "../Components/HOC/Holder"
 const Dashboard = () => {
     return (
-        <Box >
-            <h2>
-                Dashboard
-            </h2>
-        </Box>
+        <>
+            < Holder>
+                <p>
+                    hi Dashboard
+                </p>
+            </Holder>
+        </>
     )
 }
 

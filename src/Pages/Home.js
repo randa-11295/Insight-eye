@@ -37,6 +37,6 @@ export default Home;
 
 const BoxStyle = {
   flexGrow: 1,
-  px: 3,
+  p: 3,
   width: { xs: "100vw", md: `calc(100% - ${drawerWidth}px)` },
 };
