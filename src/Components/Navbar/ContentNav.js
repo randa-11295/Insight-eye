@@ -21,7 +21,7 @@ const ContentNav = (props) => {
   }
 
   const listStyle = (url, path) => ({
-    borderRadius: 2,
+    borderRadius: 2,    
     bgcolor: url === path && "primary.main",
     overflow: "hidden",
   });
