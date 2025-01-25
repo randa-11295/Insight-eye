@@ -13,8 +13,8 @@ export const navbarContentArr = [
     icon: <DashboardOutlinedIcon sx={{ marginLeft: " auto" }} />,
   },
   {
-    text: "Stream",
-    url: "/stream",
+    text: "Streams",
+    url: "/streams",
     icon: <LiveTvOutlinedIcon sx={{ marginLeft: " auto" }} />,
   },
   {

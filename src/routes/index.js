@@ -14,7 +14,10 @@ export const AppRouter = () => {
       <Routes>
         <Route path="" element={<HomePage />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/stream" element={<Stream />} />
+          <Route path="/streams" element={<Stream />} >
+          {/* Nested Route for Add Product */}
+          <Route path="add-product" element={<h1>test</h1>} />
+        </Route>
           <Route path="/search" element={<h1>search</h1>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Route>
