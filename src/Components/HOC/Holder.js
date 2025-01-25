@@ -1,11 +1,15 @@
-import { Paper, Typography } from "@mui/material"
+import { Paper, Typography, Stack } from "@mui/material"
 
-const Holder = ({ children, title }) => (
+const Holder = ({ children, title, action }) => (
 
     <Paper sx={{ padding: "1rem", background: "#121212" }} elevation={3} >
-        {title && <Typography pb={2} fontWeight={800} fontSize={23} textTransform="capitalize">
-            {title}
-        </Typography>}
+        <Stack direction="row" justifyContent="space-between" alignItems="center" >
+
+            {title && <Typography pb={2} fontWeight={800} fontSize={23} textTransform="capitalize">
+                {title}
+            </Typography>}
+            {action}
+        </Stack>
         {children}
     </Paper>
 )
