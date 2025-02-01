@@ -3,22 +3,20 @@ import Holder from "../../Components/HOC/Holder";
 import { Box } from "@mui/system";
 import CustomBtn from "../../Components/Reusable/CustomBtn";
 import { useNavigate } from "react-router-dom";
+import StreamTable from "../../Components/Stream/StreamTable"
 
-const Streams= () => {
+const Streams = () => {
     const navigate = useNavigate();
 
     return (
-        <Holder 
-            title="All Streams" 
+        <Holder
+            title="All Streams"
             action={
-                <CustomBtn 
-                    text="Add New Stream" 
-                    handle={() => navigate("/streams/add-stream")} 
-                />
-            }
-        >
-            <Box sx={{ height: '250px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                Test stream
+                <CustomBtn handle={() => navigate("/streams/add-stream")}
+                > Add New Stream</CustomBtn>
+            } >
+            <Box mt={2}>
+                <StreamTable />
             </Box>
         </Holder>
     );
