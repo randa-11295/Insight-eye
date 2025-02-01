@@ -1,38 +1,26 @@
-import { TextField, MenuItem, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { TextField, MenuItem, Typography ,Box} from "@mui/material";
 
 export default function SelectCustom(props) {
-
-  const [val, setVal] = useState(false);
-
-  const updateValueHandel = (newVal) => {
-    setVal(newVal);
-    props.changeHandle(newVal);
-  };
-
-  useEffect(() => {
-    updateValueHandel(props?.arr[0]?.val || props?.arr[0]?.code || props?.arr[0]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.arr]);
-
   return (
-    <TextField
-      sx={ItemStyle}
-      select
-      size={props.small && "small"}
-      value={val}
-      label={props?.label}
-      fullWidth
-      onChange={(e) => {
-        updateValueHandel(e.target.value);
-      }}
+    <Box>
+         <Typography
+      
+      variant="h6"
+      sx={{ fontSize: ".9rem", fontWeight: 600 , mb:1 }}
     >
+      {props.label} : 
+    </Typography>
+    
+    <TextField
+      select
+      value={props.formik?.values[props.name]}
+      fullWidth
+      onChange={props.formik?.handleChange}    >
       {props.arr && props.arr?.map((option) => {
         return (
           <MenuItem
             key={option.val || option}
             value={option.val || option}
-            sx={ItemStyle}
           >
             <Typography noWrap>
               {option.label || option}
@@ -41,8 +29,6 @@ export default function SelectCustom(props) {
         );
       })}
     </TextField>
+    </Box>
   );
 }
-const ItemStyle = {
-  background: "white",
-};

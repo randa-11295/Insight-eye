@@ -14,25 +14,24 @@ const AddStream = () => {
     const formik = useFormik({
 
         initialValues: {
-          name: "",
-          path: "",
-          type: "",
+            name: "",
+            src: "",
+            type: "1",
         },
         // validationSchema: addStreamSchema,
         onSubmit: (values) => {
-         console.log(values);
+            console.log(values);
         },
-      });
-      
+    });
+
     return (
         <Holder>
             <Box >
-                <InputTextCustom name="name" label="Name" placeholder="add your Stream Name" formik={formik} />
-                <InputTextCustom />
-                <InputTextCustom />
-                {/* <SelectCustom /> */}
-                <Stack alignItems="center" justifyContent="space-between" direction="row" >
-                    <CustomBtn isLined handle={()=>navigate("/streams")}>
+                <InputTextCustom formik={formik} name="name" label="Name" placeholder="add your Stream Name" />
+                <InputTextCustom formik={formik} name="src" label="Source" placeholder="add Stream Source or Stream Path" />
+                <SelectCustom formik={formik} arr={["1", "2", "3"]} name="type" label="type" />
+                <Stack alignItems="center" justifyContent="space-between" direction="row" mt={4}>
+                    <CustomBtn isLined handle={() => navigate("/streams")}>
                         Back
                     </CustomBtn>
 
