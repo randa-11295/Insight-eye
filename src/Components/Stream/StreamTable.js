@@ -28,8 +28,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function StreamTable({ data }) {
   return (
-    <TableContainer >[]
-      <Table sx={{ minWidth: 700, "& *": { textAlign: "center" } }}>
+    <TableContainer >
+      <Table sx={{ minWidth: 700 }}>
         <TableHead>
           <TableRow >
             <StyledTableCell >order</StyledTableCell>
