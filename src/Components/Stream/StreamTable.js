@@ -26,32 +26,24 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-
-const rows = [
-  { name: 'women section', id: 1, type: "tesst", path: "https://service.women.gov.eg" },
-  { name: 'men section', id: 2, type: "tesst", path: "https://service.men.gov.eg"},
-  { name: 'children section', id: 3, type: "tesst", path: "https://service.children.gov.eg" },
-
-];
-
-export default function CustomizedTables() {
+export default function StreamTable({data}) {
   return (
     <TableContainer >
       <Table sx={{ minWidth: 700 }}>
         <TableHead>
           <TableRow>
-            <StyledTableCell >id</StyledTableCell>
+            <StyledTableCell >order</StyledTableCell>
             <StyledTableCell >name</StyledTableCell>
             <StyledTableCell >type</StyledTableCell>
             <StyledTableCell >path</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {data?.map((row , indx) => (
             <StyledTableRow key={row.name}>
               <StyledTableCell component="th" scope="row" >
               <Checkbox  defaultChecked />
-                {row.id}</StyledTableCell>
+                {indx + 1}</StyledTableCell>
               <StyledTableCell  >
                 {row.name}
               </StyledTableCell>
