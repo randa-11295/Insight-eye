@@ -12,7 +12,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
   },
- 
+
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -26,29 +26,29 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-export default function StreamTable({data}) {
+export default function StreamTable({ data }) {
   return (
-    <TableContainer >
-      <Table sx={{ minWidth: 700 }}>
+    <TableContainer >[]
+      <Table sx={{ minWidth: 700, "& *": { textAlign: "center" } }}>
         <TableHead>
-          <TableRow>
+          <TableRow >
             <StyledTableCell >order</StyledTableCell>
-            <StyledTableCell >name</StyledTableCell>
-            <StyledTableCell >type</StyledTableCell>
-            <StyledTableCell >path</StyledTableCell>
+            <StyledTableCell align="center">name</StyledTableCell>
+            <StyledTableCell align="center">type</StyledTableCell>
+            <StyledTableCell align="center">path</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data?.map((row , indx) => (
+          {data?.map((row, indx) => (
             <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row" >
-              <Checkbox  defaultChecked />
+              <StyledTableCell component="th" scope="row"  >
+                <Checkbox defaultChecked />
                 {indx + 1}</StyledTableCell>
-              <StyledTableCell  >
+              <StyledTableCell align="center" >
                 {row.name}
               </StyledTableCell>
-              <StyledTableCell >{row.type}</StyledTableCell>
-              <StyledTableCell >{row.path}</StyledTableCell>
+              <StyledTableCell align="center">{row.type}</StyledTableCell>
+              <StyledTableCell align="center">{row.path}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
