@@ -89,7 +89,7 @@ const Streams = () => {
                 <Stack direction="row" gap={2}>
                     <CustomBtn isLined handle={() => navigate("/streams/add-stream")}
                     > Update</CustomBtn>
-                    <CustomBtn handle={() => navigate("/streams/add-stream")}
+                    <CustomBtn handle={() => navigate("/streams/show-streams")}
                     > Show Stream</CustomBtn>
                 </Stack>
             </Stack>
