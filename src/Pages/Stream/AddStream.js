@@ -26,9 +26,6 @@ const AddStream = () => {
             console.log(values);
             axios.post(baseURL + "/stream", {
                 ...values,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
             })
                 .then(response => {
                     console.log(response.data)

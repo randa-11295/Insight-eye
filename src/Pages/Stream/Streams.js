@@ -24,11 +24,7 @@ const Streams = () => {
     }
 
     const getAllStreams = () => {
-        axios.get(baseURL + "/stream", {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
+        axios.get(baseURL + "/stream",)
             .then(response => {
                 console.log(response.data)
                 setData(response.data);
@@ -51,10 +47,7 @@ const Streams = () => {
         console.log(selectedIDs)
 
         axios.delete(baseURL + "/stream", {
-            data: { ids: selectedIDs },
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            data: { ids: selectedIDs }
         })
             .then(response => {
                 getAllStreams()
