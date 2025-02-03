@@ -1,57 +1,48 @@
-import { useEffect, forwardRef } from "react";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
 import Snackbar from "@mui/material/Snackbar";
-// import { hiddenNotificationHandel } from "../../Redux/sliceReducers/notificationsSlice";
 import MuiAlert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
+import { snackAlertState } from "../../Recoil/RecoilState"; // Import Recoil state
 
 function Transition(props) {
-
   return <Slide {...props} direction="left" />;
 }
 
-const Alert = forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
 export default function SnackAlert() {
+  const [snackState, setSnackState] = useRecoilState(snackAlertState);
 
   useEffect(() => {
-    if (true) {
+    if (snackState.open) {
       setTimeout(() => {
         handleClose();
       }, 4000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [snackState.open]);
 
   const handleClose = () => {
-    // dispatch(hiddenNotificationHandel());
+    setSnackState((prev) => ({ ...prev, open: false }));
   };
 
   return (
-    <div>
-      <Snackbar
-        open={true}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-
-        sx={{ width: { md: "300px" } }}
-        TransitionComponent={Transition}
+    <Snackbar
+      open={snackState.open}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+      sx={{ width: { md: "300px" } }}
+      TransitionComponent={Transition}
+    >
+      <MuiAlert
+        severity={snackState.severity}
+        sx={{ width: "100%" }}
+        onClose={handleClose}
+        variant="filled"
       >
-        <Alert
-          // severity={snackAlertState.val?.variant || "success"}
-          severity={"success"}
-          sx={{ width: "100%" }}
-          onClose={handleClose}
-        >
-          {
-            // getContentText(snackAlertState.val?.msg.trim())
-            //  ||
-            " every thing is okay"}
-        </Alert>
-      </Snackbar>
-    </div>
+        {snackState.message || "Everything is okay"}
+      </MuiAlert>
+    </Snackbar>
   );
 }

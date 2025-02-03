@@ -9,6 +9,8 @@ import { useFormik } from "formik";
 import { addStreamSchema } from "../../utils/validationSchema";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
+import { snackAlertState } from "../../Recoil/RecoilState";
+import { useSetRecoilState } from "recoil";
 
 const AddStream = () => {
     const [loading, setLoading] = useState(true);
@@ -30,15 +32,34 @@ const AddStream = () => {
                 .then(response => {
                     console.log(response.data)
                     setLoading(false);
+                    showSuccess()
                 })
                 .catch(error => {
                     setError(error);
                     setLoading(false);
+                    showError()
                 });
         },
     });
 
 
+      const setSnackAlert = useSetRecoilState(snackAlertState);
+    
+      const showSuccess = () => {
+        setSnackAlert({
+          open: true,
+          message: "Operation successful!",
+          severity: "success",
+        });
+      };
+    
+      const showError = () => {
+        setSnackAlert({
+          open: true,
+          message: "Something went wrong!",
+          severity: "error",
+        });
+      };
     return (
         <Holder>
             <Box >
