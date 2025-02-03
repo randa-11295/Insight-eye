@@ -22,7 +22,7 @@ const AddStream = () => {
             path: "",
             type: "test",
         },
-        // validationSchema: addStreamSchema,
+        validationSchema: addStreamSchema,
         onSubmit: (values) => {
             setLoading(true);
             
