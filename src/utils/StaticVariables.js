@@ -44,7 +44,7 @@ export const navbarContentArr = [
 ];
 
 
-export const baseURL = "http://16.170.216.227/"
+export const baseURL = "http://16.170.216.227"
 
 
 //* apis links

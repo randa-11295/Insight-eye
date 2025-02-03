@@ -26,10 +26,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-export default function StreamTable({ data }) {
+export default function StreamTable({ data, handelChangeSelect }) {
   return (
     <TableContainer >
-      <Table sx={{ minWidth: 700 }}>
+      <Table sx={{ minWidth: 500 }}>
         <TableHead>
           <TableRow >
             <StyledTableCell >order</StyledTableCell>
@@ -40,9 +40,9 @@ export default function StreamTable({ data }) {
         </TableHead>
         <TableBody>
           {data?.map((row, indx) => (
-            <StyledTableRow key={row.name}>
+            <StyledTableRow key={row.id}>
               <StyledTableCell component="th" scope="row"  >
-                <Checkbox defaultChecked />
+                <Checkbox onChange={() => { handelChangeSelect(row) }} />
                 {indx + 1}</StyledTableCell>
               <StyledTableCell align="center" >
                 {row.name}

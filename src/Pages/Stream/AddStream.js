@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import Holder from "../../Components/HOC/Holder";
 import { Box, Stack } from "@mui/system";
 import CustomBtn from "../../Components/Reusable/CustomBtn";
@@ -7,29 +7,47 @@ import { useNavigate } from "react-router-dom";
 import InputTextCustom from "../../Components/Inputs/InputTextCustom";
 import { useFormik } from "formik";
 import { addStreamSchema } from "../../utils/validationSchema";
+import axios from "axios";
+import { baseURL } from "../../utils/StaticVariables";
 
 const AddStream = () => {
-    
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
     const formik = useFormik({
 
         initialValues: {
             name: "",
-            src: "",
-            type: "1",
+            path: "",
+            type: "test",
         },
         // validationSchema: addStreamSchema,
         onSubmit: (values) => {
             console.log(values);
+            axios.post(baseURL + "/stream", {
+                ...values,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(response => {
+                    console.log(response.data)
+                    setLoading(false);
+                })
+                .catch(error => {
+                    setError(error);
+                    setLoading(false);
+                });
         },
     });
+
 
     return (
         <Holder>
             <Box >
                 <InputTextCustom formik={formik} name="name" label="Name" placeholder="add your Stream Name" />
-                <InputTextCustom formik={formik} name="src" label="Source" placeholder="add Stream Source or Stream Path" />
-                <SelectCustom formik={formik} arr={["1", "2", "3"]} name="type" label="type" />
+                <InputTextCustom formik={formik} name="path" label="Source" placeholder="add Stream Source or Stream Path" />
+                <SelectCustom formik={formik} arr={["test", "hi", "here"]} name="type" label="type" />
                 <Stack alignItems="center" justifyContent="space-between" direction="row" mt={4}>
                     <CustomBtn isLined handle={() => navigate("/streams")}>
                         Back
