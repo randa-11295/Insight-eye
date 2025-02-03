@@ -11,10 +11,9 @@ import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
-
+import LoadBtn from "../../Components/Reusable/LoadBtn";
 const AddStream = () => {
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const formik = useFormik({
 
@@ -25,7 +24,8 @@ const AddStream = () => {
         },
         // validationSchema: addStreamSchema,
         onSubmit: (values) => {
-            console.log(values);
+            setLoading(true);
+            
             axios.post(baseURL + "/stream", {
                 ...values,
             })
@@ -35,7 +35,6 @@ const AddStream = () => {
                     showSuccess()
                 })
                 .catch(error => {
-                    setError(error);
                     setLoading(false);
                     showError()
                 });
@@ -75,9 +74,8 @@ const AddStream = () => {
                         <CustomBtn isLined handle={formik.handleReset}>
                             Clear
                         </CustomBtn>
-                        <CustomBtn handle={formik.handleSubmit}>
-                            Conform
-                        </CustomBtn>
+                       < LoadBtn loading={loading} handle={formik.handleSubmit} />
+                      
                     </Stack>
 
                 </Stack>
