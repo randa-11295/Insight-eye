@@ -21,9 +21,9 @@ const Streams = () => {
         const isInSelectedData = selectedData.find(el => selectedNewData.id === el.id); // Returns 30
 
         !isInSelectedData ? setSelectedData([...selectedData, selectedNewData]) : setSelectedData(selectedData.filter(el => selectedNewData.id !== el.id))
-        console.log(isInSelectedData, selectedNewData)
     }
-    useEffect(() => {
+
+    const getAllStreams = () => {
         axios.get(baseURL + "/stream", {
             headers: {
                 'Content-Type': 'application/json'
@@ -38,8 +38,36 @@ const Streams = () => {
                 setError(error);
                 setLoading(false);
             });
+    }
+    useEffect(() => {
+        getAllStreams()
+
     }, []);
 
+
+
+    const handelDeleteStream = () => {
+        const selectedIDs = selectedData.map(el => el.id)
+        console.log(selectedIDs)
+
+        axios.delete(baseURL + "/stream", {
+            data: { ids: selectedIDs },
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                getAllStreams()
+                setSelectedData()
+                // setLoading(false);
+            })
+            .catch(error => {
+                console.log(error)
+                // setError(error);
+                // setLoading(false);
+            });
+
+    }
     return (
         <Holder
             title="All Streams"
@@ -50,7 +78,7 @@ const Streams = () => {
                 <StreamTable handelChangeSelect={changeSelectDataRow} data={data} />
             </Box>
             <Stack direction="row" justifyContent="space-between" gap={2}>
-                <CustomBtn color="error" isLined handle={() => navigate("/streams/add-stream")}
+                <CustomBtn color="error" isLined handle={handelDeleteStream}
                 > Delete </CustomBtn>
                 <Stack direction="row" gap={2}>
                     <CustomBtn isLined handle={() => navigate("/streams/add-stream")}
