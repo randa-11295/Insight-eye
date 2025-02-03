@@ -4,6 +4,7 @@ import Toolbar from "@mui/material/Toolbar";
 import TopNav from "../Components/Navbar/TopNav";
 import SideNav from "../Components/Navbar/SideNav";
 import { Outlet } from "react-router-dom";
+import SnackAlert from "../Components/PopUp/SnackAlert";
 
 const drawerWidth = 280;
 
@@ -28,7 +29,9 @@ function Home() {
 
       <Box component="main" sx={BoxStyle}>
         <Toolbar />
-        <Outlet />      </Box>
+        <Outlet />   
+           </Box>
+           <SnackAlert />
     </Box>
   );
 }
