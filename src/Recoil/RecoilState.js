@@ -8,3 +8,17 @@ export const snackAlertState = atom({
     severity: "success", // success, error, warning, info
   },
 });
+
+
+
+
+export const popupState = atom({
+  key: "popupState",
+  default: {
+    isOpen: false,
+    title: "",
+    content: null,
+    clearHandel: null,
+    sendReq: null,
+  },
+});

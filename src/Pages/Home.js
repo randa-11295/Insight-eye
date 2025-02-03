@@ -5,7 +5,7 @@ import TopNav from "../Components/Navbar/TopNav";
 import SideNav from "../Components/Navbar/SideNav";
 import { Outlet } from "react-router-dom";
 import SnackAlert from "../Components/PopUp/SnackAlert";
-
+import PopUpReusable from "../Components/PopUp/PopUpReusable"
 const drawerWidth = 280;
 
 function Home() {
@@ -32,6 +32,7 @@ function Home() {
         <Outlet />   
            </Box>
            <SnackAlert />
+           <PopUpReusable />
     </Box>
   );
 }

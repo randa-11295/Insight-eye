@@ -9,19 +9,19 @@ import {
   Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import DesBtn from "../Inputs/DesBtn";
-import useContentHook from "../../hooks/useContentHook";
+// import DesBtn from "../Inputs/DesBtn";
+import { useRecoilState } from "recoil";
+import { popupState } from "../../Recoil/RecoilState";
 
-export default function ReusablePopUp(props) {
-  const { getContentText } = useContentHook();
+export default function PopUpReusable() {
+  const [popup, setPopup] = useRecoilState(popupState);
+
+  const handleClose = () => {
+    setPopup({ ...popup, isOpen: false });
+  };
 
   return (
-    <Dialog
-      open={props?.isOpen}
-      onClose={props?.handleClose}
-      fullWidth
-      maxWidth={"md"}
-    >
+    <Dialog open={popup.isOpen} onClose={handleClose} fullWidth maxWidth="sm">
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -38,47 +38,47 @@ export default function ReusablePopUp(props) {
             width: "calc(100% - 100px)",
           }}
         >
-          {props.title}
+          {popup.title}
         </DialogTitle>
-        <DesBtn
-          fun={props.handleClose}
-          close
-          text={getContentText("popUp_cancel")}
-        >
+        {/* <DesBtn fun={handleClose} close text={getContentText("popUp_cancel")}>
           <CloseIcon />
-        </DesBtn>
+        </DesBtn> */}
       </Stack>
 
       <Divider sx={{ mb: 1 }} />
-      <DialogContent>{props.children}</DialogContent>
+      <DialogContent>{popup.content}</DialogContent>
       <Divider sx={{ pt: 1 }} />
       <DialogActions
         sx={{
           px: 3,
           py: 2,
           m: 0,
-          justifyContent: props.clearHandel && "space-between",
+          justifyContent: popup.clearHandel && "space-between",
         }}
       >
-        {props.clearHandel && (
-          <Button onClick={props.clearHandel}>
-            <Box component="span">{getContentText("popUp_clear")}</Box>
+        {popup.clearHandel && (
+          <Button onClick={popup.clearHandel}>
+            <Box component="span">{"clear"}</Box>
           </Button>
         )}
 
         <div>
-          {props.sendReq && (
+          <Button onClick={handleClose} variant="outlined">
+            cancel
+          </Button>
+          {popup.sendReq && (
             <Button
-              onClick={props.sendReq}
+              onClick={() => {
+                popup.sendReq()
+                handleClose()
+              }}
               variant="contained"
               sx={{ boxShadow: "none", mx: 1 }}
             >
-              {getContentText("popUp_save")}
+              yes, I`m sure
             </Button>
           )}
-          <Button onClick={props.handleClose} variant="outlined">
-            {getContentText("popUp_cancel")}
-          </Button>
+
         </div>
       </DialogActions>
     </Dialog>

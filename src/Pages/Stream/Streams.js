@@ -7,6 +7,8 @@ import StreamTable from "../../Components/Stream/StreamTable"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
+import { useSetRecoilState } from "recoil";
+import { popupState } from "../../Recoil/RecoilState";
 
 const Streams = () => {
 
@@ -15,7 +17,7 @@ const Streams = () => {
     const [selectedData, setSelectedData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const setPopup = useSetRecoilState(popupState);
 
     const changeSelectDataRow = (selectedNewData) => {
         const isInSelectedData = selectedData.find(el => selectedNewData.id === el.id); // Returns 30
@@ -41,10 +43,12 @@ const Streams = () => {
     }, []);
 
 
+ 
 
-    const handelDeleteStream = () => {
+    const handelDeleteReqFromApi = () => {
         const selectedIDs = selectedData.map(el => el.id)
         console.log(selectedIDs)
+
 
         axios.delete(baseURL + "/stream", {
             data: { ids: selectedIDs }
@@ -52,6 +56,7 @@ const Streams = () => {
             .then(response => {
                 getAllStreams()
                 setSelectedData()
+                
                 // setLoading(false);
             })
             .catch(error => {
@@ -61,6 +66,14 @@ const Streams = () => {
             });
 
     }
+    const openPopup = () => {
+        setPopup({
+            isOpen: true,
+            title: "remove Stream",
+            content: "are  you sure",
+            sendReq:handelDeleteReqFromApi,
+        });
+    };
     return (
         <Holder
             title="All Streams"
@@ -71,7 +84,7 @@ const Streams = () => {
                 <StreamTable handelChangeSelect={changeSelectDataRow} data={data} />
             </Box>
             <Stack direction="row" justifyContent="space-between" gap={2}>
-                <CustomBtn color="error" isLined handle={handelDeleteStream}
+                <CustomBtn color="error" isLined handle={openPopup}
                 > Delete </CustomBtn>
                 <Stack direction="row" gap={2}>
                     <CustomBtn isLined handle={() => navigate("/streams/add-stream")}
