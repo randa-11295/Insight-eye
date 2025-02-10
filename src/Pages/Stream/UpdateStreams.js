@@ -16,11 +16,12 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { selectedStreamState } from "../../Recoil/RecoilState"
 import { useRecoilState } from "recoil";
-
-
+import { baseURL } from '../../utils/StaticVariables';
+import axios from 'axios';
 
 
 const validationSchema = yup.object({
+  
   streams: yup.array().of(
     yup.object({
       id: yup.string().required(),
@@ -48,6 +49,22 @@ export default function UpdateStreams({
     onSubmit: (values) => {
       console.log("original",selectedData);
       console.log("update",values.streams);
+      console.log("sperate",{...values});
+
+      axios.put(baseURL + "/stream", 
+        values.streams,
+    )
+        .then(response => {
+            formik.handleReset()
+            // setLoading(false);
+            // showSuccess()
+        })
+        .catch(error => {
+            // setLoading(false);
+            // showError()
+        });
+
+      
     },
   });
 
