@@ -90,7 +90,7 @@ const Streams = () => {
                     <CustomBtn 
                         disable={selectedData?.length < 1} 
                         isLined 
-                        handle={() => navigate("/streams/add-stream")}
+                        handle={() => navigate("/streams/update-streams")}
                     >
                         Update
                     </CustomBtn>
