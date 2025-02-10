@@ -43,7 +43,7 @@ const Streams = () => {
     }, []);
 
 
- 
+
 
     const handelDeleteReqFromApi = () => {
         const selectedIDs = selectedData.map(el => el.id)
@@ -56,7 +56,7 @@ const Streams = () => {
             .then(response => {
                 getAllStreams()
                 setSelectedData()
-                
+
                 // setLoading(false);
             })
             .catch(error => {
@@ -71,7 +71,7 @@ const Streams = () => {
             isOpen: true,
             title: "remove Stream",
             content: "are  you sure",
-            sendReq:handelDeleteReqFromApi,
+            sendReq: handelDeleteReqFromApi,
         });
     };
     return (
@@ -84,12 +84,12 @@ const Streams = () => {
                 <StreamTable handelChangeSelect={changeSelectDataRow} data={data} />
             </Box>
             <Stack direction="row" justifyContent="space-between" gap={2}>
-                <CustomBtn color="error" isLined handle={openPopup}
+                <CustomBtn disable={selectedData.length < 1} color="error" isLined handle={openPopup}
                 > Delete </CustomBtn>
                 <Stack direction="row" gap={2}>
-                    <CustomBtn isLined handle={() => navigate("/streams/add-stream")}
+                    <CustomBtn disable={selectedData.length < 1} isLined handle={() => navigate("/streams/add-stream")}
                     > Update</CustomBtn>
-                    <CustomBtn handle={() => navigate("/streams/show-streams")}
+                    <CustomBtn disable={selectedData.length < 1} handle={() => navigate("/streams/show-streams")}
                     > Show Stream</CustomBtn>
                 </Stack>
             </Stack>
