@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import Holder from "../../Components/HOC/Holder";
+import {useState } from "react";
 import { Box, Stack } from "@mui/system";
-import CustomBtn from "../../Components/Reusable/CustomBtn";
-import SelectCustom from "../../Components/Inputs/SelectCustom";
 import { useNavigate } from "react-router-dom";
-import InputTextCustom from "../../Components/Inputs/InputTextCustom";
 import { useFormik } from "formik";
 import { addStreamSchema } from "../../utils/validationSchema";
-import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
+import axios from "axios";
+import CustomBtn from "../../Components/Reusable/CustomBtn";
+import SelectCustom from "../../Components/Inputs/SelectCustom";
+import Holder from "../../Components/HOC/Holder";
 import LoadBtn from "../../Components/Reusable/LoadBtn";
+import InputTextCustom from "../../Components/Inputs/InputTextCustom";
 const AddStream = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ const AddStream = () => {
                 ...values,
             })
                 .then(response => {
-                    console.log(response.data)
+                    formik.handleReset()
                     setLoading(false);
                     showSuccess()
                 })

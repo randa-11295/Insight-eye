@@ -15,7 +15,7 @@ export default function SelectCustom(props) {
       select
       value={props.formik?.values[props.name]}
       fullWidth
-      onChange={props.formik?.handleChange}    >
+      onChange={props.formik?.handleChange} >
       {props.arr && props.arr?.map((option) => {
         return (
           <MenuItem
