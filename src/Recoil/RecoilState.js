@@ -22,3 +22,9 @@ export const popupState = atom({
     sendReq: null,
   },
 });
+
+
+export const selectedStreamState = atom({
+  key: "selectedStreamState",
+  default: []
+});
