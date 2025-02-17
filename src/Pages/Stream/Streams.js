@@ -27,7 +27,7 @@ const Streams = () => {
     };
 
     const getAllStreams = () => {
-        axios.get(baseURL + "/stream")
+        axios.get(baseURL + "/source")
             .then(response => {
                 console.log(response.data);
                 setData(response.data);
@@ -46,7 +46,7 @@ const Streams = () => {
     const handelDeleteReqFromApi = () => {
         const selectedIDs = selectedData.map(el => el.id);
 
-        axios.delete(baseURL + "/stream", {
+        axios.delete(baseURL + "/source", {
             data: { ids: selectedIDs }
         })
             .then(() => {

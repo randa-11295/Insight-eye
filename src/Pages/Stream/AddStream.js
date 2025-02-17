@@ -22,11 +22,10 @@ const AddStream = () => {
             path: "",
             type: "test",
         },
-        validationSchema: addStreamSchema,
         onSubmit: (values) => {
             setLoading(true);
             
-            axios.post(baseURL + "/stream", {
+            axios.post(baseURL + "/source", {
                 ...values,
             })
                 .then(response => {
