@@ -12,32 +12,7 @@ import {
 function StreamCards() {
   const videoRef = useRef(null);
 
-  useEffect(() => {
-    async function setupCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-          video: true,
-          audio: false 
-        });
-        
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (err) {
-        console.error("Error accessing camera:", err);
-      }
-    }
 
-    setupCamera();
-
-    return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        // Remove TypeScript casting and use plain JavaScript
-        const stream = videoRef.current.srcObject;
-        stream.getTracks().forEach(track => track.stop());
-      }
-    };
-  }, []);
 
   return (
    
@@ -50,16 +25,7 @@ function StreamCards() {
               bgcolor: 'black'
             }}
           >
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover'
-              }}
-            />
+         
             <Box
               sx={{
                 position: 'absolute',

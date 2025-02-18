@@ -20,7 +20,7 @@ const AddStream = () => {
         initialValues: {
             name: "",
             path: "",
-            type: "test",
+            type: "Video File",
         },
         onSubmit: (values) => {
             setLoading(true);
@@ -63,7 +63,7 @@ const AddStream = () => {
             <Box  component="form">
                 <InputTextCustom formik={formik} name="name" label="Name" placeholder="add your Stream Name" />
                 <InputTextCustom formik={formik} name="path" label="Source" placeholder="add Stream Source or Stream Path" />
-                <SelectCustom formik={formik} arr={["test", "hi", "here"]} name="type" label="type" />
+                <SelectCustom formik={formik} arr={["Video File", "RTSP Stream", "Webcam"]} name="type" label="type" />
                 <Stack alignItems="center" justifyContent="space-between" direction="row" mt={4}>
                     <CustomBtn isLined handle={() => navigate("/streams")}>
                         Back

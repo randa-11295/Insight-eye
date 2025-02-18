@@ -12,13 +12,13 @@ const ShowStreams = () => {
 
      useEffect(() => {
           // console.log(selectedData)
-          axios.get(baseURL + "/video_stream/a2ad70bd-9f7c-42da-8553-a5bc6d66c766")
+          axios.get(baseURL + "/video_stream/cc70d07c-7cf1-41a1-9c32-fd08a7beb060")
           .then(response => {
               console.log(response.data);
              
           })
           .catch(error => {
-          
+               console.log(error);
           });
      }, [])
 
