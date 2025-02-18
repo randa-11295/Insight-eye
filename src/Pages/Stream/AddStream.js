@@ -1,4 +1,4 @@
-import {useState } from "react";
+import { useState } from "react";
 import { Box, Stack } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -24,43 +24,46 @@ const AddStream = () => {
         },
         onSubmit: (values) => {
             setLoading(true);
-            
+            console.log(values)
             axios.post(baseURL + "/source", {
                 ...values,
             })
                 .then(response => {
                     formik.handleReset()
-                    setLoading(false);
                     showSuccess()
                 })
                 .catch(error => {
-                    setLoading(false);
+         
+                    console.log(error.message)
                     showError()
-                });
+                    // showSuccess()
+                })
+                .finally(() => setLoading(false))
+
         },
     });
 
 
-      const setSnackAlert = useSetRecoilState(snackAlertState);
-    
-      const showSuccess = () => {
+    const setSnackAlert = useSetRecoilState(snackAlertState);
+
+    const showSuccess = () => {
         setSnackAlert({
-          open: true,
-          message: "Operation successful!",
-          severity: "success",
+            open: true,
+            message: "Operation successful!",
+            severity: "success",
         });
-      };
-    
-      const showError = () => {
+    };
+
+    const showError = () => {
         setSnackAlert({
-          open: true,
-          message: "Something went wrong!",
-          severity: "error",
+            open: true,
+            message: "Something went wrong!",
+            severity: "error",
         });
-      };
+    };
     return (
         <Holder>
-            <Box  component="form">
+            <Box component="form">
                 <InputTextCustom formik={formik} name="name" label="Name" placeholder="add your Stream Name" />
                 <InputTextCustom formik={formik} name="path" label="Source" placeholder="add Stream Source or Stream Path" />
                 <SelectCustom formik={formik} arr={["Video File", "RTSP Stream", "Webcam"]} name="type" label="type" />
@@ -73,8 +76,8 @@ const AddStream = () => {
                         <CustomBtn isLined handle={formik.handleReset}>
                             Clear
                         </CustomBtn>
-                       < LoadBtn loading={loading} handle={formik.handleSubmit} />
-                      
+                        < LoadBtn loading={loading} handle={formik.handleSubmit} />
+
                     </Stack>
 
                 </Stack>
