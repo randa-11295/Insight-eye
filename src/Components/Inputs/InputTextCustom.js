@@ -25,7 +25,7 @@ const InputTextCustom = (props) => {
       <Typography
       
         variant="h6"
-        sx={{ fontSize: ".9rem", fontWeight: 600 }}
+        sx={{ fontSize: ".9rem", fontWeight: 600 , textTransform : "capitalize" }}
       >
         {props.label} : 
       </Typography>

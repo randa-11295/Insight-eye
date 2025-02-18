@@ -6,7 +6,7 @@ export default function SelectCustom(props) {
          <Typography
       
       variant="h6"
-      sx={{ fontSize: ".9rem", fontWeight: 600 , mb:1 }}
+      sx={{ fontSize: ".9rem", fontWeight: 600 , mb:1 , textTransform : "capitalize" }}
     >
       {props.label} : 
     </Typography>
