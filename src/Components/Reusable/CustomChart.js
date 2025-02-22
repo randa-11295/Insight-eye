@@ -2,7 +2,7 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-
+import { Box } from '@mui/system';
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -37,7 +37,9 @@ const LineChart = () => {
   };
 
   return (
+    <Box sx={{ height: '250px' }}>
       <Line data={data} options={options} />
+    </Box>
   );
 };
 
