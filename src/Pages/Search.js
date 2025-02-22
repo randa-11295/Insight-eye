@@ -1,8 +1,10 @@
-const Search = ()=>{
+import Holder from "../Components/HOC/Holder"
+import ReusableToggleBtns from "../Components/Reusable/ReusableToggleBtns"
+const Search = () => {
      return (
-          <h2>
-               this is search
-          </h2>
+          <Holder>
+               <ReusableToggleBtns />
+          </Holder>
      )
 }
 
