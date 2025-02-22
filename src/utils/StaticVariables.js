@@ -6,45 +6,20 @@ import CorporateFareOutlinedIcon from '@mui/icons-material/CorporateFareOutlined
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
+const getIcon = (IconComponent) => (isSelected) => (
+  <IconComponent sx={{ color: isSelected ? "black" : "inherit", marginLeft: "auto" }} />
+);
+
 export const navbarContentArr = [
- {
-    text: "Dashboard",
-    url: "/",
-    icon: <DashboardOutlinedIcon sx={{ marginLeft: " auto" }} />,
-  },
-  {
-    text: "Streams",
-    url: "/streams",
-    icon: <LiveTvOutlinedIcon sx={{ marginLeft: " auto" }} />,
-  },
-  {
-    text: "Search",
-    url: "/search",
-    icon: <SearchOutlinedIcon sx={{ marginLeft: " auto" }} />,
-  },
-  {
-    text: "Prediction",
-    url: "/production",
-    icon: <CorporateFareOutlinedIcon sx={{ marginLeft: " auto" }} />,
-  },
-  {
-    text: "Setting",
-    url: "/setting",
-    icon: <SettingsOutlinedIcon sx={{ marginLeft: " auto" }} />,
-  },
-  {
-    text: "Logout",
-    url: false,
-    icon: <LogoutOutlinedIcon sx={{ marginLeft: " auto" }} />,
-  },
- 
-
-
-
+  { text: "Dashboard", url: "/", icon: getIcon(DashboardOutlinedIcon) },
+  { text: "Streams", url: "/streams", icon: getIcon(LiveTvOutlinedIcon) },
+  { text: "Search", url: "/search", icon: getIcon(SearchOutlinedIcon) },
+  { text: "Prediction", url: "/prediction", icon: getIcon(CorporateFareOutlinedIcon) },
+  { text: "Setting", url: "/setting", icon: getIcon(SettingsOutlinedIcon) },
+  { text: "Logout", url: false, icon: getIcon(LogoutOutlinedIcon) },
 ];
 
 
 export const baseURL = "http://16.170.216.227"
 
 
-//* apis links

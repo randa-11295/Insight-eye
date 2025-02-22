@@ -21,9 +21,11 @@ const ContentNav = (props) => {
   }
 
   const listStyle = (url, path) => ({
-    borderRadius: 2,    
+    borderRadius: 2,
     bgcolor: url === path && "primary.main",
+    color: url === path && "black",
     overflow: "hidden",
+
   });
 
 
@@ -53,7 +55,7 @@ const ContentNav = (props) => {
                   sx={{ textAlign: "start" }}
                 />
                 <ListItemIcon >
-                  {el.icon}
+                  {el.icon(el.url === location.pathname)}
                 </ListItemIcon>
               </ListItemButton>
             </ListItem>
