@@ -8,6 +8,8 @@ import axios from "axios"
 import { baseURL } from "../utils/StaticVariables"
 import CardSearch from "../Components/Search/CardSearch"
 import GridContainer from "../Components/HOC/GridContainer"
+import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable"
+
 const Search = () => {
      const [selectedShowMethod, setSelectedShowMethod] = useState("cards");
 
@@ -41,9 +43,9 @@ const Search = () => {
           <Holder>
                <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} onChange={handleToggleChange} />
                {selectedShowMethod === "cards" && <div>
-                    
-                         <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />
-                    
+                    {loading ? <SkeletonLoaderReusable  /> : <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />}
+
+
                </div>
 
                }
