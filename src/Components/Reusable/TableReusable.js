@@ -30,7 +30,7 @@ const TableReusable = ({ data, columns, loading }) => {
                     {col.field === "frame" ? (
                       <img src={`data:image/jpeg;base64,${row[col.field]}`} alt="Frame" width="50" />
                     ) : (
-                      row[col.field] ||  row.metadata[col.field]
+                      row[col?.field] ||  row.metadata[col?.field] || " "
                     )}
                   </TableCell>
                 ))}

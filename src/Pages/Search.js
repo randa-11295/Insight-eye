@@ -9,6 +9,7 @@ import CardSearch from "../Components/Search/CardSearch"
 import GridContainer from "../Components/HOC/GridContainer"
 import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable"
 import TableReusable from "../Components/Reusable/TableReusable"
+import { searchFramesColumns } from "../utils/StaticVariables"
 const Search = () => {
      const [selectedShowMethod, setSelectedShowMethod] = useState("cards");
 
@@ -21,14 +22,8 @@ const Search = () => {
      const [error, setError] = useState(null);
      //     const setPopup = useSetRecoilState(popupState);
 
-     const columns = [
-          { field: "camera_id", headerName: "Camera ID" },
-          { field: "date", headerName: "Date" },
-          { field: "time", headerName: "Time" },
-          { field: "person_count", headerName: "Person Count" },
-          { field: "frame", headerName: "Image" }
-        ];
-        
+
+
      const getAllSearchResult = () => {
           axios.get(baseURL + "/search_results")
                .then(response => {
@@ -48,17 +43,12 @@ const Search = () => {
 
      return (
           <Holder>
-               <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} onChange={handleToggleChange} />
-               {selectedShowMethod === "cards" && <div>
-                    {loading ? <SkeletonLoaderReusable  /> : <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />}
-
-
-               </div>
-
-               }
-               {selectedShowMethod === "table" &&   <TableReusable data={searchData} columns={columns} loading={loading} />   }
-    
+               <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
+              
+               {selectedShowMethod === "cards" && loading ? <SkeletonLoaderReusable /> : <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />}
+               {selectedShowMethod === "table" && <TableReusable data={searchData} columns={searchFramesColumns} loading={loading} />}
                {selectedShowMethod === "chart" && <CustomChart />}
+
           </Holder>
      )
 }

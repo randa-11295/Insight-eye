@@ -26,6 +26,21 @@ export const dataRenderTypeInSearchArr = [
   { value: "chart", icon: require('@mui/icons-material/ShowChart').default },
 ];
 
+export const searchFramesColumns = [
+  { field: "camera_id", headerName: "Camera ID" },
+  { field: "date", headerName: "Date" },
+  { field: "time", headerName: "Time" },
+  { field: "person_count", headerName: "Person Count" },
+  { field: "frame", headerName: "Image" }
+];
+
+ export const  streamColumns = [
+  { field: "id", headerName: "Order" },
+  { field: "name", headerName: "Name" },
+  { field: "type", headerName: "Type" },
+  { field: "path", headerName: "Path" },
+];
+
 export const BASE64_IMAGE_PREFIX = "data:image/jpeg;base64,";
 export const baseURL = "http://16.170.216.227"
 

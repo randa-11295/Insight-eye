@@ -8,10 +8,12 @@ import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { popupState, selectedStreamState } from "../../Recoil/RecoilState";
+import TableReusable from "../../Components/Reusable/TableReusable";
+import { streamColumns } from "../../utils/StaticVariables";
 
 const Streams = () => {
     const navigate = useNavigate();
-    const [data, setData] = useState(null);
+    const [streamData, setStreamData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const setPopup = useSetRecoilState(popupState);
@@ -30,7 +32,7 @@ const Streams = () => {
         axios.get(baseURL + "/source")
             .then(response => {
                 console.log(response.data);
-                setData(response.data);
+                setStreamData(response.data);
                 setLoading(false);
             })
             .catch(error => {
@@ -75,7 +77,8 @@ const Streams = () => {
             }
         >
             <Box my={2}>
-                <StreamTable handelChangeSelect={changeSelectDataRow} data={data} />
+                <StreamTable handelChangeSelect={changeSelectDataRow} data={streamData} />
+                <TableReusable data={streamData} columns={streamColumns} loading={loading} />
             </Box>
             <Stack direction="row" justifyContent="space-between" gap={2}>
                 <CustomBtn 
