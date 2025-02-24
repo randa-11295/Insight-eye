@@ -3,7 +3,6 @@ import Holder from "../../Components/HOC/Holder";
 import { Box, Stack } from "@mui/system";
 import CustomBtn from "../../Components/Reusable/CustomBtn";
 import { useNavigate } from "react-router-dom";
-import StreamTable from "../../Components/Stream/StreamTable";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -77,8 +76,7 @@ const Streams = () => {
             }
         >
             <Box my={2}>
-                <StreamTable handelChangeSelect={changeSelectDataRow} data={streamData} />
-                <TableReusable showCheckbox data={streamData} columns={streamColumns} loading={loading} />
+                <TableReusable handelChangeSelect={changeSelectDataRow} showCheckbox data={streamData} columns={streamColumns} loading={loading} />
             </Box>
             <Stack direction="row" justifyContent="space-between" gap={2}>
                 <CustomBtn 

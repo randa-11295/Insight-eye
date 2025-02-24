@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import TableLoader from "./TableLoaderReusable"; // Import Skeleton Loader
-import { padding } from "@mui/system";
 
 // Styled Components for Dark Theme
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -44,7 +43,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": { border: 0 },
 }));
 
-const TableReusable = ({ data, columns, loading, showCheckbox = false, onRowSelect }) => {
+const TableReusable = ({ data, columns, loading, handelChangeSelect = false, onRowSelect }) => {
   if (loading) return <TableLoader columns={columns.length} />; // Show loader if loading
 
   return (
@@ -62,7 +61,7 @@ const TableReusable = ({ data, columns, loading, showCheckbox = false, onRowSele
         {/* Table Header */}
         <TableHead>
           <TableRow>
-            {showCheckbox && <StyledTableCell align="center">Select</StyledTableCell>}
+            {handelChangeSelect && <StyledTableCell align="center">Select</StyledTableCell>}
             {columns.map((col) => (
               <StyledTableCell key={col.field} align="center">
                 {col.headerName}
@@ -76,9 +75,9 @@ const TableReusable = ({ data, columns, loading, showCheckbox = false, onRowSele
           {data.length > 0 ? (
             data.map((row, rowIndex) => (
               <StyledTableRow key={rowIndex}>
-                {showCheckbox && (
+                {handelChangeSelect && (
                   <StyledTableCell align="center">
-                    <Checkbox  onChange={() => onRowSelect?.(row)} />
+                    <Checkbox  onChange={() => handelChangeSelect(row)} />
                   </StyledTableCell>
                 )}
                 {columns.map((col) => (
@@ -94,7 +93,7 @@ const TableReusable = ({ data, columns, loading, showCheckbox = false, onRowSele
             ))
           ) : (
             <StyledTableRow>
-              <StyledTableCell colSpan={columns.length + (showCheckbox ? 1 : 0)} align="center" sx={{ color: "#aaa" }}>
+              <StyledTableCell colSpan={columns.length + (handelChangeSelect ? 1 : 0)} align="center" sx={{ color: "#aaa" }}>
                 No data available
               </StyledTableCell>
             </StyledTableRow>
