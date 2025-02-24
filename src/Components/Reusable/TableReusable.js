@@ -1,47 +1,103 @@
 import React from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Checkbox,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 import TableLoader from "./TableLoaderReusable"; // Import Skeleton Loader
+import { padding } from "@mui/system";
 
-const TableReusable = ({ data, columns, loading }) => {
-  if (loading) return <TableLoader  columns={columns.length} />; // Show loader if loading
+// Styled Components for Dark Theme
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#1a1a1a", // Dark header
+    color: "#ffffff", // White text
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    fontSize: "14px",
+    letterSpacing: "0.8px",
+    borderBottom: "2px solid #333",
+    padding: " 15px 5px",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    color: "#ddd", // Lighter text for readability
+    padding: " 15px 5px",
+
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  backgroundColor: "#141414", // Dark row background
+  "&:nth-of-type(odd)": {
+    backgroundColor: "black", // Slightly lighter gray
+  },
+  "&:hover": {
+    backgroundColor: "#222", // Subtle hover effect
+  },
+  "&:last-child td, &:last-child th": { border: 0 },
+}));
+
+const TableReusable = ({ data, columns, loading, showCheckbox = false, onRowSelect }) => {
+  if (loading) return <TableLoader columns={columns.length} />; // Show loader if loading
 
   return (
-    <TableContainer component={Paper} sx={{ mt: 3 , border: "2px solid gray", }} >
-      <Table>
-      <TableHead >
-  <TableRow>
-    {columns.map((col) => (
-      <TableCell
-        align="center"
-        key={col.field}
-        sx={headerStyle}
-      >
-        {col.headerName}
-      </TableCell>
-    ))}
-  </TableRow>
-</TableHead>
+    <TableContainer
+      component={Paper}
+      sx={{
+        mt: 3,
+        backgroundColor: "#121212", // Dark container background
+        border: "1px solid #333",
+        borderRadius: "2px",
+        overflow: "hidden",
+      }}
+    >
+      <Table sx={{ minWidth: 500 }}>
+        {/* Table Header */}
+        <TableHead>
+          <TableRow>
+            {showCheckbox && <StyledTableCell align="center">Select</StyledTableCell>}
+            {columns.map((col) => (
+              <StyledTableCell key={col.field} align="center">
+                {col.headerName}
+              </StyledTableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+
+        {/* Table Body */}
         <TableBody>
           {data.length > 0 ? (
             data.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <StyledTableRow key={rowIndex}>
+                {showCheckbox && (
+                  <StyledTableCell align="center">
+                    <Checkbox  onChange={() => onRowSelect?.(row)} />
+                  </StyledTableCell>
+                )}
                 {columns.map((col) => (
-                  <TableCell key={col.field} align="center">
-                    {col.field === "frame" ? (
+                  <StyledTableCell key={col.field} align="center">
+                    { col.field === "frame" ? (
                       <img src={`data:image/jpeg;base64,${row[col.field]}`} alt="Frame" width="50" />
                     ) : (
-                      row[col?.field] ||  row.metadata[col?.field] || " "
+                      row[col?.field] || row.metadata?.[col?.field] || "—"
                     )}
-                  </TableCell>
+                  </StyledTableCell>
                 ))}
-              </TableRow>
+              </StyledTableRow>
             ))
           ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} align="center">
+            <StyledTableRow>
+              <StyledTableCell colSpan={columns.length + (showCheckbox ? 1 : 0)} align="center" sx={{ color: "#aaa" }}>
                 No data available
-              </TableCell>
-            </TableRow>
+              </StyledTableCell>
+            </StyledTableRow>
           )}
         </TableBody>
       </Table>
@@ -50,14 +106,3 @@ const TableReusable = ({ data, columns, loading }) => {
 };
 
 export default TableReusable;
-
-const headerStyle={
-  fontWeight: "bold",
-  textTransform: "uppercase",
-  fontSize: "16px",
-  letterSpacing: "0.8px",
-  padding: "12px",
-  color: "primary.main",
-  borderBottom: "2px solid gray",
-  paddingY : 3
-}

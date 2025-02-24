@@ -45,7 +45,7 @@ const Search = () => {
           <Holder>
                <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
               
-               {selectedShowMethod === "cards" && loading ? <SkeletonLoaderReusable /> : <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />}
+               {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> : <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />)}
                {selectedShowMethod === "table" && <TableReusable data={searchData} columns={searchFramesColumns} loading={loading} />}
                {selectedShowMethod === "chart" && <CustomChart />}
 

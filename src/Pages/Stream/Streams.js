@@ -78,7 +78,7 @@ const Streams = () => {
         >
             <Box my={2}>
                 <StreamTable handelChangeSelect={changeSelectDataRow} data={streamData} />
-                <TableReusable data={streamData} columns={streamColumns} loading={loading} />
+                <TableReusable showCheckbox data={streamData} columns={streamColumns} loading={loading} />
             </Box>
             <Stack direction="row" justifyContent="space-between" gap={2}>
                 <CustomBtn 

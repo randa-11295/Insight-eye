@@ -35,7 +35,6 @@ export const searchFramesColumns = [
 ];
 
  export const  streamColumns = [
-  { field: "id", headerName: "Order" },
   { field: "name", headerName: "Name" },
   { field: "type", headerName: "Type" },
   { field: "path", headerName: "Path" },
