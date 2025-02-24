@@ -7,8 +7,9 @@ import CustomChart from "../Components/Reusable/CustomChart"
 import axios from "axios"
 import { baseURL } from "../utils/StaticVariables"
 import CardSearch from "../Components/Search/CardSearch"
+import GridContainer from "../Components/HOC/GridContainer"
 const Search = () => {
-     const [selectedShowMethod, setSelectedShowMethod] = useState("card");
+     const [selectedShowMethod, setSelectedShowMethod] = useState("cards");
 
      const handleToggleChange = (event, newValue) => {
           if (newValue !== null) setSelectedShowMethod(newValue);
@@ -40,9 +41,9 @@ const Search = () => {
           <Holder>
                <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} onChange={handleToggleChange} />
                {selectedShowMethod === "cards" && <div>
-                    {
-                         searchData?.map(el => <CardSearch key={el.frame} data={el} />)
-                    }
+                    
+                         <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />
+                    
                </div>
 
                }

@@ -10,7 +10,7 @@ import { BASE64_IMAGE_PREFIX } from "../../utils/StaticVariables";
 
 export default function CardSearch({ data }) {
   return (
-    <Card sx={{ maxWidth: 400, borderRadius: 3, boxShadow: 3 }}>
+    <Card sx={{  borderRadius: 3, boxShadow: 3 }}>
       <CardActionArea>
         {/* Image Section */}
         <CardMedia
