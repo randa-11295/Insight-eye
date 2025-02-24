@@ -20,13 +20,13 @@ export const navbarContentArr = [
 ];
 
 
- export const dataRenderTypeInSearchArr = [
-  { value: "toggle", icon: require('@mui/icons-material/DashboardOutlined').default },
+export const dataRenderTypeInSearchArr = [
+  { value: "cards", icon: require('@mui/icons-material/DashboardOutlined').default },
   { value: "table", icon: require('@mui/icons-material/Toc').default },
   { value: "chart", icon: require('@mui/icons-material/ShowChart').default },
 ];
 
-
+export const BASE64_IMAGE_PREFIX = "data:image/jpeg;base64,";
 export const baseURL = "http://16.170.216.227"
 
 
