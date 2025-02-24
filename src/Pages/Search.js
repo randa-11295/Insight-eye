@@ -1,6 +1,5 @@
 import Holder from "../Components/HOC/Holder"
 import ReusableToggleBtns from "../Components/Reusable/ReusableToggleBtns"
-import ReusableAccordion from "../Components/Reusable/ReusableAccordion"
 import { useState, useEffect } from "react"
 import { dataRenderTypeInSearchArr } from "../utils/StaticVariables"
 import CustomChart from "../Components/Reusable/CustomChart"
@@ -9,7 +8,7 @@ import { baseURL } from "../utils/StaticVariables"
 import CardSearch from "../Components/Search/CardSearch"
 import GridContainer from "../Components/HOC/GridContainer"
 import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable"
-
+import TableReusable from "../Components/Reusable/TableReusable"
 const Search = () => {
      const [selectedShowMethod, setSelectedShowMethod] = useState("cards");
 
@@ -22,6 +21,14 @@ const Search = () => {
      const [error, setError] = useState(null);
      //     const setPopup = useSetRecoilState(popupState);
 
+     const columns = [
+          { field: "camera_id", headerName: "Camera ID" },
+          { field: "date", headerName: "Date" },
+          { field: "time", headerName: "Time" },
+          { field: "person_count", headerName: "Person Count" },
+          { field: "frame", headerName: "Image" }
+        ];
+        
      const getAllSearchResult = () => {
           axios.get(baseURL + "/search_results")
                .then(response => {
@@ -49,7 +56,8 @@ const Search = () => {
                </div>
 
                }
-               {selectedShowMethod === "table" && <p>table</p>}
+               {selectedShowMethod === "table" &&   <TableReusable data={searchData} columns={columns} loading={loading} />   }
+    
                {selectedShowMethod === "chart" && <CustomChart />}
           </Holder>
      )
