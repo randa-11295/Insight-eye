@@ -10,6 +10,8 @@ import GridContainer from "../Components/HOC/GridContainer"
 import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable"
 import TableReusable from "../Components/Reusable/TableReusable"
 import { searchFramesColumns } from "../utils/StaticVariables"
+import FilterSearch from "../Components/Search/FilterSearch"
+
 const Search = () => {
      const [selectedShowMethod, setSelectedShowMethod] = useState("cards");
 
@@ -17,6 +19,7 @@ const Search = () => {
           if (newValue !== null) setSelectedShowMethod(newValue);
      };
 
+     
      const [searchData, setSearchData] = useState(null);
      const [loading, setLoading] = useState(true);
      const [error, setError] = useState(null);
@@ -43,6 +46,7 @@ const Search = () => {
 
      return (
           <Holder>
+               <FilterSearch />
                <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
               
                {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> : <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />)}

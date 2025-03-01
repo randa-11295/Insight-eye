@@ -75,14 +75,14 @@ const TableReusable = ({ data, columns, loading, handelChangeSelect = false, onR
           {data.length > 0 ? (
             data.map((row, rowIndex) => (
               <StyledTableRow key={rowIndex}>
-                {handelChangeSelect && (
-                  <StyledTableCell align="center">
-                    <Checkbox  onChange={() => handelChangeSelect(row)} />
-                  </StyledTableCell>
-                )}
+                <StyledTableCell align="center">
+                  {handelChangeSelect && (
+                    <Checkbox onChange={() => handelChangeSelect(row)} />)}
+                </StyledTableCell>
+
                 {columns.map((col) => (
                   <StyledTableCell key={col.field} align="center">
-                    { col.field === "frame" ? (
+                    {col.field === "frame" ? (
                       <img src={`data:image/jpeg;base64,${row[col.field]}`} alt="Frame" width="50" />
                     ) : (
                       row[col?.field] || row.metadata?.[col?.field] || "—"

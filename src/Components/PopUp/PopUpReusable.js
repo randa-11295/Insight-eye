@@ -8,8 +8,6 @@ import {
   Box,
   Stack,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-// import DesBtn from "../Inputs/DesBtn";
 import { useRecoilState } from "recoil";
 import { popupState } from "../../Recoil/RecoilState";
 
