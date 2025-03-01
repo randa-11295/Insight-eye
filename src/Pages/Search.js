@@ -36,7 +36,7 @@ const Search = () => {
      const openPopup = () => {
           setPopup({
                isOpen: true,
-               title: "Remove Stream",
+               title: " Select Date and Time Range",
                content:  <FilterSearch />,
                sendReq: () => { console.log("open ") },
           });
@@ -66,7 +66,6 @@ const Search = () => {
           <Holder>
               
               
-               {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> : <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />)}
                <Stack direction="row" spacing={2}>
 
                     <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />

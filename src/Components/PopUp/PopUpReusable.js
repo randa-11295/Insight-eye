@@ -41,9 +41,9 @@ export default function PopUpReusable() {
      
       </Stack>
 
-      <Divider sx={{ mb: 1 }} />
+      <Divider  />
       <DialogContent>{popup.content}</DialogContent>
-      <Divider sx={{ pt: 1 }} />
+      <Divider  />
       <DialogActions
         sx={{
           px: 3,
