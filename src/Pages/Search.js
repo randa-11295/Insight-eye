@@ -37,7 +37,7 @@ const Search = () => {
           setPopup({
                isOpen: true,
                title: "Remove Stream",
-               content: "Are you sure?",
+               content:  <FilterSearch />,
                sendReq: () => { console.log("open ") },
           });
      };
@@ -64,8 +64,7 @@ const Search = () => {
 
      return (
           <Holder>
-               <FilterSearch />
-               <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
+              
               
                {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> : <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />)}
                <Stack direction="row" spacing={2}>

@@ -38,9 +38,7 @@ export default function PopUpReusable() {
         >
           {popup.title}
         </DialogTitle>
-        {/* <DesBtn fun={handleClose} close text={getContentText("popUp_cancel")}>
-          <CloseIcon />
-        </DesBtn> */}
+     
       </Stack>
 
       <Divider sx={{ mb: 1 }} />
