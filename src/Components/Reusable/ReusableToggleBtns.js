@@ -4,7 +4,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 const ReusableToggleBtns = ({ options, value, handleToggleChange }) => {
      return (
-          <ToggleButtonGroup color="primary" value={value} exclusive onChange={handleToggleChange}>
+          <ToggleButtonGroup  color="primary" value={value} exclusive onChange={handleToggleChange}>
                {options.map(({ value, icon: Icon }) => (
                     <ToggleButton key={value} value={value}>
                          <Icon />

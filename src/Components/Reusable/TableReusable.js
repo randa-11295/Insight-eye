@@ -9,10 +9,10 @@ import {
   TableRow,
   Paper,
   Checkbox,
+  TablePagination
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import TableLoader from "./TableLoaderReusable"; // Import Skeleton Loader
-
 // Styled Components for Dark Theme
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -47,6 +47,7 @@ const TableReusable = ({ data, columns, loading, handelChangeSelect = false, onR
   if (loading) return <TableLoader columns={columns.length} />; // Show loader if loading
 
   return (
+    <>
     <TableContainer
       component={Paper}
       sx={{
@@ -101,6 +102,17 @@ const TableReusable = ({ data, columns, loading, handelChangeSelect = false, onR
         </TableBody>
       </Table>
     </TableContainer>
+
+<TablePagination
+rowsPerPageOptions={[5, 10, 25]}
+component="div"
+count={100}
+// rowsPerPage={rowsPerPage}
+page={2}
+// onPageChange={handleChangePage}
+// onRowsPerPageChange={handleChangeRowsPerPage}
+/>
+</>
   );
 };
 
