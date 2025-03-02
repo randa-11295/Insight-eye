@@ -44,14 +44,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRowsPerPageChange, handelChangeSelect }) => {
-  if (loading) return <TableLoader  m={3} columns={columns.length} />; // Show loader if loading
+  if (loading) return <TableLoader columns={columns.length} />; // Show loader if loading
 
   return (
     <>
       <TableContainer
         component={Paper}
         sx={{
-          mt: 3,
+        
           backgroundColor: "#121212", // Dark container background
           border: "1px solid #333",
           borderRadius: "2px",
@@ -76,11 +76,14 @@ const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRo
             {data.length > 0 ? (
               data.map((row, rowIndex) => (
                 <StyledTableRow key={rowIndex}>
-                  <StyledTableCell align="center">
-                    {handelChangeSelect && (
-                      <Checkbox onChange={() => handelChangeSelect(row)} />)}
-                  </StyledTableCell>
+                  {/* Render Checkbox in a fixed-width column */}
+                  {handelChangeSelect && (
+                    <StyledTableCell align="center" sx={{ width: "50px" }}>
+                      <Checkbox onChange={() => handelChangeSelect(row)} />
+                    </StyledTableCell>
+                  )}
 
+                  {/* Render other columns */}
                   {columns.map((col) => (
                     <StyledTableCell key={col.field} align="center">
                       {col.field === "frame" ? (
@@ -100,13 +103,14 @@ const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRo
               </StyledTableRow>
             )}
           </TableBody>
+
         </Table>
       </TableContainer>
 
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25, 50 , 75]}
+        rowsPerPageOptions={[5, 10, 25, 50, 75]}
         component="div"
-        count={100} 
+        count={100}
         rowsPerPage={limit}
         page={page}
         onPageChange={onPageChange}

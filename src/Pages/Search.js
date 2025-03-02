@@ -27,7 +27,9 @@ const Search = () => {
      const [searchData, setSearchData] = useState([]);
      const [loading, setLoading] = useState(true);
      const [page, setPage] = useState(1);
-     const [limit, setLimit] = useState(50);
+     const [limit, setLimit] = useState(15);
+     const [total, setTotal] = useState(0);
+     const [numOfPages, setNumOfPages] = useState(0);
 
      const setSnackAlert = useSetRecoilState(snackAlertState);
 
@@ -58,11 +60,11 @@ const Search = () => {
 
      const showError = () => {
           setSnackAlert({
-              open: true,
-              message: "Something went wrong!",
-              severity: "error",
+               open: true,
+               message: "Something went wrong!",
+               severity: "error",
           });
-      };
+     };
 
      //  get all result
      useEffect(() => {
@@ -70,7 +72,7 @@ const Search = () => {
           window.scrollTo({ top: 0, behavior: "smooth" });
           axios.get(baseURL + "/search_results", {
                params: {
-                    page: page - 1,
+                    page: page ,
                     per_page: limit,
                     limit: "12"
                }
@@ -78,7 +80,11 @@ const Search = () => {
                .then(response => {
                     console.log(response.data.data);
                     console.log(response.data.metadata);
+                    console.log(response.data.num_of_pages);
+                    console.log(response.data.total_count);
                     setSearchData(response.data.data);
+                    setNumOfPages(response.data.num_of_pages);
+                    setTotal(response.data.total_count);
 
                })
                .catch(error => {
@@ -95,6 +101,7 @@ const Search = () => {
                     <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
                     <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}> <FilterAltOutlinedIcon /> </DesBtn>
                </Stack>
+               <p>total   {total || 0}</p>
                {selectedShowMethod === "cards" && (
                     loading ? (
                          <SkeletonLoaderReusable />
@@ -111,10 +118,10 @@ const Search = () => {
                                         ))} />
                                         <Stack justifyContent="center" sx={{ mt: 2 }}>
                                              <Pagination
-                                                  count={10}
+                                                  count={numOfPages}
                                                   color="primary"
                                                   sx={{ margin: "auto" }}
-                                                  page={page}  // Corrected
+                                                  page={page}
                                                   onChange={handleChangePage}
                                              />
                                         </Stack>
@@ -128,6 +135,7 @@ const Search = () => {
                     columns={searchFramesColumns}
                     loading={loading}
                     page={page}
+                    count={numOfPages}
                     limit={limit}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
