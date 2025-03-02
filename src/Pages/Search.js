@@ -27,9 +27,9 @@ const Search = () => {
           if (newValue !== null) setSelectedShowMethod(newValue);
      };
 
-     
+
      const [searchData, setSearchData] = useState(null);
-     const [loading, setLoading] = useState(true);
+     const [loading, setLoading] = useState(false);
      const [error, setError] = useState(null);
      //     const setPopup = useSetRecoilState(popupState);
 
@@ -37,46 +37,58 @@ const Search = () => {
           setPopup({
                isOpen: true,
                title: " Select Date and Time Range",
-               content:  <FilterSearch />,
+               content: <FilterSearch />,
                sendReq: () => { console.log("open ") },
           });
      };
 
+     const [page, setPage] = useState(1);
+     const [limit, setLimit] = useState(50);
+
+     const handleChange = (event, value) => {
+          setPage(value);
+          console.log("Current Page:", value);
+     };
 
 
-     const getAllSearchResult = () => {
-          axios.get(baseURL + "/search_results")
+
+
+     //  get all result
+     useEffect(() => {
+          setLoading(true)
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          axios.get(baseURL + "/search_results", {
+               params: {
+                    page: page - 1,
+                    per_page: limit, 
+                    limit : "12"
+               }
+          })
                .then(response => {
                     console.log(response.data.data);
                     console.log(response.data.metadata);
                     setSearchData(response.data.data);
-                    setLoading(false);
+
                })
                .catch(error => {
                     setError(error);
-                    setLoading(false);
-               });
-     };
+                    setSearchData([]);
 
-     useEffect(() => {
-          getAllSearchResult();
-     }, []);
+               }).finally(() => setLoading(false))
+     }, [page, limit]);
 
      return (
           <Holder>
-              
-              
                <Stack direction="row" spacing={2}>
-
                     <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
                     <DesBtn text={"Filter"} handle={openPopup} customStyle={{ minWidth: "auto" }}> <FilterAltOutlinedIcon /> </DesBtn>
-
                </Stack>
                {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> :
                     <>
                          <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />
                          <Stack justifyContent={"center"}>
-                              <Pagination count={10} color="primary" sx={{ margin: "auto" }} />
+                              <Pagination count={10} color="primary" sx={{ margin: "auto" }} value={3} page={page}
+                                   onChange={handleChange} />
                          </Stack>
                     </>
 
