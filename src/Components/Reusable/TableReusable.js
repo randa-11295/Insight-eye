@@ -43,76 +43,76 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": { border: 0 },
 }));
 
-const TableReusable = ({ data, columns, loading, handelChangeSelect = false, onRowSelect }) => {
-  if (loading) return <TableLoader columns={columns.length} />; // Show loader if loading
+const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRowsPerPageChange, handelChangeSelect }) => {
+  if (loading) return <TableLoader  m={3} columns={columns.length} />; // Show loader if loading
 
   return (
     <>
-    <TableContainer
-      component={Paper}
-      sx={{
-        mt: 3,
-        backgroundColor: "#121212", // Dark container background
-        border: "1px solid #333",
-        borderRadius: "2px",
-        overflow: "hidden",
-      }}
-    >
-      <Table sx={{ minWidth: 500 }}>
-        {/* Table Header */}
-        <TableHead>
-          <TableRow>
-            {handelChangeSelect && <StyledTableCell align="center">Select</StyledTableCell>}
-            {columns.map((col) => (
-              <StyledTableCell key={col.field} align="center">
-                {col.headerName}
-              </StyledTableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-
-        {/* Table Body */}
-        <TableBody>
-          {data.length > 0 ? (
-            data.map((row, rowIndex) => (
-              <StyledTableRow key={rowIndex}>
-                <StyledTableCell align="center">
-                  {handelChangeSelect && (
-                    <Checkbox onChange={() => handelChangeSelect(row)} />)}
+      <TableContainer
+        component={Paper}
+        sx={{
+          mt: 3,
+          backgroundColor: "#121212", // Dark container background
+          border: "1px solid #333",
+          borderRadius: "2px",
+          overflow: "hidden",
+        }}
+      >
+        <Table sx={{ minWidth: 500 }}>
+          {/* Table Header */}
+          <TableHead>
+            <TableRow>
+              {handelChangeSelect && <StyledTableCell align="center">Select</StyledTableCell>}
+              {columns.map((col) => (
+                <StyledTableCell key={col.field} align="center">
+                  {col.headerName}
                 </StyledTableCell>
+              ))}
+            </TableRow>
+          </TableHead>
 
-                {columns.map((col) => (
-                  <StyledTableCell key={col.field} align="center">
-                    {col.field === "frame" ? (
-                      <img src={`data:image/jpeg;base64,${row[col.field]}`} alt="Frame" width="50" />
-                    ) : (
-                      row[col?.field] || row.metadata?.[col?.field] || "—"
-                    )}
+          {/* Table Body */}
+          <TableBody>
+            {data.length > 0 ? (
+              data.map((row, rowIndex) => (
+                <StyledTableRow key={rowIndex}>
+                  <StyledTableCell align="center">
+                    {handelChangeSelect && (
+                      <Checkbox onChange={() => handelChangeSelect(row)} />)}
                   </StyledTableCell>
-                ))}
-              </StyledTableRow>
-            ))
-          ) : (
-            <StyledTableRow>
-              <StyledTableCell colSpan={columns.length + (handelChangeSelect ? 1 : 0)} align="center" sx={{ color: "#aaa" }}>
-                No data available
-              </StyledTableCell>
-            </StyledTableRow>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
 
-<TablePagination
-rowsPerPageOptions={[5, 10, 25]}
-component="div"
-count={100}
-// rowsPerPage={rowsPerPage}
-page={2}
-// onPageChange={handleChangePage}
-// onRowsPerPageChange={handleChangeRowsPerPage}
-/>
-</>
+                  {columns.map((col) => (
+                    <StyledTableCell key={col.field} align="center">
+                      {col.field === "frame" ? (
+                        <img src={`data:image/jpeg;base64,${row[col.field]}`} alt="Frame" width="50" />
+                      ) : (
+                        row[col?.field] || row.metadata?.[col?.field] || "—"
+                      )}
+                    </StyledTableCell>
+                  ))}
+                </StyledTableRow>
+              ))
+            ) : (
+              <StyledTableRow>
+                <StyledTableCell colSpan={columns.length + (handelChangeSelect ? 1 : 0)} align="center" sx={{ color: "#aaa" }}>
+                  No data available
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25, 50 , 75]}
+        component="div"
+        count={100} 
+        rowsPerPage={limit}
+        page={page}
+        onPageChange={onPageChange}
+        onRowsPerPageChange={onRowsPerPageChange}
+      />
+    </>
   );
 };
 

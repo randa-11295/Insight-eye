@@ -43,12 +43,16 @@ const Search = () => {
      };
 
 
-     const handleChange = (event, value) => {
-          setPage(value);
-          console.log("Current Page:", value);
+     const handleChangePage = (event, newPage) => {
+          setPage(newPage);
+          console.log("Current Page:", newPage);
      };
 
-
+     const handleChangeRowsPerPage = (event) => {
+          setLimit(event.target.value)
+          // setLimit(parseInt(event.target.value, 10));
+          // setPage(0); // Reset to first page when changing rows per page
+     };
 
 
      //  get all result
@@ -80,7 +84,7 @@ const Search = () => {
 
                <Stack direction="row" spacing={2}>
                     <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
-                    <DesBtn text={"Filter"} handle={openPopup} customStyle={{ minWidth: "auto" }}> <FilterAltOutlinedIcon /> </DesBtn>
+                    <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}> <FilterAltOutlinedIcon /> </DesBtn>
                </Stack>
                {selectedShowMethod === "cards" && (
                     loading ? (
@@ -102,7 +106,7 @@ const Search = () => {
                                                   color="primary"
                                                   sx={{ margin: "auto" }}
                                                   page={page}  // Corrected
-                                                  onChange={handleChange}
+                                                  onChange={handleChangePage}
                                              />
                                         </Stack>
                                    </>
@@ -110,7 +114,15 @@ const Search = () => {
                          </>
                     )
                )}
-               {selectedShowMethod === "table" && <TableReusable data={searchData} columns={searchFramesColumns} loading={loading} />}
+               {selectedShowMethod === "table" && <TableReusable
+                    data={searchData}
+                    columns={searchFramesColumns}
+                    loading={loading}
+                    page={page}
+                    limit={limit}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+               />}
                {selectedShowMethod === "chart" && <CustomChart />}
 
           </Holder>
