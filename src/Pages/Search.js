@@ -13,12 +13,11 @@ import { searchFramesColumns } from "../utils/StaticVariables"
 import FilterSearch from "../Components/Search/FilterSearch"
 import { useSetRecoilState } from "recoil";
 import { popupState } from "../Recoil/RecoilState";
-import CustomBtn from "../Components/Reusable/CustomBtn"
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { Stack } from "@mui/system"
 import DesBtn from "../Components/Reusable/DesBtn"
 import { Pagination } from "@mui/material"
-import { Card, CardContent } from "@mui/material"
+import { Card } from "@mui/material"
 const Search = () => {
 
      const setPopup = useSetRecoilState(popupState);
@@ -78,29 +77,42 @@ const Search = () => {
 
      return (
           <Holder>
-               {
-                    !searchData.length && !loading ? <Card sx={{ p: 2, textAlign: "center" }}>
-                         No Data Available in Frame result
-                    </Card> : <>
 
+               <Stack direction="row" spacing={2}>
+                    <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
+                    <DesBtn text={"Filter"} handle={openPopup} customStyle={{ minWidth: "auto" }}> <FilterAltOutlinedIcon /> </DesBtn>
+               </Stack>
+               {selectedShowMethod === "cards" && (
+                    loading ? (
+                         <SkeletonLoaderReusable />
+                    ) : (
+                         <>
+                              {!searchData.length ? (
+                                   <Card sx={{ p: 3, my: 4, textAlign: "center" }}>
+                                        No Data Available in Frame result
+                                   </Card>
+                              ) : (
+                                   <>
+                                        <GridContainer items={searchData.map((el) => (
+                                             <CardSearch key={el.frame} data={el} />
+                                        ))} />
+                                        <Stack justifyContent="center" sx={{ mt: 2 }}>
+                                             <Pagination
+                                                  count={10}
+                                                  color="primary"
+                                                  sx={{ margin: "auto" }}
+                                                  page={page}  // Corrected
+                                                  onChange={handleChange}
+                                             />
+                                        </Stack>
+                                   </>
+                              )}
+                         </>
+                    )
+               )}
+               {selectedShowMethod === "table" && <TableReusable data={searchData} columns={searchFramesColumns} loading={loading} />}
+               {selectedShowMethod === "chart" && <CustomChart />}
 
-                         <Stack direction="row" spacing={2}>
-                              <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
-                              <DesBtn text={"Filter"} handle={openPopup} customStyle={{ minWidth: "auto" }}> <FilterAltOutlinedIcon /> </DesBtn>
-                         </Stack>
-                         {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> :
-                              <>
-                                   <GridContainer items={searchData?.map((el) => <CardSearch key={el.frame} data={el} />)} />
-                                   <Stack justifyContent={"center"}>
-                                        <Pagination count={10} color="primary" sx={{ margin: "auto" }} value={3} page={page}
-                                             onChange={handleChange} />
-                                   </Stack>
-                              </>
-
-                         )}
-                         {selectedShowMethod === "table" && <TableReusable data={searchData} columns={searchFramesColumns} loading={loading} />}
-                         {selectedShowMethod === "chart" && <CustomChart />}
-                    </>}
           </Holder>
      )
 }
