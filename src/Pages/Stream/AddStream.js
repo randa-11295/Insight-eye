@@ -25,17 +25,16 @@ const AddStream = () => {
         },
         onSubmit: (values) => {
             setLoading(true);
-            console.log(values)
+
             axios.post(baseURL + "/source", {
                 ...values,
             })
-                .then(response => {
+                .then(() => {
                     formik.handleReset()
                     showSuccess()
                 })
                 .catch(error => {
-         
-                    console.log(error.message)
+
                     showError()
                     // showSuccess()
                 })

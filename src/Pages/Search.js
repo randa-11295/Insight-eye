@@ -18,15 +18,19 @@ import { Stack } from "@mui/system"
 import DesBtn from "../Components/Reusable/DesBtn"
 import { Pagination } from "@mui/material"
 import { Card } from "@mui/material"
+import { snackAlertState } from "../Recoil/RecoilState";
+
 const Search = () => {
 
      const setPopup = useSetRecoilState(popupState);
      const [selectedShowMethod, setSelectedShowMethod] = useState("cards");
      const [searchData, setSearchData] = useState([]);
      const [loading, setLoading] = useState(true);
-     const [error, setError] = useState(null);
      const [page, setPage] = useState(1);
      const [limit, setLimit] = useState(50);
+
+     const setSnackAlert = useSetRecoilState(snackAlertState);
+
      const handleToggleChange = (event, newValue) => {
           if (newValue !== null) setSelectedShowMethod(newValue);
      };
@@ -50,10 +54,15 @@ const Search = () => {
 
      const handleChangeRowsPerPage = (event) => {
           setLimit(event.target.value)
-          // setLimit(parseInt(event.target.value, 10));
-          // setPage(0); // Reset to first page when changing rows per page
      };
 
+     const showError = () => {
+          setSnackAlert({
+              open: true,
+              message: "Something went wrong!",
+              severity: "error",
+          });
+      };
 
      //  get all result
      useEffect(() => {
@@ -73,7 +82,7 @@ const Search = () => {
 
                })
                .catch(error => {
-                    setError(error);
+                    showError()
                     setSearchData([]);
 
                }).finally(() => setLoading(false))
