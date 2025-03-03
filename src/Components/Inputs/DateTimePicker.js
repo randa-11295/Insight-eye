@@ -17,7 +17,7 @@ export default function DateTimePicker({
                <DatePicker
                     label={label}
                     value={dateValue}
-                    onChange={onDateChange}
+                    onChange={(e)=>onDateChange(e, label)}
                     minDate={minDate}
                     maxDate={maxDate}
                     sx={{width : "100%"}}
