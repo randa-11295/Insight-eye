@@ -14,7 +14,7 @@ import { popupState, snackAlertState } from "../Recoil/RecoilState";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { Stack, Card, Pagination } from "@mui/material";
 import DesBtn from "../Components/Reusable/DesBtn";
-
+import SelectCustom from "../Components/Inputs/SelectCustom";
 
 const Search = () => {
   const setPopup = useSetRecoilState(popupState);
@@ -24,7 +24,7 @@ const Search = () => {
   const [searchChartData, setSearchChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(15);
+  const [limit, setLimit] = useState(25);
   const [total, setTotal] = useState(0);
   const [numOfPages, setNumOfPages] = useState(0);
 
@@ -55,14 +55,14 @@ const Search = () => {
   };
 
   const handleChangePage = (event, newPage) => setPage(newPage);
-  const handleChangeRowsPerPage = event => setLimit(event.target.value);
+  const handleChangeLimit = event => setLimit(event.target.value);
   const showError = () => setSnackAlert({ open: true, message: "Something went wrong!", severity: "error" });
 
   useEffect(() => {
     setLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    axios.get(`${baseURL}/search_results`, { params: { page, per_page: limit, limit: "12" } })
+    axios.get(`${baseURL}/search_results`, { params: { page, per_page: limit } })
       .then(response => {
         setSearchData(response.data.data);
         setNumOfPages(response.data.num_of_pages);
@@ -70,6 +70,7 @@ const Search = () => {
       })
       .catch(showError)
       .finally(() => setLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, limit]);
 
  
@@ -80,6 +81,7 @@ const Search = () => {
         <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
         <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}> <FilterAltOutlinedIcon /> </DesBtn>
       </Stack>
+        <SelectCustom  label="Select Frame Limit" arr={[10 , 25 , 50 , 75 , 100 , 150 , 200]} value={limit} handleChange={handleChangeLimit}/>
       <p>Total: {total || 0}</p>
 
       {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> : (
@@ -102,7 +104,7 @@ const Search = () => {
           count={total}
           limit={limit}
           onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+          onRowsPerPageChange={handleChangeLimit}
         />
       )}
 

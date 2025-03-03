@@ -13,9 +13,9 @@ export default function SelectCustom(props) {
     
     <TextField
       select
-      value={props.formik?.values[props.name]}
+      value={props.formik?.values[props.name] || props.value }
       fullWidth
-      onChange={props.formik?.handleChange} >
+      onChange={props.formik?.handleChange || props.handleChange} >
       {props.arr && props.arr?.map((option) => {
         return (
           <MenuItem
