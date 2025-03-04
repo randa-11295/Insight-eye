@@ -13,7 +13,7 @@ export default function DateTimePicker({
     maxDate,
 }) {
     return (
-        <Stack sx={{ flexDirection: { md: "row" } }} gap={2} my={3}>
+        <Stack sx={{ flexDirection: { md: "row" } }} gap={2}     >
             <DatePicker
                 label={label}
                 value={dateValue}

@@ -15,6 +15,7 @@ export default function FilterSearch() {
             endDate: null,
             endTime: null,
             limit: "25",
+            id:null
         },
         onSubmit: (values) => {
             console.log("Submitted Values:", values);
@@ -51,6 +52,7 @@ export default function FilterSearch() {
                     onTimeChange={(time) => formik.setFieldValue("endTime", time)}
                     minDate={formik.values.startDate}
                 />
+                <SelectCustom label="Select Stream Name" arr={["camera_0","camera_1", "camera_2", ]} name={"id"} formik={formik} />
                 <SelectCustom label="Select Frame Limit" arr={[10, 25, 50, 75, 100, 150, 200]} name={"limit"} formik={formik} />
                 
 
