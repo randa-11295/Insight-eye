@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Holder from "../Components/HOC/Holder";
 import ReusableToggleBtns from "../Components/Reusable/ReusableToggleBtns";
 import { dataRenderTypeInSearchArr, searchFramesColumns, baseURL } from "../utils/StaticVariables";
@@ -14,7 +14,6 @@ import { popupState, snackAlertState } from "../Recoil/RecoilState";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { Stack, Card, Pagination } from "@mui/material";
 import DesBtn from "../Components/Reusable/DesBtn";
-import SelectCustom from "../Components/Inputs/SelectCustom";
 
 const Search = () => {
   const setPopup = useSetRecoilState(popupState);
@@ -27,6 +26,8 @@ const Search = () => {
   const [limit, setLimit] = useState(25);
   const [total, setTotal] = useState(0);
   const [numOfPages, setNumOfPages] = useState(0);
+  
+  const childRef = useRef(null); // Ensure it's null initially
 
   const handleToggleChange = (event, newValue) => {
     if (newValue !== null) setSelectedShowMethod(newValue);
@@ -36,7 +37,7 @@ const Search = () => {
     if (!searchData.length) return;
 
     const chartDataFormat = searchData.map(el => ({
-      camera_id: el.metadata?.camera_id ,
+      camera_id: el.metadata?.camera_id,
       date: el.metadata?.date || 0,
       time: el.metadata?.time || 0,
       person_count: el.metadata?.person_count || 0,
@@ -45,12 +46,19 @@ const Search = () => {
     setSearchChartData(chartDataFormat);
   }, [searchData]);
 
+  const handleClick = () => {
+    console.log("tessst");
+    if (childRef.current) {
+      childRef.current.test(); // Call child's function
+    }
+  };
+
   const openPopup = () => {
     setPopup({
       isOpen: true,
       title: "Select Date and Time Range",
-      content: <FilterSearch />,
-      sendReq: () => console.log("open"),
+      content: <FilterSearch ref={childRef} />, // Attach ref here
+      sendReq: handleClick,
     });
   };
 
@@ -70,16 +78,15 @@ const Search = () => {
       })
       .catch(showError)
       .finally(() => setLoading(false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, limit]);
-
- 
 
   return (
     <Holder>
       <Stack direction="row" spacing={2}>
         <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
-        <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}> <FilterAltOutlinedIcon /> </DesBtn>
+        <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}> 
+          <FilterAltOutlinedIcon /> 
+        </DesBtn>
       </Stack>
       <p>Total: {total || 0}</p>
 
@@ -106,8 +113,6 @@ const Search = () => {
           onRowsPerPageChange={handleChangeLimit}
         />
       )}
-
-
 
       {selectedShowMethod === "chart" && <CustomChart chartData={searchChartData} />}
     </Holder>
