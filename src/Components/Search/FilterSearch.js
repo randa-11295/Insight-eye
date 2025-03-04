@@ -4,6 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import DateTimePicker from "../Inputs/DateTimePicker"; // Import reusable component
 import { Button } from "@mui/material";
+import SelectCustom from "../Inputs/SelectCustom";
 
 export default function FilterSearch() {
     // Formik setup with null defaults
@@ -13,6 +14,7 @@ export default function FilterSearch() {
             startTime: null,
             endDate: null,
             endTime: null,
+            limit: "25",
         },
         onSubmit: (values) => {
             console.log("Submitted Values:", values);
@@ -49,6 +51,8 @@ export default function FilterSearch() {
                     onTimeChange={(time) => formik.setFieldValue("endTime", time)}
                     minDate={formik.values.startDate}
                 />
+                <SelectCustom label="Select Frame Limit" arr={[10, 25, 50, 75, 100, 150, 200]} name={"limit"} formik={formik} />
+                
 
                 <Button type="submit" variant="contained" sx={{ mt: 2 }}>
                     Submit

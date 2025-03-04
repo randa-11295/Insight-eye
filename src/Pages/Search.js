@@ -81,7 +81,6 @@ const Search = () => {
         <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
         <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}> <FilterAltOutlinedIcon /> </DesBtn>
       </Stack>
-        <SelectCustom  label="Select Frame Limit" arr={[10 , 25 , 50 , 75 , 100 , 150 , 200]} value={limit} handleChange={handleChangeLimit}/>
       <p>Total: {total || 0}</p>
 
       {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> : (
