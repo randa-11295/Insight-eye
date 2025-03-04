@@ -1,61 +1,59 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { useFormik } from "formik";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import DateTimePicker from "../Inputs/DateTimePicker"; // Import reusable component
-import { useState } from "react";
+import { Button } from "@mui/material";
 
-export default function FilterSearch({
-    startDateTime,
-    endDateTime,
-    onStartDateTimeChange,
-    onEndDateTimeChange,
-}) {
-    // Handle Start Date Change
+export default function FilterSearch() {
+    // Formik setup with null defaults
+    const formik = useFormik({
+        initialValues: {
+            startDate: null,
+            startTime: null,
+            endDate: null,
+            endTime: null,
+        },
+        onSubmit: (values) => {
+            console.log("Submitted Values:", values);
 
-    const [startDate, setStartDate] = useState(null);
-    const [endData, setEndData] = useState(null);
+            values.startDate = new Intl.DateTimeFormat("en-GB").format(values.startDate.$d);
+            values.endDate = new Intl.DateTimeFormat("en-GB").format(values.endDate.$d);
 
-    const getDateHandle = (date, label) => {
-        const formattedDate = new Intl.DateTimeFormat("en-GB").format(date);
-        label === "Start" ? setStartDate(formattedDate) : setEndData(formattedDate)
-    };
+            values.startTime = `${String(values.startTime.$H).padStart(2, "0")}:${String(values.startTime.$m).padStart(2, "0")}`;
+            values.endTime = `${String(values.endTime.$H).padStart(2, "0")}:${String(values.endTime.$m).padStart(2, "0")}`;
 
-    useEffect(() => {
-        console.log(startDate, endData)
-    }, [endData, startDate])
-
-    // Handle End Time Change
-    const handleEndTimeChange = (time) => {
-        if (!time) return;
-        if (!endDateTime) return;
-        onEndDateTimeChange(endDateTime.hour(time.hour()).minute(time.minute()));
-    };
+            console.log("final Values:", values);
+        },
+    });
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            {/* Start Date & Time Picker */}
-            <DateTimePicker
-                label="Start"
+            <form onSubmit={formik.handleSubmit}>
+                {/* Start Date & Time */}
+                <DateTimePicker
+                    label="Start"
+                    dateValue={formik.values.startDate}
+                    timeValue={formik.values.startTime}
+                    onDateChange={(date) => formik.setFieldValue("startDate", date)}
+                    onTimeChange={(time) => formik.setFieldValue("startTime", time)}
+                    maxDate={formik.values.endDate}
+                />
 
-                dateValue={startDateTime}
-                timeValue={startDateTime}
-                onDateChange={getDateHandle}
-                // onTimeChange={handleStartTimeChange}
-                maxDate={endDateTime || undefined}
-                disableTime={!startDateTime} // Disable time if no date is selected
-            />
+                {/* End Date & Time */}
+                <DateTimePicker
+                    label="End"
+                    dateValue={formik.values.endDate}
+                    timeValue={formik.values.endTime}
+                    onDateChange={(date) => formik.setFieldValue("endDate", date)}
+                    onTimeChange={(time) => formik.setFieldValue("endTime", time)}
+                    minDate={formik.values.startDate}
+                />
 
-            {/* End Date & Time Picker */}
-            <DateTimePicker
-                label="End"
-
-                dateValue={endDateTime}
-                timeValue={endDateTime}
-                onDateChange={getDateHandle}
-                // onTimeChange={handleEndTimeChange}
-                minDate={startDateTime || undefined}
-                disableTime={!endDateTime} // Disable time if no date is selected
-            />
+                <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+                    Submit
+                </Button>
+            </form>
         </LocalizationProvider>
     );
 }
