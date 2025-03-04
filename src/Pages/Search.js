@@ -23,10 +23,10 @@ const Search = () => {
   const [searchChartData, setSearchChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(25);
+  const [filter, setFilter] = useState({});
   const [total, setTotal] = useState(0);
   const [numOfPages, setNumOfPages] = useState(0);
-  
+
   const childRef = useRef(null); // Ensure it's null initially
 
   const handleToggleChange = (event, newValue) => {
@@ -49,7 +49,7 @@ const Search = () => {
   const handleClick = () => {
     console.log("tessst");
     if (childRef.current) {
-      childRef.current.test(); // Call child's function
+      childRef.current.submit(); // Call child's function
     }
   };
 
@@ -63,14 +63,14 @@ const Search = () => {
   };
 
   const handleChangePage = (event, newPage) => setPage(newPage);
-  const handleChangeLimit = event => setLimit(event.target.value);
   const showError = () => setSnackAlert({ open: true, message: "Something went wrong!", severity: "error" });
 
   useEffect(() => {
+
     setLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
-
-    axios.get(`${baseURL}/search_results`, { params: { page, per_page: limit } })
+    console.log(filter)
+    axios.get(`${baseURL}/search_results`, { params: { page, per_page: 50 } })
       .then(response => {
         setSearchData(response.data.data);
         setNumOfPages(response.data.num_of_pages);
@@ -78,14 +78,14 @@ const Search = () => {
       })
       .catch(showError)
       .finally(() => setLoading(false));
-  }, [page, limit]);
+  }, [page, filter]);
 
   return (
     <Holder>
       <Stack direction="row" spacing={2}>
         <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
-        <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}> 
-          <FilterAltOutlinedIcon /> 
+        <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}>
+          <FilterAltOutlinedIcon />
         </DesBtn>
       </Stack>
       <p>Total: {total || 0}</p>
@@ -108,9 +108,7 @@ const Search = () => {
           loading={loading}
           page={page}
           count={total}
-          limit={limit}
           onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeLimit}
         />
       )}
 

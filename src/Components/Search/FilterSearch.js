@@ -27,9 +27,7 @@ const FilterSearch = forwardRef((props, ref) => {
     });
 
     useImperativeHandle(ref, () => ({
-        test: () => {
-            console.log("Child function executed!");
-        },
+        submit: formik.handleSubmit,
     }));
 
     return (
