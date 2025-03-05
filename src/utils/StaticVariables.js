@@ -17,6 +17,7 @@ export const navbarContentArr = [
   { text: "Prediction", url: "/prediction", icon: getIcon(CorporateFareOutlinedIcon) },
   { text: "Setting", url: "/setting", icon: getIcon(SettingsOutlinedIcon) },
   { text: "Log in", url: "/log-in", icon: getIcon(LogoutOutlinedIcon) },
+  { text: "Contact With us", url: "/contact-with-us", icon: getIcon(LogoutOutlinedIcon) },
   { text: "Log out", url: false, icon: getIcon(LogoutOutlinedIcon) },
 ];
 
