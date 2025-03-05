@@ -10,7 +10,7 @@ import FilterSearch from "../Components/Search/FilterSearch";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DesBtn from "../Components/Reusable/DesBtn";
 import PrintBtn from "../Components/Reusable/PrintBtn";
-import { Stack, Card, Pagination, Box , Typography} from "@mui/material";
+import { Stack, Card, Pagination, Box, Typography } from "@mui/material";
 import { useSetRecoilState } from "recoil";
 import { popupState, snackAlertState } from "../Recoil/RecoilState";
 import { dataRenderTypeInSearchArr, searchFramesColumns, baseURL } from "../utils/StaticVariables";
@@ -92,12 +92,12 @@ const Search = () => {
 
   return (
     <Box p={2}>
-      <Stack direction={{xs : "column" ,md :"row"}} spacing={2} justifyContent="space-between" alignItems="center">
+      {!loading && <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-between" alignItems="center">
 
         <Typography variant="body1" color="textPrimary">
           Avertible Recoded Frames : <strong> {total || 0}</strong>
         </Typography>
-        <Stack direction={{xs : "column" ,md :"row"}}  spacing={2}  >
+        <Stack direction={{ xs: "column", md: "row" }} spacing={2}  >
 
           <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
           <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}>
@@ -107,7 +107,7 @@ const Search = () => {
             columns={searchFramesColumns} />
 
         </Stack>
-      </Stack>
+      </Stack>}
 
       {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> : (
         searchData.length ? (
@@ -127,9 +127,10 @@ const Search = () => {
       )}
 
       {selectedShowMethod === "chart" && <CustomChart chartData={searchChartData} />}
-      <Stack justifyContent="center" sx={{ mt: 4 }}>
+
+      {!loading && <Stack justifyContent="center" sx={{ mt: 4 }}>
         <Pagination count={numOfPages} color="primary" sx={{ margin: "auto" }} page={page} onChange={changePageHandle} />
-      </Stack>
+      </Stack>}
     </Box>
   );
 };
