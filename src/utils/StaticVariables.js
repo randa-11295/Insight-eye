@@ -16,7 +16,8 @@ export const navbarContentArr = [
   { text: "Search", url: "/search", icon: getIcon(SearchOutlinedIcon) },
   { text: "Prediction", url: "/prediction", icon: getIcon(CorporateFareOutlinedIcon) },
   { text: "Setting", url: "/setting", icon: getIcon(SettingsOutlinedIcon) },
-  { text: "Logout", url: false, icon: getIcon(LogoutOutlinedIcon) },
+  { text: "Log in", url: "/log-in", icon: getIcon(LogoutOutlinedIcon) },
+  { text: "Log out", url: false, icon: getIcon(LogoutOutlinedIcon) },
 ];
 
 

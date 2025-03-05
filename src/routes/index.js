@@ -11,7 +11,7 @@ import UpdateStreams from "../Pages/Stream/UpdateStreams";
 import Search from "../Pages/Search"
 import Stream from "../Pages/Stream/Streams"
 import ShowStreams from "../Pages/Stream/ShowStreams";
-
+import Login from "../Pages/Login";
 export const AppRouter = () => {
 
   return (
@@ -23,6 +23,7 @@ export const AppRouter = () => {
           <Route path="/streams/add-stream" element={<AddStream />} />
           <Route path="/streams/show-streams" element={<ShowStreams />} />
           <Route path="/streams/update-streams" element={<UpdateStreams />} />
+          <Route path="/log-in" element={<Login />} />
           <Route path="/search" element={<Search />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Route>
