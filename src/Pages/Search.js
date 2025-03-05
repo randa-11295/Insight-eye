@@ -62,7 +62,7 @@ const Search = () => {
   };
 
   const changePageHandle = (event, newPage) => setPage(newPage);
-  
+
   const showError = () => setSnackAlert({ open: true, message: "Something went wrong!", severity: "error" });
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const Search = () => {
         end_time: filter.endTime,
         start_time: filter.startTime,
         start_date: filter.startDate,
-        end_date: filter.endTime,
+        end_date: filter.endDate,
         camera_id: filter.id
       }
     })
@@ -102,17 +102,15 @@ const Search = () => {
 
       {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> : (
         searchData.length ? (
-          <>
-            <GridContainer items={searchData.map(el => <CardSearch key={el.frame} data={el} />)} />
-            <Stack justifyContent="center" sx={{ mt: 2 }}>
-              <Pagination count={numOfPages} color="primary" sx={{ margin: "auto" }} page={page} onChange={changePageHandle} />
-            </Stack>
-          </>
+
+          <GridContainer items={searchData.map(el => <CardSearch key={el.frame} data={el} />)} />
+
+
         ) : <Card sx={{ p: 3, my: 4, textAlign: "center" }}>No Data Available in Frame result</Card>
       ))}
 
       {selectedShowMethod === "table" && (
-        <TableReusable
+        <TableReusable print
           data={searchData}
           columns={searchFramesColumns}
           loading={loading}
@@ -123,6 +121,9 @@ const Search = () => {
       )}
 
       {selectedShowMethod === "chart" && <CustomChart chartData={searchChartData} />}
+      <Stack justifyContent="center" sx={{ mt: 4 }}>
+        <Pagination count={numOfPages} color="primary" sx={{ margin: "auto" }} page={page} onChange={changePageHandle} />
+      </Stack>
     </Holder>
   );
 };

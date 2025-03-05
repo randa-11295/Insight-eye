@@ -9,11 +9,10 @@ import {
   TableRow,
   Paper,
   Checkbox,
-  TablePagination,
   Button
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import TableLoader from "./TableLoaderReusable"; // Import Skeleton Loader
+import TableLoader from "./TableLoaderReusable"; 
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
@@ -46,7 +45,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": { border: 0 },
 }));
 
-const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRowsPerPageChange, handelChangeSelect }) => {
+const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRowsPerPageChange, handelChangeSelect, print, pagination }) => {
   if (loading) return <TableLoader columns={columns.length} />;
 
   const exportToExcel = () => {
@@ -76,10 +75,9 @@ const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRo
 
   return (
     <>
-      {/* Export Button */}
-      <Button 
-        variant="contained" 
-        onClick={exportToExcel} 
+      {print && <Button
+        variant="contained"
+        onClick={exportToExcel}
         sx={{
           backgroundColor: "#16AA9D",
           color: "#fff",
@@ -88,7 +86,7 @@ const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRo
         }}
       >
         Download Excel
-      </Button>
+      </Button>}
 
       <TableContainer
         component={Paper}
@@ -145,16 +143,7 @@ const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRo
         </Table>
       </TableContainer>
 
-      {/* Pagination */}
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25, 50, 75]}
-        component="div"
-        count={100}
-        rowsPerPage={limit}
-        page={page}
-        onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-      />
+  
     </>
   );
 };
