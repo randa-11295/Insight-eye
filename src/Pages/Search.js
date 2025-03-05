@@ -47,9 +47,8 @@ const Search = () => {
   }, [searchData]);
 
   const handleClick = () => {
-    console.log("tessst");
     if (childRef.current) {
-      childRef.current.submit(); // Call child's function
+      childRef.current.submit();
     }
   };
 
@@ -57,20 +56,30 @@ const Search = () => {
     setPopup({
       isOpen: true,
       title: "Select Date and Time Range",
-      content: <FilterSearch ref={childRef} />, // Attach ref here
+      content: <FilterSearch ref={childRef} changeFilterHandle={setFilter} />,
       sendReq: handleClick,
     });
   };
 
-  const handleChangePage = (event, newPage) => setPage(newPage);
+  const changePageHandle = (event, newPage) => setPage(newPage);
+  
   const showError = () => setSnackAlert({ open: true, message: "Something went wrong!", severity: "error" });
 
   useEffect(() => {
 
     setLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    console.log(filter)
-    axios.get(`${baseURL}/search_results`, { params: { page, per_page: 50 } })
+    axios.get(`${baseURL}/search_results`, {
+      params: {
+        page,
+        per_page: filter.limit,
+        end_time: filter.endTime,
+        start_time: filter.startTime,
+        start_date: filter.startDate,
+        end_date: filter.endTime,
+        camera_id: filter.id
+      }
+    })
       .then(response => {
         setSearchData(response.data.data);
         setNumOfPages(response.data.num_of_pages);
@@ -78,6 +87,7 @@ const Search = () => {
       })
       .catch(showError)
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, filter]);
 
   return (
@@ -95,7 +105,7 @@ const Search = () => {
           <>
             <GridContainer items={searchData.map(el => <CardSearch key={el.frame} data={el} />)} />
             <Stack justifyContent="center" sx={{ mt: 2 }}>
-              <Pagination count={numOfPages} color="primary" sx={{ margin: "auto" }} page={page} onChange={handleChangePage} />
+              <Pagination count={numOfPages} color="primary" sx={{ margin: "auto" }} page={page} onChange={changePageHandle} />
             </Stack>
           </>
         ) : <Card sx={{ p: 3, my: 4, textAlign: "center" }}>No Data Available in Frame result</Card>
@@ -108,7 +118,7 @@ const Search = () => {
           loading={loading}
           page={page}
           count={total}
-          onPageChange={handleChangePage}
+          onPageChange={changePageHandle}
         />
       )}
 
