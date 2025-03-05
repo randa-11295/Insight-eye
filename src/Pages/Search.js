@@ -1,19 +1,19 @@
 import { useState, useEffect, useRef } from "react";
-import Holder from "../Components/HOC/Holder";
-import ReusableToggleBtns from "../Components/Reusable/ReusableToggleBtns";
-import { dataRenderTypeInSearchArr, searchFramesColumns, baseURL } from "../utils/StaticVariables";
-import CustomChart from "../Components/Search/searchChart";
 import axios from "axios";
+import ReusableToggleBtns from "../Components/Reusable/ReusableToggleBtns";
+import CustomChart from "../Components/Search/searchChart";
 import CardSearch from "../Components/Search/CardSearch";
 import GridContainer from "../Components/HOC/GridContainer";
 import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable";
 import TableReusable from "../Components/Reusable/TableReusable";
 import FilterSearch from "../Components/Search/FilterSearch";
+import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import DesBtn from "../Components/Reusable/DesBtn";
+import PrintBtn from "../Components/Reusable/PrintBtn";
+import { Stack, Card, Pagination, Box , Typography} from "@mui/material";
 import { useSetRecoilState } from "recoil";
 import { popupState, snackAlertState } from "../Recoil/RecoilState";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import { Stack, Card, Pagination } from "@mui/material";
-import DesBtn from "../Components/Reusable/DesBtn";
+import { dataRenderTypeInSearchArr, searchFramesColumns, baseURL } from "../utils/StaticVariables";
 
 const Search = () => {
   const setPopup = useSetRecoilState(popupState);
@@ -91,21 +91,27 @@ const Search = () => {
   }, [page, filter]);
 
   return (
-    <Holder>
-      <Stack direction="row" spacing={2}>
-        <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
-        <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}>
-          <FilterAltOutlinedIcon />
-        </DesBtn>
+    <Box p={2}>
+      <Stack direction={{xs : "column" ,md :"row"}} spacing={2} justifyContent="space-between" alignItems="center">
+
+        <Typography variant="body1" color="textPrimary">
+          Avertible Recoded Frames : <strong> {total || 0}</strong>
+        </Typography>
+        <Stack direction={{xs : "column" ,md :"row"}}  spacing={2}  >
+
+          <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
+          <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}>
+            <FilterAltOutlinedIcon />
+          </DesBtn>
+          <PrintBtn data={searchData}
+            columns={searchFramesColumns} />
+
+        </Stack>
       </Stack>
-      <p>Total: {total || 0}</p>
 
       {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> : (
         searchData.length ? (
-
           <GridContainer items={searchData.map(el => <CardSearch key={el.frame} data={el} />)} />
-
-
         ) : <Card sx={{ p: 3, my: 4, textAlign: "center" }}>No Data Available in Frame result</Card>
       ))}
 
@@ -124,7 +130,7 @@ const Search = () => {
       <Stack justifyContent="center" sx={{ mt: 4 }}>
         <Pagination count={numOfPages} color="primary" sx={{ margin: "auto" }} page={page} onChange={changePageHandle} />
       </Stack>
-    </Holder>
+    </Box>
   );
 };
 
