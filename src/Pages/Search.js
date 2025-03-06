@@ -92,7 +92,7 @@ const Search = () => {
 
   return (
     <Box p={2}>
-      {!loading && <Stack my={3} direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-between" alignItems="center">
+      {!loading && <Stack my={4} direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-between" alignItems="center">
 
         <Typography variant="body1" color="textPrimary">
           Avertible Recoded Frames : <strong> {total || 0}</strong>
