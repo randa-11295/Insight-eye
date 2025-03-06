@@ -13,7 +13,7 @@ const getIcon = (IconComponent) => (isSelected) => (
 export const navbarContentArr = [
   { text: "Dashboard", url: "/", icon: getIcon(DashboardOutlinedIcon) },
   { text: "Streams", url: "/streams", icon: getIcon(LiveTvOutlinedIcon) },
-  { text: "Search", url: "/search", icon: getIcon(SearchOutlinedIcon) },
+  { text: "Frames Search", url: "/frames-search", icon: getIcon(SearchOutlinedIcon) },
   { text: "Prediction", url: "/prediction", icon: getIcon(CorporateFareOutlinedIcon) },
   { text: "Setting", url: "/setting", icon: getIcon(SettingsOutlinedIcon) },
   { text: "Log in", url: "/log-in", icon: getIcon(LogoutOutlinedIcon) },

@@ -85,7 +85,9 @@ const Search = () => {
         setNumOfPages(response.data.num_of_pages);
         setTotal(response.data.total_count);
       })
-      .catch(showError)
+      .catch(()=>{
+        searchData([])
+        showError()})
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, filter]);
@@ -95,7 +97,7 @@ const Search = () => {
       {!loading && <Stack my={4} direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-between" alignItems="center">
 
         <Typography variant="body1" color="textPrimary">
-          Avertible Recoded Frames : <strong> {total || 0}</strong>
+        Avertible Recoded Frames : <strong> {total || 0}</strong>
         </Typography>
         <Stack direction={{ xs: "column", md: "row" }} spacing={2}  >
 

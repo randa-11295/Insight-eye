@@ -18,7 +18,7 @@ const TopNav = (props) => {
 
 
   useEffect(() => {
-    const newRoute = location.pathname.split("/")[1]?.replaceAll("-" ,"_");
+    const newRoute = location.pathname.split("/")[1]?.replaceAll("-" ," ");
     if (newRoute) {
       setRoute(
       (`${newRoute}`)
