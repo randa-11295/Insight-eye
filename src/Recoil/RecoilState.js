@@ -34,11 +34,23 @@ export const selectedStreamState = atom({
 export const filterResultState = atom({
   key: "filterResultState",
   default: {
-      startDate: null,
-      startTime: null,
-      endDate: null,
-      endTime: null,
-      limit: "25",
-      id: null,
+    startDate: null,
+    startTime: null,
+    endDate: null,
+    endTime: null,
+    limit: "25",
+    id: null,
   },
 });
+
+
+
+// const storedAuth = JSON.parse(localStorage.getItem("auth")) || {
+export const authState = {
+  key: "authState",
+  default: {
+  isAuthenticated: false,
+  username: null,
+  token: null}
+};
+

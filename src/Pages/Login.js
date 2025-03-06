@@ -2,18 +2,30 @@ import React from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import { TextField, Button, Card, CardContent, Typography } from "@mui/material";
+import { baseURL } from "../utils/StaticVariables";
+import { authState } from "../Recoil/RecoilState";
+import { useRecoilState } from "recoil";
 
 const Login = () => {
+  const [, setAuthRecoil] = useRecoilState(authState);
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
     },
     onSubmit: async (values) => {
-     console.log(values)
+      console.log(values)
+
       try {
-        const response = await axios.post("/api/login", values);
+        const response = await axios.post(baseURL + "/login", values);
         console.log("Login Successful:", response.data);
+
+        setAuthRecoil({
+          isAuthenticated: true,
+          username: response.data.username,
+          token: response.data.session_id,
+        })
+
       } catch (error) {
         console.error("Login Failed:", error);
       }
@@ -30,12 +42,11 @@ const Login = () => {
           <form onSubmit={formik.handleSubmit}>
             <TextField
               fullWidth
-              label="Email"
-              type="email"
+              label="username"
               variant="outlined"
               margin="normal"
-              name="email"
-              value={formik.values.email}
+              name="username"
+              value={formik.values.username}
               onChange={formik.handleChange}
               required
             />
