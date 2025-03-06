@@ -5,23 +5,26 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import DateTimePicker from "../Inputs/DateTimePicker";
 import { Stack } from "@mui/system";
 import SelectCustom from "../Inputs/SelectCustom";
+import { filterResultState } from "../../Recoil/RecoilState";
+import { useRecoilState } from "recoil";
 
 const FilterSearch = forwardRef((props, ref) => {
+
+    const [formState, setFormState] = useRecoilState(filterResultState);
+
     const formik = useFormik({
-        initialValues: {
-            startDate: null,
-            startTime: null,
-            endDate: null,
-            endTime: null,
-            limit: "25",
-            id: null,
-        },
+        initialValues: formState, // Load saved values
         onSubmit: (values) => {
-            if (values.startDate) values.startDate = new Intl.DateTimeFormat("en-GB").format(values.startDate.$d);
-            if (values.endDate) values.endDate = new Intl.DateTimeFormat("en-GB").format(values.endDate.$d);
-            if (values.startTime) values.startTime = `${String(values.startTime.$H).padStart(2, "0")}:${String(values.startTime.$m).padStart(2, "0")}`;
-            if (values.endTime) values.endTime = `${String(values.endTime.$H).padStart(2, "0")}:${String(values.endTime.$m).padStart(2, "0")}`;
-            props.changeFilterHandle(values)
+            const formattedValues = {
+                ...values,
+                startDate: values.startDate ? new Intl.DateTimeFormat("en-GB").format(values.startDate.$d) : null,
+                endDate: values.endDate ? new Intl.DateTimeFormat("en-GB").format(values.endDate.$d) : null,
+                startTime: values.startTime ? `${String(values.startTime.$H).padStart(2, "0")}:${String(values.startTime.$m).padStart(2, "0")}` : null,
+                endTime: values.endTime ? `${String(values.endTime.$H).padStart(2, "0")}:${String(values.endTime.$m).padStart(2, "0")}` : null,
+            };
+
+            setFormState(values); 
+            props.changeFilterHandle(formattedValues);
         },
     });
 
@@ -31,7 +34,7 @@ const FilterSearch = forwardRef((props, ref) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Stack  gap={2} component="form" onSubmit={formik.handleSubmit}>
+            <Stack gap={2} component="form" onSubmit={formik.handleSubmit}>
                 <DateTimePicker label="Start" dateValue={formik.values.startDate} timeValue={formik.values.startTime}
                     onDateChange={(date) => formik.setFieldValue("startDate", date)}
                     onTimeChange={(time) => formik.setFieldValue("startTime", time)} maxDate={formik.values.endDate} />

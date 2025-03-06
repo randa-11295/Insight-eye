@@ -28,3 +28,17 @@ export const selectedStreamState = atom({
   key: "selectedStreamState",
   default: []
 });
+
+
+
+export const filterResultState = atom({
+  key: "filterResultState",
+  default: {
+      startDate: null,
+      startTime: null,
+      endDate: null,
+      endTime: null,
+      limit: "25",
+      id: null,
+  },
+});
