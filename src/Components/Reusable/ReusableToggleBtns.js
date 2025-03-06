@@ -1,14 +1,13 @@
-import * as React from 'react';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-
+import { Tooltip, ToggleButton, ToggleButtonGroup } from '@mui/material';
 const ReusableToggleBtns = ({ options, value, handleToggleChange }) => {
      return (
-          <ToggleButtonGroup  color="primary" value={value} exclusive onChange={handleToggleChange}>
+          <ToggleButtonGroup color="primary" value={value} exclusive onChange={handleToggleChange}>
                {options.map(({ value, icon: Icon }) => (
-                    <ToggleButton key={value} value={value}>
-                         <Icon />
-                    </ToggleButton>
+                    <Tooltip key={value} title={value} placement="top" arrow  >
+                         <ToggleButton value={value}>
+                              <Icon />
+                         </ToggleButton>
+                    </Tooltip>
                ))}
           </ToggleButtonGroup>
      );
