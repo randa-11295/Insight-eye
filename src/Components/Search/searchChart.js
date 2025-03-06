@@ -1,13 +1,14 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
-import { Card , Skeleton} from "@mui/material";
-
+import { Card, Skeleton } from "@mui/material";
+import { chartColors } from "../../utils/StaticVariables";
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 // Generate distinct colors for cameras
-const colors = ["rgb(75, 192, 192)", "rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 206, 86)"];
+
+
 
 const processData = (data) => {
   const groupedData = {};
@@ -40,7 +41,7 @@ const processData = (data) => {
   const datasets = Object.keys(groupedData).map((camera_id, index) => ({
     label: camera_id,
     data: sortedTimestamps.map((timestamp) => groupedData[camera_id][timestamp] || 0),
-    borderColor: colors[index % colors.length],
+    borderColor: chartColors[index % chartColors.length],
     fill: false,
     tension: 0.1,
   }));
@@ -48,7 +49,7 @@ const processData = (data) => {
   return { labels: sortedTimestamps, datasets };
 };
 
-const LineChart = ({ chartData = [] , loading}) => {
+const LineChart = ({ chartData = [], loading }) => {
   const { labels, datasets } = processData(chartData);
 
   const data = { labels, datasets };
@@ -78,11 +79,11 @@ const LineChart = ({ chartData = [] , loading}) => {
 
   return (
     <>
-   { loading ? <Skeleton variant="rectangular" height={"600px"} sx={{ borderRadius: 2 }} /> :
+      {loading ? <Skeleton variant="rectangular" height={"600px"} sx={{ borderRadius: 2 }} /> :
 
-    <Card  sx={{ height: "600px"  , padding :"20px"}}>
-      <Line data={data} options={options} />
-    </Card>}
+        <Card sx={{ height: "600px", padding: "20px" }}>
+          <Line data={data} options={options} />
+        </Card>}
     </>
   );
 };

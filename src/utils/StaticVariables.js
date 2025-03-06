@@ -42,6 +42,14 @@ export const dataRenderTypeInSearchArr = [
   { field: "path", headerName: "Path" },
 ];
 
+
+const generateUniqueColor = (index) => {
+  const hue = (index * 137) % 360; // Use golden angle for unique hues
+  return `hsl(${hue}, 85%, 55%)`; // High saturation and medium brightness for vibrancy
+};
+export const chartColors = ["rgb(75, 192, 192)", "rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 206, 86)", ...Array.from({ length: 10 }, (_, i) => generateUniqueColor(i))];
+
+
 export const BASE64_IMAGE_PREFIX = "data:image/jpeg;base64,";
 export const baseURL = "http://16.170.216.227"
 

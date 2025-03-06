@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import DateTimePicker from "../Inputs/DateTimePicker";
-import { Button } from "@mui/material";
+import { Stack } from "@mui/system";
 import SelectCustom from "../Inputs/SelectCustom";
 
 const FilterSearch = forwardRef((props, ref) => {
@@ -31,7 +31,7 @@ const FilterSearch = forwardRef((props, ref) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <form onSubmit={formik.handleSubmit}>
+            <Stack  gap={2} component="form" onSubmit={formik.handleSubmit}>
                 <DateTimePicker label="Start" dateValue={formik.values.startDate} timeValue={formik.values.startTime}
                     onDateChange={(date) => formik.setFieldValue("startDate", date)}
                     onTimeChange={(time) => formik.setFieldValue("startTime", time)} maxDate={formik.values.endDate} />
@@ -42,11 +42,7 @@ const FilterSearch = forwardRef((props, ref) => {
 
                 <SelectCustom label="Select Stream Name" arr={["camera_0", "camera_1", "camera_2"]} name={"id"} formik={formik} />
                 <SelectCustom label="Select Frame Limit" arr={[10, 25, 50, 75, 100, 150, 200]} name={"limit"} formik={formik} />
-
-                <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-                    Submit
-                </Button>
-            </form>
+            </Stack>
         </LocalizationProvider>
     );
 });

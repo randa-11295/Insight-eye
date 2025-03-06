@@ -1,7 +1,7 @@
 import React from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 export default function DateTimePicker({
     label,
@@ -12,10 +12,12 @@ export default function DateTimePicker({
     minDate,
     maxDate,
 }) {
-    return (
+    return (<div>
+        <Typography variant="h6" sx={{ fontSize: ".9rem", fontWeight: 600, textTransform: "capitalize" , mb: 1}}  >
+            {label} Date & Time :
+        </Typography>
         <Stack sx={{ flexDirection: { md: "row" } }} gap={2}     >
             <DatePicker
-                label={label}
                 value={dateValue}
                 onChange={(date) => onDateChange(date, label)}
                 minDate={minDate}
@@ -23,12 +25,13 @@ export default function DateTimePicker({
                 sx={{ width: "100%" }}
             />
             <TimePicker
-                label={`${label} Time`}
                 value={timeValue}
                 onChange={(time) => onTimeChange(time, label)}
                 disabled={!dateValue} // Enable only when date is selected
                 sx={{ width: "100%" }}
             />
         </Stack>
+    </div>
+
     );
 }
