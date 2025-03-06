@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ReusableToggleBtns from "../Components/Reusable/ReusableToggleBtns";
-import CustomChart from "../Components/Search/searchChart";
+import CustomChart from "../Components/Search/SearchChart";
 import CardSearch from "../Components/Search/CardSearch";
 import GridContainer from "../Components/HOC/GridContainer";
 import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable";
@@ -92,7 +92,7 @@ const Search = () => {
 
   return (
     <Box p={2}>
-      {!loading && <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-between" alignItems="center">
+      {!loading && <Stack my={3} direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-between" alignItems="center">
 
         <Typography variant="body1" color="textPrimary">
           Avertible Recoded Frames : <strong> {total || 0}</strong>
@@ -126,7 +126,7 @@ const Search = () => {
         />
       )}
 
-      {selectedShowMethod === "chart" && <CustomChart chartData={searchChartData} />}
+      {selectedShowMethod === "chart" && <CustomChart loading={loading}   chartData={searchChartData} />}
 
       {!loading && <Stack justifyContent="center" sx={{ mt: 4 }}>
         <Pagination count={numOfPages} color="primary" sx={{ margin: "auto" }} page={page} onChange={changePageHandle} />

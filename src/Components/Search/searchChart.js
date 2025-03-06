@@ -1,7 +1,7 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
-import { Card } from "@mui/material";
+import { Card , Skeleton} from "@mui/material";
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -48,7 +48,7 @@ const processData = (data) => {
   return { labels: sortedTimestamps, datasets };
 };
 
-const LineChart = ({ chartData = [] }) => {
+const LineChart = ({ chartData = [] , loading}) => {
   const { labels, datasets } = processData(chartData);
 
   const data = { labels, datasets };
@@ -77,9 +77,13 @@ const LineChart = ({ chartData = [] }) => {
   };
 
   return (
+    <>
+   { loading ? <Skeleton variant="rectangular" height={"600px"} sx={{ borderRadius: 2 }} /> :
+
     <Card  sx={{ height: "600px"  , padding :"20px"}}>
       <Line data={data} options={options} />
-    </Card>
+    </Card>}
+    </>
   );
 };
 
