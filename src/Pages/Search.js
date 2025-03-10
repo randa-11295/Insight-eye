@@ -86,7 +86,7 @@ const Search = () => {
         setTotal(response.data.total_count);
       })
       .catch(()=>{
-        searchData([])
+        setSearchData([])
         showError()})
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,8 +112,8 @@ const Search = () => {
       </Stack>}
 
       {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> : (
-        searchData.length ? (
-          <GridContainer items={searchData.map(el => <CardSearch key={el.frame} data={el} />)} />
+        searchData.length > 0 ? (
+          <GridContainer items={searchData?.map(el => <CardSearch key={el.frame} data={el} />)} />
         ) : <Card sx={{ p: 3, my: 4, textAlign: "center" }}>No Data Available in Frame result</Card>
       ))}
 
