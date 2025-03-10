@@ -16,19 +16,27 @@ const Login = () => {
     onSubmit: async (values) => {
       console.log(values)
 
-      try {
-        const response = await axios.post(baseURL + "/login", values);
-        console.log("Login Successful:", response.data);
-
-        setAuthRecoil({
-          isAuthenticated: true,
-          username: response.data.username,
-          token: response.data.session_id,
+      axios.post(baseURL + "/login", values, {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }
+      })
+        .then(response => {
+          console.log("Login Successful:", response.data);
+          localStorage.setItem("token", response.data.session_id);
+          setAuthRecoil({
+            isAuthenticated: true,
+            username: response.data.username,
+            token: response.data.session_id,
+          });
         })
-
-      } catch (error) {
-        console.error("Login Failed:", error);
-      }
+        .catch(error => {
+          console.error("Login Failed:", error);
+        })
+        .finally(() => {
+          console.log("Login request completed.");
+        });
     },
   });
 

@@ -29,10 +29,10 @@ function Home() {
 
       <Box component="main" sx={BoxStyle}>
         <Toolbar />
-        <Outlet />   
-           </Box>
-           <SnackAlert />
-           <PopUpReusable />
+        <Outlet />
+      </Box>
+      <SnackAlert />
+      <PopUpReusable />
     </Box>
   );
 }
