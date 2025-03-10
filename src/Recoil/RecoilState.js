@@ -45,12 +45,11 @@ export const filterResultState = atom({
 
 
 
-// const storedAuth = JSON.parse(localStorage.getItem("auth")) || {
-export const authState = {
+export const authState = atom({
   key: "authState",
   default: {
-  isAuthenticated: false,
-  username: null,
-  token: null}
-};
-
+    isAuthenticated: false,
+    username: null,
+    token: null
+  }
+});
