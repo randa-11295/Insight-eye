@@ -6,7 +6,7 @@ import SideNav from "../Components/Navbar/SideNav";
 import { Outlet } from "react-router-dom";
 import SnackAlert from "../Components/PopUp/SnackAlert";
 import PopUpReusable from "../Components/PopUp/PopUpReusable"
-import Login from "./Login";
+import Login from "./Welcome";
 const drawerWidth = 280;
 
 function Home() {

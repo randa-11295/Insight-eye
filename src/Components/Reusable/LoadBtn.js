@@ -6,12 +6,13 @@ export default function LoadBtn(props) {
 
   return (
     <LoadingButton
-    
       loading={props.loading || false}
       variant="contained"
       onClick={props.handle}
+      fullWidth={props.fullWidth}
+      size="large"
     >
-      Conform
+      {props.text || "Conform"}
     </LoadingButton>
   );
 }

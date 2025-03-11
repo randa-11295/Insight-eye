@@ -11,7 +11,7 @@ import UpdateStreams from "../Pages/Stream/UpdateStreams";
 import Search from "../Pages/Search"
 import Stream from "../Pages/Stream/Streams"
 import ShowStreams from "../Pages/Stream/ShowStreams";
-import Login from "../Pages/Login";
+import Login from "../Pages/Welcome";
 import Contact from "../Pages/Contact";
 
 export const AppRouter = () => {
