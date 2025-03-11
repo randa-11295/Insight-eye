@@ -1,6 +1,7 @@
 import Info from "../Components/Auth/Info";
 import LogIn from "../Components/Auth/LogIn";
-import { Stack } from "@mui/system";
+import { Stack, Box } from "@mui/system";
+import Otp from "../Components/Auth/Otp";
 
 const Welcome = () => {
 
@@ -14,8 +15,12 @@ const Welcome = () => {
       }}
     >
       <Info />
-
-    <LogIn />
+      <Box sx={{
+        width: { md: "50%" },
+        height: { xs: "50%", md: "100%" },
+      }} >
+        <Otp />
+      </Box>
     </Stack>
   );
 };
