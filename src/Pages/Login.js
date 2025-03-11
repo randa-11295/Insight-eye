@@ -1,19 +1,16 @@
 import React from "react";
 import { useFormik } from "formik";
 import axios from "axios";
-import { TextField, Button, Stack, CardContent, Typography } from "@mui/material";
+import { Box, Button, Stack, CardContent, Typography } from "@mui/material";
 import { baseURL } from "../utils/StaticVariables";
 import { authState } from "../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
-import { Box, useTheme } from "@mui/material";
-import logo from "../Images/logo.png"
-import bg from "../Images/logbg.jpg"
+import Info from "../Components/Auth/Info";
 import InputTextCustom from "../Components/Inputs/InputTextCustom";
 
 const Login = () => {
-  const theme = useTheme();
   const [, setAuthRecoil] = useRecoilState(authState);
-  
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -51,63 +48,9 @@ const Login = () => {
       sx={{
         height: "100vh",
         p: 4
-        // background: `linear-gradient(135deg, ${theme.palette.primary.main} 25%, ${theme.palette.secondary.main} 100%)`,
       }}
     >
-      <Stack sx={{
-        width: { md: "50%" },
-        height: { xs: "50%", md: "100%" },
-        p: 4,
-        backgroundImage: `url(${bg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "left",
-        border: 3,
-        borderRadius: 5,
-        borderColor: "primary.main"
-      }}>
-
-
-        <Box
-          sx={{
-            width: { xs: "40%", sm: "25%", md: "20%" }, // Responsive width
-            display: "flex",
-            justifyContent: "center",
-
-            "& img": {
-              width: "100%",
-              height: "auto",
-              objectFit: "contain",
-            },
-          }}
-        >
-          <img src={logo} alt="Logo" />
-        </Box>
-        <Stack sx={{ textAlign: { xs: "center", md: "left " }, p: 2, flexGrow: 1, justifyContent: "center" }}>
-          <Typography
-            variant="h1"
-            sx={{
-              fontSize: { xs: "24px", sm: "32px", md: "40px", lg: "4rem" }, // Responsive font sizes
-              fontWeight: "bold",
-
-            }}
-          >
-            Welcome in INSIGHT EYE
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{
-              fontSize: { xs: "14px", sm: "16px", md: "18px" }, // Responsive font sizes
-              color: "text.secondary",
-              mt: 4,
-            }}
-          >
-            Lorem ipsum was conceived as filler text, formatted in a certain way to enable the presentation of graphic elements in documents, without the need for formal copy. Using Lorem Ipsum allows designers to put together layouts and the form of the content before the content has been created, giving the design and production process more freedom.
-
-            It is widely believed that the history of Lorem Ipsum originates with Cicero in the 1st Century BC and his text De
-          </Typography>
-        </Stack>
-      </Stack>
+     <Info />
       <Box sx={{
         width: { md: "50%" },
         height: { xs: "50%", md: "100%" },
@@ -123,7 +66,7 @@ const Login = () => {
                 color: "primary.main"
               }}
             >
-              Log in
+              LOGIN
             </Typography>
 
             <Typography
@@ -133,13 +76,13 @@ const Login = () => {
                 mt: 1,
               }}
             >
-              Lorem ipsum was conceived as filler text </Typography>
+              login to your account  to access all features in INSIGHT EYE</Typography>
           </Box>
 
           <InputTextCustom label="Email "
             placeholder="Enter your email or user name"
             formik={formik}
-            name="email" />
+            name="username" />
 
           <InputTextCustom label="password"
             placeholder="Enter your password"
