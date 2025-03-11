@@ -8,11 +8,12 @@ import { useRecoilState } from "recoil";
 import { Box, useTheme } from "@mui/material";
 import logo from "../Images/logo.png"
 import bg from "../Images/logbg.jpg"
-
+import InputTextCustom from "../Components/Inputs/InputTextCustom";
 
 const Login = () => {
   const theme = useTheme();
   const [, setAuthRecoil] = useRecoilState(authState);
+  
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -49,29 +50,29 @@ const Login = () => {
     <Stack direction={{ xs: "column", md: "row" }} justifyContent="stretch" alignItems="stretch" gap={4}
       sx={{
         height: "100vh",
-p : 4
+        p: 4
         // background: `linear-gradient(135deg, ${theme.palette.primary.main} 25%, ${theme.palette.secondary.main} 100%)`,
       }}
     >
       <Stack sx={{
         width: { md: "50%" },
         height: { xs: "50%", md: "100%" },
-        p: 4, 
+        p: 4,
         backgroundImage: `url(${bg})`,
         backgroundSize: "cover",
         backgroundPosition: "left",
-      border : 3,
-      borderRadius : 5, 
-      borderColor : "primary.main"
+        border: 3,
+        borderRadius: 5,
+        borderColor: "primary.main"
       }}>
-          
-       
+
+
         <Box
           sx={{
             width: { xs: "40%", sm: "25%", md: "20%" }, // Responsive width
             display: "flex",
             justifyContent: "center",
-            
+
             "& img": {
               width: "100%",
               height: "auto",
@@ -81,7 +82,7 @@ p : 4
         >
           <img src={logo} alt="Logo" />
         </Box>
-        <Stack sx={{ textAlign: { xs: "center", md: "left " }, p: 2, flexGrow: 1, justifyContent : "center"}}>
+        <Stack sx={{ textAlign: { xs: "center", md: "left " }, p: 2, flexGrow: 1, justifyContent: "center" }}>
           <Typography
             variant="h1"
             sx={{
@@ -103,43 +104,52 @@ p : 4
           >
             Lorem ipsum was conceived as filler text, formatted in a certain way to enable the presentation of graphic elements in documents, without the need for formal copy. Using Lorem Ipsum allows designers to put together layouts and the form of the content before the content has been created, giving the design and production process more freedom.
 
-            It is widely believed that the history of Lorem Ipsum originates with Cicero in the 1st Century BC and his text De 
+            It is widely believed that the history of Lorem Ipsum originates with Cicero in the 1st Century BC and his text De
           </Typography>
         </Stack>
       </Stack>
       <Box sx={{
         width: { md: "50%" },
         height: { xs: "50%", md: "100%" },
-
-        // background: "darkblue",
       }} >
 
         <CardContent component="form" onSubmit={formik.handleSubmit}>
-          <Typography variant="h5" align="center" gutterBottom>
-            Login
-          </Typography>
+          <Box>
+            <Typography
+              variant="h4"
+              sx={{
+                fontSize: "3rem",
+                fontWeight: "bold",
+                color: "primary.main"
+              }}
+            >
+              Log in
+            </Typography>
 
-          <TextField
-            fullWidth
-            label="username"
-            variant="outlined"
-            margin="normal"
-            name="username"
-            value={formik.values.username}
-            onChange={formik.handleChange}
-            required
-          />
-          <TextField
-            fullWidth
-            label="Password"
+            <Typography
+              variant="body1"
+              sx={{
+                color: "text.secondary",
+                mt: 1,
+              }}
+            >
+              Lorem ipsum was conceived as filler text </Typography>
+          </Box>
+
+          <InputTextCustom label="Email "
+            placeholder="Enter your email or user name"
+            formik={formik}
+            name="email" />
+
+          <InputTextCustom label="password"
+            placeholder="Enter your password"
             type="password"
-            variant="outlined"
-            margin="normal"
-            name="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            required
-          />
+            formik={formik}
+            name="Password"
+
+            value={formik.values.username}
+            onChange={formik.handleChange} />
+
           <Button fullWidth variant="contained" color="primary" type="submit" style={{ marginTop: 16 }}>
             Login
           </Button>
