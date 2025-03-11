@@ -116,18 +116,8 @@ function Otp() {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ height: '100vh', display: 'flex', alignItems: 'center' }}>
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          p: 4, 
-          width: '100%',
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center',
-          gap: 3
-        }}
-      >
+    <Box>
+    
         {/* <KeyRound size={40} color="#1976d2" /> */}
         <Typography variant="h5" component="h1" gutterBottom>
           OTP Verification
@@ -202,7 +192,7 @@ function Otp() {
             </Button>
           )}
         </Box>
-      </Paper>
+     
 
       <Snackbar
         open={alert.open}
@@ -217,7 +207,7 @@ function Otp() {
           {alert.message}
         </Alert>
       </Snackbar>
-    </Container>
+    </Box>
   );
 }
 
