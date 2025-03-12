@@ -19,7 +19,11 @@ const Welcome = () => {
         width: { md: "50%" },
         height: { xs: "50%", md: "100%" },
       }} >
-        <Otp />
+        <Box sx={{ margin : "auto",width  : "60%" ,height : "100%"}}>
+
+        <LogIn />
+        </Box>
+        {/* <Otp /> */}
       </Box>
     </Stack>
   );

@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Link, Typography } from "@mui/material";
 
 const LogIn = () => {
 
@@ -46,7 +46,7 @@ const LogIn = () => {
 
   return (
 
-    <Box>
+    <Box sx={{ flexDirection: "column", height: "100%", display: "flex", justifyContent: "space-around" }}>
       <Box>
         <Typography
           variant="h4"
@@ -68,6 +68,7 @@ const LogIn = () => {
         >
           login to your account  to access all features in INSIGHT EYE</Typography>
       </Box>
+
       <Box component="form" onSubmit={formik.handleSubmit}>
 
         <InputTextCustom label="Email "
@@ -83,14 +84,21 @@ const LogIn = () => {
 
           value={formik.values.username}
           onChange={formik.handleChange} />
-        <Button sx={{ margin: "auto" }}>
-
-          Forget your password?
-        </Button>
         <LoadBtn fullWidth text={"LogIn"} />
 
+        <Link component="span" underline="hover" sx={{ cursor: "pointer", padding: "20px", display: "block", textAlign: "center" }}>
+          Forget your password ?
+        </Link>
       </Box>
-      </Box>
+
+      <Typography sx={{ textAlign: "center" }}>
+
+        New user ?
+        <Link component="span" underline="hover" sx={{ cursor: "pointer", padding: "10px" }}>
+          Contact us
+        </Link>
+      </Typography>
+    </Box>
   )
 }
 
