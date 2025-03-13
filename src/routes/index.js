@@ -25,8 +25,7 @@ export const AppRouter = () => {
           <Route path="/streams/add-stream" element={<AddStream />} />
           <Route path="/streams/show-streams" element={<ShowStreams />} />
           <Route path="/streams/update-streams" element={<UpdateStreams />} />
-          <Route path="/log-in" element={<Login />} />
-          <Route path="/Contact-with-us" element={<Contact />} />
+          <Route path="/contact-us" element={<Contact />} />
           <Route path="/frames-search" element={<Search />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Route>
