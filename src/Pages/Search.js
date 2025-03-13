@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ReusableToggleBtns from "../Components/Reusable/ReusableToggleBtns";
-import CustomChart from "../Components/Search/SearchChart";
+import SearchChart from "../Components/Search/SearchChart";
 import CardSearch from "../Components/Search/CardSearch";
 import GridContainer from "../Components/HOC/GridContainer";
 import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable";
@@ -128,7 +128,7 @@ const Search = () => {
         />
       )}
 
-      {selectedShowMethod === "chart" && <CustomChart loading={loading}   chartData={searchChartData} />}
+      {selectedShowMethod === "chart" && <SearchChart loading={loading}   chartData={searchChartData} />}
 
       {!loading && <Stack justifyContent="center" sx={{ mt: 4 }}>
         <Pagination count={numOfPages} color="primary" sx={{ margin: "auto" }} page={page} onChange={changePageHandle} />
