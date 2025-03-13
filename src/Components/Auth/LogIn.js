@@ -6,9 +6,10 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
 import { Box, Link, Typography, Stack } from "@mui/material";
+import { useState } from "react";
 
 const LogIn = () => {
-
+  const [loading, setLoading] = useState(false)
   const [, setAuthRecoil] = useRecoilState(authState);
 
   const formik = useFormik({
@@ -18,7 +19,7 @@ const LogIn = () => {
     },
     onSubmit: async (values) => {
       console.log(values)
-
+      setLoading(true)
       axios.post(baseURL + "/login", values, {
         headers: {
           "Accept": "application/json",
@@ -39,6 +40,7 @@ const LogIn = () => {
         })
         .finally(() => {
           console.log("Login request completed.");
+          setLoading(false)
         });
     },
   });
@@ -80,11 +82,12 @@ const LogIn = () => {
           placeholder="Enter your password"
           type="password"
           formik={formik}
-          name="Password"
+          name="password"
 
           value={formik.values.username}
           onChange={formik.handleChange} />
-        <LoadBtn fullWidth text={"LogIn"} />
+
+        <LoadBtn fullWidth text={"LogIn"} handle={() => formik.handleSubmit()} loading={loading}/>
 
         <Link component="span" underline="hover" sx={{ cursor: "pointer", padding: "20px", display: "block", textAlign: "center" }}>
           Forget your password ?
