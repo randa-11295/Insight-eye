@@ -1,58 +1,75 @@
 import React from "react";
 import { Paper, Stack } from "@mui/material";
-import Grid from "@mui/material/Grid";
 import Holder from "../Components/HOC/Holder";
 import HighlightedText from "../Components/Reusable/HighlightedText";
+
+const personalInfo = [
+    { title: "First Name", val: "Randa" },
+    { title: "Last Name", val: "Mohamed" },
+    { title: "Email", val: "Randa.12@gmail.com" },
+    { title: "Company Name", val: "Spacetoon" },
+];
+
+const cameraStatuses = [
+    { title: "Camera 1", val: "on" },
+    { title: "Camera 12", val: "off" },
+    { title: "Camera 45", val: "on" },
+    { title: "Camera 2334", val: "on" },
+    { title: "Camera 22", val: "off" },
+    { title: "Camera 34", val: "off" },
+    { title: "Camera e3e", val: "on" },
+    { title: "Camera 3", val: "off" },
+    { title: "Camera 3", val: "on" },
+];
+
+const systemInfo = [
+    { title: "Frame Rate", val: "30" },
+    { title: "Confidence Level", val: "0.60" },
+];
+
+const RenderSection = ({ title, data, fullWidth = false }) => (
+    data.length > 0 && (
+        <Stack 
+            sx={{ 
+                flex: fullWidth ? "1 1 100%" : "1 1 45%", 
+            }}
+        >
+            <Holder title={title}>
+                <Paper 
+                    sx={{ 
+                        padding: 2, 
+                        height: "100%", // Ensures full height
+                    }}
+                >
+                    <Stack 
+                        gap={2} 
+                        direction={fullWidth ? "row" : "column"} 
+                        justifyContent={fullWidth ? "space-between" : "flex-start"}
+                        sx={{ flex: 1 }} // Ensures inner content stretches
+                    >
+                        {data.map((item, index) => (
+                            <HighlightedText key={index} title={item.title} val={item.val} />
+                        ))}
+                    </Stack>
+                </Paper>
+            </Holder>
+        </Stack>
+    )
+);
+
 const MyGridLayout = () => {
     return (
-        <Grid container spacing={4}>
-            {/* Top Left */}
-            <Grid item xs={12} sm={6}>
-                <Holder title="test">
-                    <Paper sx={{ padding: 2 }}>
-                        <Stack gap={2} >
-                            <HighlightedText title="First Name" val="Randa" />
-                            <HighlightedText title="last Name" val="Mohamed" />
-                            <HighlightedText title="Email" val="Randa.12@gmail.com" />
-                            <HighlightedText title="Company Name" val="Spacetoon" />
-                        </Stack>
-                    </Paper>
-                </Holder>
-            </Grid>
-
-            {/* Top Right */}
-            <Grid item xs={12} sm={6}>
-                <Holder title="test">
-                    <Paper sx={{ padding: 2 }}>
-                        <Stack gap={2} >
-                            <HighlightedText title="Camera 1" val="on" />
-                            <HighlightedText title="Camera 12" val="off" />
-                            <HighlightedText title="Camera 45" val="on" />
-                            <HighlightedText title="Camera 2334" val="on" />
-                            <HighlightedText title="Camera 22" val="off" />
-                            <HighlightedText title="Camera 34" val="off" />
-                            <HighlightedText title="Camera e3e" val="on" />
-                            <HighlightedText title="Camera 3" val="off" />
-                            <HighlightedText title="Camera 3" val="on" />
-
-                        </Stack>
-                    </Paper>
-                </Holder>
-            </Grid>
-
-            {/* Full-Width Row */}
-            <Grid item xs={12}>
-                <Holder title="System information">
-                    <Paper sx={{ padding: 2 }}>
-                        <Stack gap={2} direction={{ sm: "row" }} justifyContent="space-between">
-                            <HighlightedText title="Frame Rate" val="30" />
-                            <HighlightedText title="Confidence Level" val="0.60" />
-                        </Stack>
-                    </Paper>
-
-                </Holder>
-            </Grid>
-        </Grid>
+        <Stack 
+            direction="row" 
+            flexWrap="wrap" 
+            gap={4} 
+            justifyContent="space-between"
+            alignItems="stretch" // Ensures all items stretch to the same height
+        >
+            <RenderSection title="Personal Info" data={personalInfo} />
+            <RenderSection title="Camera Status" data={cameraStatuses} />
+            <RenderSection title="System Information" data={systemInfo} fullWidth />
+        </Stack>
     );
 };
 
