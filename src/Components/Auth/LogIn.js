@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
-import { Box, Link, Typography } from "@mui/material";
+import { Box, Link, Typography, Stack } from "@mui/material";
 
 const LogIn = () => {
 
@@ -46,7 +46,7 @@ const LogIn = () => {
 
   return (
 
-    <Box sx={{ flexDirection: "column", height: "100%", display: "flex", justifyContent: "space-around" }}>
+    <Stack justifyContent="space-around" gap={4} sx={{ height: "100%" }}>
       <Box>
         <Typography
           variant="h4"
@@ -98,7 +98,7 @@ const LogIn = () => {
           Contact us
         </Link>
       </Typography>
-    </Box>
+    </Stack>
   )
 }
 

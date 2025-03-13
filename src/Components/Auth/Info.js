@@ -4,7 +4,7 @@ import { Box, Stack, Typography } from "@mui/material";
 
 const Info = () => {
      return (
-          <Stack sx={boxStyle}>
+          <Stack sx={boxStyle} >
 
                <Box sx={logoStyle}   >
                     <img src={logo} alt="Logo" />
@@ -34,7 +34,7 @@ export default Info
 
 const boxStyle = {
      width: { md: "50%" },
-     height: { xs: "50%", md: "100%" },
+     minHeight: { xs: "50%", md: "100%" },
      p: 4,
      backgroundImage: `url(${bg})`,
      backgroundSize: "cover",
