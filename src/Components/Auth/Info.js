@@ -14,7 +14,7 @@ const Info = () => {
                          variant="h1"
                          sx={titleStyle}
                     >
-                         Welcome in INSIGHT EYE
+                         Welcome in <br /> INSIGHT EYE
                     </Typography>
 
                     <Typography

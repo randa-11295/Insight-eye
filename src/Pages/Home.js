@@ -6,7 +6,7 @@ import SideNav from "../Components/Navbar/SideNav";
 import { Outlet } from "react-router-dom";
 import SnackAlert from "../Components/PopUp/SnackAlert";
 import PopUpReusable from "../Components/PopUp/PopUpReusable"
-import Login from "./Welcome";
+import Welcome from "./Welcome";
 const drawerWidth = 280;
 
 function Home() {
@@ -19,8 +19,8 @@ function Home() {
 
 
   return (
-    <>
-      {true ? <Login /> : <Box sx={{ display: "flex", overflow: "hidden" }}>
+    <div>
+      {true ? <Welcome /> : <Box sx={{ display: "flex", overflow: "hidden" }}>
         <TopNav openHandel={openHandel} drawerWidth={drawerWidth} />
         <SideNav
           openHandel={openHandel}
@@ -31,11 +31,12 @@ function Home() {
           <Toolbar />
           <Outlet />
         </Box>
-        <SnackAlert />
+        
         <PopUpReusable />
       </Box>
       }
-    </>
+      <SnackAlert />
+    </div>
   );
 }
 

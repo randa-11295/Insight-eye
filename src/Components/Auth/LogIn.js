@@ -16,7 +16,7 @@ const LogIn = () => {
 
   const showError = () => {
     setSnackAlert({
-      open: false,
+      open: true,
       message: "Email or Password is wrong",
       severity: "error",
     });
@@ -46,6 +46,7 @@ const LogIn = () => {
           });
         })
         .catch(error => {
+          console.log("error")
           showError();
         })
         .finally(() => {
