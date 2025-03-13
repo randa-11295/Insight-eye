@@ -7,10 +7,20 @@ import { useRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
 import { Box, Link, Typography, Stack } from "@mui/material";
 import { useState } from "react";
-
+import { snackAlertState } from "../../Recoil/RecoilState";
+import { useSetRecoilState } from "recoil";
 const LogIn = () => {
   const [loading, setLoading] = useState(false)
   const [, setAuthRecoil] = useRecoilState(authState);
+  const setSnackAlert = useSetRecoilState(snackAlertState);
+
+  const showError = () => {
+    setSnackAlert({
+      open: false,
+      message: "Email or Password is wrong",
+      severity: "error",
+    });
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -36,7 +46,7 @@ const LogIn = () => {
           });
         })
         .catch(error => {
-          console.error("Login Failed:", error);
+          showError();
         })
         .finally(() => {
           console.log("Login request completed.");
@@ -87,7 +97,7 @@ const LogIn = () => {
           value={formik.values.username}
           onChange={formik.handleChange} />
 
-        <LoadBtn fullWidth text={"LogIn"} handle={() => formik.handleSubmit()} loading={loading}/>
+        <LoadBtn fullWidth text={"LogIn"} handle={() => formik.handleSubmit()} loading={loading} />
 
         <Link component="span" underline="hover" sx={{ cursor: "pointer", padding: "20px", display: "block", textAlign: "center" }}>
           Forget your password ?
