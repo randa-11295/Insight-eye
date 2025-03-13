@@ -3,15 +3,15 @@ import InputTextCustom from "../Inputs/InputTextCustom";
 import LoadBtn from "../Reusable/LoadBtn";
 import { useFormik } from "formik";
 import axios from "axios";
-import { useRecoilState } from "recoil";
-import { authState } from "../../Recoil/RecoilState";
 import { Box, Link, Typography, Stack } from "@mui/material";
 import { useState } from "react";
 import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
+import { authState } from "../../Recoil/RecoilState";
+
 const LogIn = () => {
   const [loading, setLoading] = useState(false)
-  const [, setAuthRecoil] = useRecoilState(authState);
+  const setAuthRecoil = useSetRecoilState(authState);
   const setSnackAlert = useSetRecoilState(snackAlertState);
 
   const showError = () => {
