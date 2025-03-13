@@ -56,7 +56,7 @@ const Search = () => {
     setPopup({
       isOpen: true,
       title: "Select Date and Time Range",
-      content: <FilterSearch ref={childRef} changeFilterHandle={setFilter} />,
+      content: <FilterSearch ref={childRef} changeFilterHandle={setFilter} total={total} />,
       sendReq: handleClick,
     });
   };

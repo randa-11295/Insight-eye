@@ -44,7 +44,7 @@ const FilterSearch = forwardRef((props, ref) => {
                     onTimeChange={(time) => formik.setFieldValue("endTime", time)} minDate={formik.values.startDate} />
 
                 <SelectCustom label="Select Stream Name" arr={["camera_0", "camera_1", "camera_2"]} name={"id"} formik={formik} />
-                <SelectCustom label="Select Frame Limit" arr={[10, 25, 50, 75, 100, 150, 200]} name={"limit"} formik={formik} />
+                <SelectCustom label="Select Frame Limit" arr={[10, 25, 50, 75, 100, 150, 200, props.total]} name={"limit"} formik={formik} />
             </Stack>
         </LocalizationProvider>
     );
