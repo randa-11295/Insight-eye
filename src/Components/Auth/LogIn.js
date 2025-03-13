@@ -28,25 +28,19 @@ const LogIn = () => {
       password: "",
     },
     onSubmit: async (values) => {
-      console.log(values)
       setLoading(true)
-      axios.post(baseURL + "/login", values, {
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        }
-      })
+      axios.post(baseURL + "/login", values)
         .then(response => {
-          console.log("Login Successful:", response.data);
+          
           localStorage.setItem("token", response.data.session_id);
+          localStorage.setItem("username", response.data.username);
           setAuthRecoil({
             isAuthenticated: true,
             username: response.data.username,
             token: response.data.session_id,
           });
         })
-        .catch(error => {
-          console.log("error")
+        .catch(() => {
           showError();
         })
         .finally(() => {
