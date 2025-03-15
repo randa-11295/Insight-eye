@@ -1,22 +1,18 @@
 
 import { ThemeProvider } from "@mui/material/styles";
-
 import theme from "./utils/theme";
-
 import { AppRouter } from "./routes";
-
-import { Box } from "@mui/system";
+import { RecoilRoot } from 'recoil';
 
 
 export default function App() {
 
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box >
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
         <AppRouter />
-      </Box>
-
-    </ThemeProvider>
+      </ThemeProvider>
+    </RecoilRoot>
   );
 }

@@ -1,10 +1,18 @@
 import Button from '@mui/material/Button';
 
-export default function CustomBtn({ type = "contained",
-    text = "button title",
-    handle = () => console.log(" you must send fun") }) {
+export default function CustomBtn({ isLined,
+    color, disable,
+    children = "button title",
+    handle = () => console.log(" you must send fun"),
+    customStyle ={},
+     }) {
 
     return (
-        <Button variant={type} size='small' sx={{ textTransform: 'capitalize' }} onClick={handle}> {text}</Button >
+        <Button  disabled={disable} variant={isLined ? "outlined" : "contained"}
+            color={color || 'primary'}
+            sx={{ textTransform: 'capitalize' , ...customStyle }}
+            onClick={handle}
+        > {children}
+        </Button >
     );
 }

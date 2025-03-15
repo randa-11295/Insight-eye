@@ -67,5 +67,6 @@ export default function InputWithBtn(props) {
 }
 
 const inputStyle = {
+  textTransform : "capitalize", 
   fontSize: { xs: ".7rem", sm: ".9rem", md: ".8rem", lg: "1rem" },
 };

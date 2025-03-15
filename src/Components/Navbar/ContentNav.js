@@ -9,21 +9,36 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { v4 as uuid } from "uuid";
 import logoImg from "../../Images/logo.png"
+import { v4 as uuid } from "uuid";
+import { useSetRecoilState } from "recoil";
+import { authState } from "../../Recoil/RecoilState";
 
 const ContentNav = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const setAuthRecoil = useSetRecoilState(authState);
 
+  const handelLogout = () => {
+    localStorage.removeItem("token")
+    localStorage.removeItem("username")
+
+    setAuthRecoil({
+      isAuthenticated: false,
+      username: null,
+      token: null,
+    })
+  }
   const changeRouteHandel = (url) => {
-    url ? navigate(url) : alert("log out ")
+    url ? navigate(url) : handelLogout()
   }
 
   const listStyle = (url, path) => ({
-    borderRadius: 2,    
+    borderRadius: 2,
     bgcolor: url === path && "primary.main",
+    color: url === path && "black",
     overflow: "hidden",
+
   });
 
 
@@ -53,7 +68,7 @@ const ContentNav = (props) => {
                   sx={{ textAlign: "start" }}
                 />
                 <ListItemIcon >
-                  {el.icon}
+                  {el.icon(el.url === location.pathname)}
                 </ListItemIcon>
               </ListItemButton>
             </ListItem>

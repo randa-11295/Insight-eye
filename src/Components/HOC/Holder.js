@@ -1,17 +1,17 @@
-import { Paper, Typography, Stack } from "@mui/material"
+import {  Typography, Stack } from "@mui/material"
 
 const Holder = ({ children, title, action }) => (
+<>
+<Stack py={2} direction="row" justifyContent="space-between" alignItems="center" >
 
-    <Paper sx={{ padding: "1rem", background: "#121212" }} elevation={3} >
-        <Stack direction="row" justifyContent="space-between" alignItems="center" >
+    {title && <Typography  fontWeight={800} fontSize={21} textTransform="capitalize">
+        {title }
+    </Typography>}
+    {action}
+</Stack>
+{children}
+</>
 
-            {title && <Typography pb={2} fontWeight={800} fontSize={23} textTransform="capitalize">
-                {title}
-            </Typography>}
-            {action}
-        </Stack>
-        {children}
-    </Paper>
 )
 
 export default Holder
