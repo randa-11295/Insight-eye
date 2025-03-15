@@ -49,7 +49,7 @@ const processData = (data) => {
   return { labels: sortedTimestamps, datasets };
 };
 
-const LineChart = ({ chartData = [], loading }) => {
+const ChartSearch = ({ chartData = [], loading }) => {
   const { labels, datasets } = processData(chartData);
 
   const data = { labels, datasets };
@@ -88,4 +88,4 @@ const LineChart = ({ chartData = [], loading }) => {
   );
 };
 
-export default LineChart;
+export default ChartSearch;
