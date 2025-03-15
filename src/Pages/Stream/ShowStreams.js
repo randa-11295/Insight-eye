@@ -1,39 +1,50 @@
-import { useEffect } from "react"
-import { selectedStreamState } from "../../Recoil/RecoilState"
+import { useEffect, useState } from "react";
+import { authState } from "../../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
-import { Grid } from "@mui/system";
-import StreamCards from "../../Components/Stream/StreamCards";
-import Holder from "../../Components/HOC/Holder";
-import { baseURL } from "../../utils/StaticVariables";
-import axios from "axios";
 
-const ShowStreams = () => {
-     const [selectedData] = useRecoilState(selectedStreamState);
+const WebSocketComponent = ({ userId }) => {
+  const [messages, setMessages] = useState([]);
+  const [ws, setWs] = useState(null);
+  const [authRecoil] = useRecoilState(authState);
 
-     useEffect(() => {
-          // console.log(selectedData)
-          axios.get(baseURL + "/video_stream/cc70d07c-7cf1-41a1-9c32-fd08a7beb060")
-          .then(response => {
-              console.log(response.data);
-             
-          })
-          .catch(error => {
-               console.log(error);
-          });
-     }, [])
+  useEffect(() => {
+//     const socket = new WebSocket(`ws://16.170.216.227/stream?session_id=${authRecoil.token}`);
+    const socket = new WebSocket(`ws://16.170.216.227/stream?session_id=${authRecoil.token}&stream_id=e1cb4c46-e95e-4dc2-942b-860431bdeed9"
+"}`);
 
-     return (
-          <Holder>
+    socket.onopen = () => {
+      console.log("WebSocket Connected");
+    };
 
-          <Grid container spacing={2}>
-               {selectedData?.map(el => <Grid size={ 4} key={el.id}>
-                    < StreamCards data={el}/>
-               </Grid>)
-               }
+    socket.onmessage = (event) => {
+     
+      console.log("Message received:", event.data);
+      setMessages( event.data);
+    };
 
-          </Grid>
-          </Holder>
-     )
-}
+    socket.onerror = (error) => {
+      console.error("WebSocket Error:", error);
+    };
 
-export default ShowStreams  
+    socket.onclose = () => {
+      console.log("WebSocket Disconnected");
+    };
+
+    setWs(socket);
+
+    return () => {
+      socket.close();
+    };
+  }, [authRecoil.token]); // Reconnect if userId changes
+
+
+  return (
+    <div>
+      <h2>WebSocket Messages</h2>
+     {messages }
+    
+    </div>
+  );
+};
+
+export default WebSocketComponent;
