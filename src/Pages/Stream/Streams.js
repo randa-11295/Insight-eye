@@ -4,7 +4,7 @@ import CustomBtn from "../../Components/Reusable/CustomBtn";
 import TableReusable from "../../Components/Reusable/TableReusable";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../utils/StaticVariables";
-import { useEffect, useState } from "react";
+import { useEffect, } from "react";
 import { Box, Stack } from "@mui/system";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { popupState, selectedStreamState } from "../../Recoil/RecoilState";
@@ -14,17 +14,19 @@ import useAxios from "../../Components/Hooks/useAxios";
 const Streams = () => {
 
     const navigate = useNavigate();
-    const [streamData, setStreamData] = useState(null);
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState(null);
     const setPopup = useSetRecoilState(popupState);
     const [selectedData, setSelectedStream] = useRecoilState(selectedStreamState);
 
+
+    const { data, loading, fetchData } = useAxios({
+        url: "/source",
+        method: "GET",
+      });
     
-  const { data, loading, error } = useAxios({
-    url: "/source",
-    method: "GET",
-  });
+      useEffect(() => {
+        fetchData(); 
+      }, [fetchData]);
+    
 
     // Function to update selected rows using Recoil
     const changeSelectDataRow = (selectedNewData) => {
@@ -35,8 +37,8 @@ const Streams = () => {
         );
     };
 
-  
-   
+
+
     const handelDeleteReqFromApi = () => {
         const selectedIDs = selectedData.map(el => el.id);
 
