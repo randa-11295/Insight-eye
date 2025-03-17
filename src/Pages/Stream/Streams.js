@@ -9,16 +9,22 @@ import { Box, Stack } from "@mui/system";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { popupState, selectedStreamState } from "../../Recoil/RecoilState";
 import { streamColumns } from "../../utils/StaticVariables";
-
+import useAxios from "../../Components/Hooks/useAxios";
 
 const Streams = () => {
 
     const navigate = useNavigate();
     const [streamData, setStreamData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    // const [loading, setLoading] = useState(true);
+    // const [error, setError] = useState(null);
     const setPopup = useSetRecoilState(popupState);
     const [selectedData, setSelectedStream] = useRecoilState(selectedStreamState);
+
+    
+  const { data, loading, error } = useAxios({
+    url: "/source",
+    method: "GET",
+  });
 
     // Function to update selected rows using Recoil
     const changeSelectDataRow = (selectedNewData) => {
@@ -29,23 +35,8 @@ const Streams = () => {
         );
     };
 
-    const getAllStreams = () => {
-        axios.get(baseURL + "/source")
-            .then(response => {
-                console.log(response.data);
-                setStreamData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
-    };
-
-    useEffect(() => {
-        getAllStreams();
-    }, []);
-
+  
+   
     const handelDeleteReqFromApi = () => {
         const selectedIDs = selectedData.map(el => el.id);
 
@@ -53,7 +44,7 @@ const Streams = () => {
             data: { ids: selectedIDs }
         })
             .then(() => {
-                getAllStreams();
+                // getAllStreams();
                 setSelectedStream([]); // Clear selection after deletion
             })
             .catch(error => console.log(error));
@@ -78,11 +69,11 @@ const Streams = () => {
             }
         >
             <Box my={2}>
-                <TableReusable handelChangeSelect={changeSelectDataRow} showCheckbox data={streamData} columns={streamColumns} loading={loading} />
+                <TableReusable handelChangeSelect={changeSelectDataRow} showCheckbox data={data} columns={streamColumns} loading={loading} />
             </Box>
             <Stack direction="row" justifyContent="space-between" gap={2}>
                 <CustomBtn
-                    disable={selectedData?.length < 1}
+                    disable={data?.length < 1}
                     color="error"
                     isLined
                     handle={openPopup}
