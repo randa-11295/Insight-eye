@@ -1,15 +1,23 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
-import { useRecoilState } from "recoil";
-import { authState } from "../../Recoil/RecoilState";
+import { useRecoilState , useSetRecoilState } from "recoil";
+import { authState , snackAlertState} from "../../Recoil/RecoilState";
 
 const useAxios = ({ url, method = "GET", body = null }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [authRecoil] = useRecoilState(authState);
-
+  const setSnackAlert = useSetRecoilState(snackAlertState);
+  
+  const showError = () => {
+     setSnackAlert({
+         open: true,
+         message: "Something went wrong!",
+         severity: "error",
+     });
+ };
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -29,6 +37,7 @@ const useAxios = ({ url, method = "GET", body = null }) => {
       return response.data; // Return for handling in components
     } catch (err) {
       setError(err);
+      showError()
       console.error("Axios Error:", err);
      //  throw err; // Throw error for component handling
     } finally {

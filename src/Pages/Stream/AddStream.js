@@ -35,7 +35,7 @@ const AddStream = () => {
                 })
                 .catch(error => {
 
-                    showError()
+                    // showError()
                     // showSuccess()
                 })
                 .finally(() => setLoading(false))
@@ -54,13 +54,7 @@ const AddStream = () => {
         });
     };
 
-    const showError = () => {
-        setSnackAlert({
-            open: true,
-            message: "Something went wrong!",
-            severity: "error",
-        });
-    };
+ 
     return (
         <Holder>
             <Box component="form">
