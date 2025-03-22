@@ -44,7 +44,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRowsPerPageChange, handelChangeSelect, print, pagination }) => {
-  if (loading) return <TableLoader columns={columns.length} />;
+  if (loading) return <TableLoader columns={columns.length || 12} />;
 
 
 
@@ -76,7 +76,7 @@ const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRo
 
           {/* Table Body */}
           <TableBody>
-            {data.length > 0 ? (
+            {data?.length > 0 ? (
               data.map((row, rowIndex) => (
                 <StyledTableRow key={rowIndex}>
                   {handelChangeSelect && (
