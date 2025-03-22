@@ -35,7 +35,7 @@ function Home() {
   
   return (
     <div>
-      {!authRecoil.token ? <Welcome /> : <Box sx={{ display: "flex", overflow: "hidden" }}>
+      {!authRecoil.isAuthenticated ? <Welcome /> : <Box sx={{ display: "flex", overflow: "hidden" }}>
         <TopNav openHandel={openHandel} drawerWidth={drawerWidth} />
         <SideNav
           openHandel={openHandel}

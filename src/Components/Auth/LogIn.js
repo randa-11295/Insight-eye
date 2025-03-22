@@ -78,8 +78,8 @@ const LogIn = () => {
 
       <Box component="form" onSubmit={formik.handleSubmit}>
 
-        <InputTextCustom label="Email "
-          placeholder="Enter your email or user name"
+        <InputTextCustom label="Username "
+          placeholder="Enter your user name"
           formik={formik}
           name="username" />
 

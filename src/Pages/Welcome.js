@@ -21,8 +21,8 @@ const Welcome = () => {
       }} >
         <Box sx={{ margin : "auto",width  : {xl :"60%"} ,height : "100%"}}>
 
-        {/* <LogIn /> */}
-        <Contact />
+        <LogIn />
+        {/* <Contact /> */}
         </Box>
         {/* <Otp /> */}
       </Box>
