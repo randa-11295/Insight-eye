@@ -22,7 +22,7 @@ const LogIn = () => {
     });
   };
 
-  const formik = useFormik({
+  const formik = useFormik({   
     initialValues: {
       username: "",
       password: "",
@@ -31,13 +31,11 @@ const LogIn = () => {
       setLoading(true)
       axios.post(baseURL + "/login", values)
         .then(response => {
-          
-          localStorage.setItem("token", response.data.session_id);
-          localStorage.setItem("username", response.data.username);
+          console.log(response)
+          localStorage.setItem("token", response.data.refresh_token);
           setAuthRecoil({
             isAuthenticated: true,
-            username: response.data.username,
-            token: response.data.session_id,
+            token: response.data.refresh_token,
           });
         })
         .catch(() => {

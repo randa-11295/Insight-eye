@@ -12,8 +12,11 @@ import SelectCustom from "../../Components/Inputs/SelectCustom";
 import Holder from "../../Components/HOC/Holder";
 import LoadBtn from "../../Components/Reusable/LoadBtn";
 import InputTextCustom from "../../Components/Inputs/InputTextCustom";
+import { useRecoilState } from "recoil";
+import { authState } from "../../Recoil/RecoilState";
 
 const AddStream = () => {
+    const [authRecoil] = useRecoilState(authState);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const formik = useFormik({
@@ -25,9 +28,13 @@ const AddStream = () => {
         },
         onSubmit: (values) => {
             setLoading(true);
-
+            console.log(authRecoil)
             axios.post(baseURL + "/source", {
                 ...values,
+                headers: {
+                    Authorization: `Bearer ${authRecoil.token}` // Send token in headers
+
+                }
             })
                 .then(() => {
                     formik.handleReset()
