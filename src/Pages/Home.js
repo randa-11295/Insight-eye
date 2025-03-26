@@ -22,6 +22,7 @@ function Home() {
   };
 
   useEffect(() => {
+    console.log(authRecoil)
     if (localStorage.token) {
       setAuthRecoil({
         isAuthenticated: true,
@@ -32,6 +33,10 @@ function Home() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  
+  useEffect(()=>{
+    console.log(authRecoil)
+  },[authRecoil])
   
   return (
     <div>

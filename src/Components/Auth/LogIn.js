@@ -1,18 +1,18 @@
-import { baseURL } from "../../utils/StaticVariables";
 import InputTextCustom from "../Inputs/InputTextCustom";
 import LoadBtn from "../Reusable/LoadBtn";
 import { useFormik } from "formik";
-import axios from "axios";
 import { Box, Link, Typography, Stack } from "@mui/material";
 import { useState } from "react";
 import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
+import {useAxiosWithAuth} from "../../services/api"
 
 const LogIn = () => {
   const [loading, setLoading] = useState(false)
   const setAuthRecoil = useSetRecoilState(authState);
   const setSnackAlert = useSetRecoilState(snackAlertState);
+  const api = useAxiosWithAuth();
 
   const showError = () => {
     setSnackAlert({
@@ -29,13 +29,14 @@ const LogIn = () => {
     },
     onSubmit: async (values) => {
       setLoading(true)
-      axios.post(baseURL + "/login", values)
+      api.post("login", values)
         .then(response => {
           console.log(response)
-          localStorage.setItem("token", response.data.refresh_token);
+          localStorage.setItem("token", response.data.access_token);
           setAuthRecoil({
             isAuthenticated: true,
             token: response.data.refresh_token,
+            expire: response.data.expires_at,
           });
         })
         .catch(() => {
