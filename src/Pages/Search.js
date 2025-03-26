@@ -14,6 +14,7 @@ import { Stack, Card, Pagination, Box, Typography } from "@mui/material";
 import { useSetRecoilState } from "recoil";
 import { popupState, snackAlertState } from "../Recoil/RecoilState";
 import { dataRenderTypeInSearchArr, searchFramesColumns, baseURL } from "../utils/StaticVariables";
+import {useAxiosWithAuth} from "../services/api"
 
 const Search = () => {
   const setPopup = useSetRecoilState(popupState);
@@ -26,8 +27,8 @@ const Search = () => {
   const [filter, setFilter] = useState({});
   const [total, setTotal] = useState(0);
   const [numOfPages, setNumOfPages] = useState(0);
-
-  const childRef = useRef(null); // Ensure it's null initially
+  const api = useAxiosWithAuth();
+  const childRef = useRef(null); 
 
   const handleToggleChange = (event, newValue) => {
     if (newValue !== null) setSelectedShowMethod(newValue);
@@ -69,7 +70,7 @@ const Search = () => {
 
     setLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    axios.get(`${baseURL}/search_results`, {
+    api.get(`search_results`, {
       params: {
         page,
         per_page: filter.limit,
