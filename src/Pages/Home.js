@@ -23,10 +23,10 @@ function Home() {
 
   useEffect(() => {
     console.log(authRecoil)
-    if (localStorage.token) {
+    if (localStorage.token && !authRecoil.token) {
       setAuthRecoil({
         isAuthenticated: true,
-        username: localStorage.username,
+        expire: localStorage.expire,
         token: localStorage.token,
       })
     }
@@ -37,7 +37,7 @@ function Home() {
   useEffect(()=>{
     console.log(authRecoil)
   },[authRecoil])
-  
+
   return (
     <div>
       {!authRecoil.isAuthenticated ? <Welcome /> : <Box sx={{ display: "flex", overflow: "hidden" }}>

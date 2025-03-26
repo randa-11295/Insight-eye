@@ -33,9 +33,10 @@ const LogIn = () => {
         .then(response => {
           console.log(response)
           localStorage.setItem("token", response.data.access_token);
+          localStorage.setItem("expire", response.data.expires_at);
           setAuthRecoil({
             isAuthenticated: true,
-            token: response.data.refresh_token,
+            token: response.data.data.access_token,
             expire: response.data.expires_at,
           });
         })

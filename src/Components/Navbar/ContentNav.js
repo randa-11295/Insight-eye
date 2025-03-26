@@ -21,11 +21,11 @@ const ContentNav = (props) => {
 
   const handelLogout = () => {
     localStorage.removeItem("token")
-    localStorage.removeItem("username")
+    localStorage.removeItem("expire")
 
     setAuthRecoil({
       isAuthenticated: false,
-      username: null,
+      expire: null,
       token: null,
     })
   }
