@@ -1,4 +1,3 @@
-import axios from "axios";
 import Holder from "../../Components/HOC/Holder";
 import CustomBtn from "../../Components/Reusable/CustomBtn";
 import TableReusable from "../../Components/Reusable/TableReusable";
@@ -30,7 +29,7 @@ const Streams = () => {
     };
 
     const getAllStreams = () => {
-        api.get("/source")
+        api.get("source")
             .then(response => {
                 console.log(response.data);
                 setStreamData(response.data);
@@ -48,8 +47,7 @@ const Streams = () => {
 
     const handelDeleteReqFromApi = () => {
         const selectedIDs = selectedData.map(el => el.id);
-
-        axios.delete(baseURL + "/source", {
+        api.delete("source", {
             data: { ids: selectedIDs }
         })
             .then(() => {

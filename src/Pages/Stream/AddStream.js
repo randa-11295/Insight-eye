@@ -5,15 +5,14 @@ import { useFormik } from "formik";
 import { addStreamSchema } from "../../utils/validationSchema";
 import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
-import axios from "axios";
+import { useRecoilState } from "recoil";
+import { authState } from "../../Recoil/RecoilState";
+import {useAxiosWithAuth} from "../../services/api"
 import CustomBtn from "../../Components/Reusable/CustomBtn";
 import SelectCustom from "../../Components/Inputs/SelectCustom";
 import Holder from "../../Components/HOC/Holder";
 import LoadBtn from "../../Components/Reusable/LoadBtn";
 import InputTextCustom from "../../Components/Inputs/InputTextCustom";
-import { useRecoilState } from "recoil";
-import { authState } from "../../Recoil/RecoilState";
-import {useAxiosWithAuth} from "../../services/api"
 
 const AddStream = () => {
     const [authRecoil] = useRecoilState(authState);
@@ -29,7 +28,7 @@ const AddStream = () => {
         },
         onSubmit: (values) => {
             setLoading(true);
-            api.post("/source", {
+            api.post("source", {
                 ...values,           
             })
                 .then(() => {

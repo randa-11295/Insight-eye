@@ -16,9 +16,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { selectedStreamState } from "../../Recoil/RecoilState"
 import { useRecoilState } from "recoil";
-import { baseURL } from '../../utils/StaticVariables';
-import axios from 'axios';
-
+import {useAxiosWithAuth} from "../../services/api"
 
 const validationSchema = yup.object({
   
@@ -39,7 +37,7 @@ export default function UpdateStreams({
 }) {
 
   const [selectedData] = useRecoilState(selectedStreamState);
-
+  const api = useAxiosWithAuth();
   const formik = useFormik({
     initialValues: {
       streams: selectedData
@@ -51,7 +49,7 @@ export default function UpdateStreams({
       console.log("update",values.streams);
       console.log("sperate",{...values});
 
-      axios.put(baseURL + "/stream", 
+      api.put( "stream", 
         values.streams,
     )
         .then(response => {
