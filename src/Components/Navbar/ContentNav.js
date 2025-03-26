@@ -13,22 +13,34 @@ import logoImg from "../../Images/logo.png"
 import { v4 as uuid } from "uuid";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
+import {useAxiosWithAuth} from "../../services/api"
 
 const ContentNav = (props) => {
+  
   const navigate = useNavigate();
   const location = useLocation();
   const setAuthRecoil = useSetRecoilState(authState);
+  const api = useAxiosWithAuth();
 
   const handelLogout = () => {
-    localStorage.removeItem("token")
-    localStorage.removeItem("expire")
 
-    setAuthRecoil({
-      isAuthenticated: false,
-      expire: null,
-      token: null,
-    })
+    // api.post("logout")
+    //     .then( ()=> {
+          localStorage.removeItem("token")
+          localStorage.removeItem("expire")
+      
+          setAuthRecoil({
+            isAuthenticated: false,
+            expire: null,
+            token: null,
+          })
+        // })
+        // .catch(() => {
+        //   console.log("error")
+        //   // showError();
+        // })
   }
+
   const changeRouteHandel = (url) => {
     url ? navigate(url) : handelLogout()
   }
