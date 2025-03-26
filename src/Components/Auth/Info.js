@@ -46,7 +46,7 @@ const boxStyle = {
 
 
 const logoStyle = {
-     width: { xs: "40%", sm: "25%", md: "20%" }, // Responsive width
+     width: { xs: "40%", lg: "28%" }, // Responsive width
      display: "flex",
      justifyContent: "center",
 
