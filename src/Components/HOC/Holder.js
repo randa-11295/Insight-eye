@@ -1,7 +1,7 @@
 import {  Box , Typography, Stack, Card } from "@mui/material"
 
 const Holder = ({ children, title, action }) => (
-<Box  >
+<Box sx={{height : "100%" }} >
 <Stack my={3} direction="row" justifyContent={action ?"space-between" : "flex-start"} alignItems="center" >
 
     {title && <Typography  fontWeight={800} fontSize={21} textTransform="capitalize">

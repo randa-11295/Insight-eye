@@ -1,7 +1,8 @@
-import React from "react";
+import {useEffect , useState} from "react";
 import { Paper, Stack } from "@mui/material";
 import Holder from "../Components/HOC/Holder";
 import HighlightedText from "../Components/Reusable/HighlightedText";
+import {useAxiosWithAuth} from "../services/api"
 
 const personalInfo = [
     { title: "First Name", val: "Randa" },
@@ -35,12 +36,7 @@ const RenderSection = ({ title, data, fullWidth = false }) => (
             }}
         >
             <Holder title={title}>
-                <Paper 
-                    sx={{ 
-                        padding: 2, 
-                        height: "100%", // Ensures full height
-                    }}
-                >
+              
                     <Stack 
                         gap={2} 
                         direction={fullWidth ? "row" : "column"} 
@@ -48,16 +44,36 @@ const RenderSection = ({ title, data, fullWidth = false }) => (
                         sx={{ flex: 1 }} // Ensures inner content stretches
                     >
                         {data.map((item, index) => (
-                            <HighlightedText key={index} title={item.title} val={item.val} />
+                            <HighlightedText key={item.id || index} title={item.title} val={item.val} />
                         ))}
                     </Stack>
-                </Paper>
+              
             </Holder>
         </Stack>
     )
 );
 
-const MyGridLayout = () => {
+const Dashbourd = () => {
+    const [streamData , setStreamData] = useState([])
+    const api = useAxiosWithAuth();
+    const getAllStreams = () => {
+        api.get("source")
+        .then(response => {
+            console.log(response.data);
+            const res = response.data?.map(el => ({ title: el.name, val: ( el.status === "inactive" ? "Off" :"On")  }));
+            setStreamData(res);
+            // setLoading(false);
+        })
+            .catch(error => {
+                console.log(error)
+                // setError(error);
+                // setLoading(false);
+            });
+    };
+
+useEffect(()=>{
+getAllStreams()
+},[])
     return (
         <Stack 
             direction="row" 
@@ -67,10 +83,10 @@ const MyGridLayout = () => {
             alignItems="stretch" // Ensures all items stretch to the same height
         >
             <RenderSection title="Personal Info" data={personalInfo} />
-            <RenderSection title="Camera Status" data={cameraStatuses} />
+            <RenderSection title="Camera Status" data={streamData} />
             <RenderSection title="System Information" data={systemInfo} fullWidth />
         </Stack>
     );
 };
 
-export default MyGridLayout;
+export default Dashbourd;
