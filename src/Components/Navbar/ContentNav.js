@@ -48,8 +48,8 @@ const ContentNav = (props) => {
   const listStyle = (url, path) => ({
     borderRadius: 2,
     bgcolor: url === path && "primary.main",
-    color: url === path && "black",
     overflow: "hidden",
+ 
 
   });
 
@@ -73,14 +73,16 @@ const ContentNav = (props) => {
               }}
             >
               <ListItemButton
-                sx={{ justifyContent: "space-between", display: "flex" }}
+                sx={{ justifyContent: "space-between", display: "flex" ,    "&:hover" : {
+                  background :"#063A36"
+                }}}
               >
                 <ListItemText
                   primary={el.text}
                   sx={{ textAlign: "start" }}
                 />
                 <ListItemIcon >
-                  {el.icon(el.url === location.pathname)}
+                  {el.icon}
                 </ListItemIcon>
               </ListItemButton>
             </ListItem>

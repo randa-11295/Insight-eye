@@ -6,8 +6,8 @@ import CorporateFareOutlinedIcon from '@mui/icons-material/CorporateFareOutlined
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
-const getIcon = (IconComponent) => (isSelected) => (
-  <IconComponent sx={{ color: isSelected ? "black" : "inherit", marginLeft: "auto" }} />
+const getIcon = (IconComponent) =>  (
+  <IconComponent sx={{ color: "inherit", marginLeft: "auto" }} />
 );
 
 export const navbarContentArr = [

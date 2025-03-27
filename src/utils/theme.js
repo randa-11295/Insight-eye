@@ -15,8 +15,8 @@ export const theme = createTheme({
       paper: "#031716",
     },
     action: {
-      selected: "#16AA9D", // Your preferred selection color
-      hover: "#041F1E", // Your preferred hover color
+      selected: "#0C6863", // Your preferred selection color
+      hover: "#063A36", // Your preferred hover color
     },
   },
 });
