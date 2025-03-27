@@ -24,8 +24,8 @@ const ContentNav = (props) => {
 
   const handelLogout = () => {
 
-    // api.post("logout")
-    //     .then( ()=> {
+    api.post("logout")
+        .then( ()=> {
           localStorage.removeItem("token")
           localStorage.removeItem("expire")
       
@@ -34,11 +34,11 @@ const ContentNav = (props) => {
             expire: null,
             token: null,
           })
-        // })
-        // .catch(() => {
-        //   console.log("error")
-        //   // showError();
-        // })
+        })
+        .catch(() => {
+          console.log("error")
+          // showError();
+        })
   }
 
   const changeRouteHandel = (url) => {
