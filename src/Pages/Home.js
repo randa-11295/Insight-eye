@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 import SnackAlert from "../Components/PopUp/SnackAlert";
 import PopUpReusable from "../Components/PopUp/PopUpReusable"
 import Welcome from "./Welcome";
-import { authState } from "../Recoil/RecoilState";
+import { authState,  isLoginState } from "../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 
@@ -23,7 +23,7 @@ function Home() {
 
   useEffect(() => {
     console.log(authRecoil)
-    if (localStorage.token && !authRecoil.token) {
+    if (localStorage?.token && !authRecoil?.token) {
       setAuthRecoil({
         isAuthenticated: true,
         expire: localStorage.expire,
@@ -31,8 +31,7 @@ function Home() {
       })
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [localStorage?.token ,!authRecoil?.token])
   
   useEffect(()=>{
     console.log(authRecoil)
@@ -40,7 +39,7 @@ function Home() {
 
   return (
     <div>
-      {!authRecoil.isAuthenticated ? <Welcome /> : <Box sx={{ display: "flex", overflow: "hidden" }}>
+      {!authRecoil?.token ? <Welcome /> : <Box sx={{ display: "flex", overflow: "hidden" }}>
         <TopNav openHandel={openHandel} drawerWidth={drawerWidth} />
         <SideNav
           openHandel={openHandel}

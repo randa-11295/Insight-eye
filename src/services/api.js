@@ -20,7 +20,7 @@ export const useAxiosWithAuth = () => {
   // currentDate > expireDate ?  console.log("after") :  console.log(" before");
   
 
-  const token = useRecoilValue(authState).token; 
+  const token = useRecoilValue(authState)?.token; 
 console.log(token)
   api.interceptors.request.use(
     (config) => {

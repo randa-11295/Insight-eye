@@ -29,11 +29,7 @@ const ContentNav = (props) => {
           localStorage.removeItem("token")
           localStorage.removeItem("expire")
       
-          setAuthRecoil({
-            isAuthenticated: false,
-            expire: null,
-            token: null,
-          })
+          setAuthRecoil(null)
         })
         .catch(() => {
           console.log("error")
