@@ -11,22 +11,8 @@ const personalInfo = [
     { title: "Company Name", val: "Spacetoon" },
 ];
 
-const cameraStatuses = [
-    { title: "Camera 1", val: "on" },
-    { title: "Camera 12", val: "off" },
-    { title: "Camera 45", val: "on" },
-    { title: "Camera 2334", val: "on" },
-    { title: "Camera 22", val: "off" },
-    { title: "Camera 34", val: "off" },
-    { title: "Camera e3e", val: "on" },
-    { title: "Camera 3", val: "off" },
-    { title: "Camera 3", val: "on" },
-];
 
-const systemInfo = [
-    { title: "Frame Rate", val: "30" },
-    { title: "Confidence Level", val: "0.60" },
-];
+
 
 const RenderSection = ({ title, data, fullWidth = false }) => (
     data.length > 0 && (
@@ -108,7 +94,7 @@ paramStream()
             justifyContent="space-between"
             alignItems="stretch"
         >
-            <RenderSection title="Personal Info" data={paramStreamData} />
+            <RenderSection title="Personal Info" data={personalInfo} />
             <RenderSection title="Camera Status" data={streamData} />
             <RenderSection title="System Information" data={paramStreamData} fullWidth />
         </Stack>
