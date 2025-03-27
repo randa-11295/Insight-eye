@@ -62,7 +62,7 @@ const AddStream = () => {
         });
     };
     return (
-        <Holder>
+        <Holder title="add stream">
             <Box component="form">
                 <InputTextCustom formik={formik} name="name" label="Name" placeholder="add your Stream Name" />
                 <InputTextCustom formik={formik} name="path" label="Source" placeholder="add Stream Source or Stream Path" />
