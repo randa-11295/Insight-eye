@@ -17,31 +17,33 @@ import TableLoader from "./TableLoaderReusable";
 // Styled Components for Dark Theme
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#1a1a1a",
-    color: "#ffffff",
+    backgroundColor: theme.palette.background.paper, // Uses theme background color
+    color: theme.palette.text.primary, // Uses theme text color
     fontWeight: "bold",
     textTransform: "uppercase",
     fontSize: "14px",
     letterSpacing: "0.8px",
-    borderBottom: "2px solid #333",
-    padding: " 15px 5px",
+    borderBottom: `2px solid ${theme.palette.divider}`, // Uses theme divider color
+    padding: "15px 5px",
   },
   [`&.${tableCellClasses.body}`]: {
-    color: "#ddd",
-    padding: " 15px 5px",
+    color: theme.palette.text.secondary, // Uses theme secondary text color
+    padding: "15px 5px",
   },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  backgroundColor: "#141414",
+  backgroundColor: theme.palette.background.default, // Uses theme default background color
   "&:nth-of-type(odd)": {
-    backgroundColor: "black",
+    backgroundColor: theme.palette.action.hover, // Uses hover effect from theme
   },
   "&:hover": {
-    backgroundColor: "#222",
+    backgroundColor: theme.palette.action.selected, // Uses selected hover effect from theme
   },
   "&:last-child td, &:last-child th": { border: 0 },
 }));
+
+export { StyledTableCell, StyledTableRow };
 
 const TableReusable = ({ data, columns, loading, page, limit, onPageChange, onRowsPerPageChange, handelChangeSelect, print, pagination }) => {
   if (loading) return <TableLoader columns={columns.length || 12} />;
