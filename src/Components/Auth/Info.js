@@ -1,11 +1,14 @@
 import logo from "../../Images/logo.png";
 import bg from "../../Images/infobg.jpg";
 import { Box, Stack, Typography } from "@mui/material";
-import SocialMediaLinks from "./SocialMediaLinks"
+import SocialMediaLinks from "./SocialMediaLinks";
 const Info = () => {
   return (
-    <Stack sx={boxStyle} justifyContent={"space-between"} alignItems={{xs: "center" , md: "flex-start"}}>
-
+    <Stack
+      sx={boxStyle}
+      justifyContent={"space-between"}
+      alignItems={{ xs: "center", md: "flex-start" }}
+    >
       <Box sx={logoStyle}>
         <img src={logo} alt="Logo" />
       </Box>
@@ -15,17 +18,20 @@ const Info = () => {
           Welcome in <br /> INSIGHTEYE
         </Typography>
 
-        <Typography component="ul"  sx={desStyle}>
-          <Typography component="li" sx={desStyle }>Count
-
-</Typography>
-          <Typography component="li" sx={desStyle} >Predict </Typography>
-          <Typography component="li" sx={desStyle}> Visualize </Typography>
+        <Typography component="ul" sx={desStyle}>
+          <Typography component="li" sx={desStyle}>
+            Count
+          </Typography>
+          <Typography component="li" sx={desStyle}>
+            Predict
+          </Typography>
+          <Typography component="li" sx={desStyle}>         
+            Visualize
+          </Typography>
         </Typography>
       </Stack>
 
-      <SocialMediaLinks/>
-
+      <SocialMediaLinks />
     </Stack>
   );
 };
@@ -34,7 +40,7 @@ export default Info;
 
 const boxStyle = {
   width: { md: "50%" },
-  minHeight:  "600px" ,
+  minHeight: "600px",
   p: 4,
   backgroundImage: `url(${bg})`,
   backgroundSize: "cover",
@@ -69,5 +75,5 @@ const titleStyle = {
 
 const desStyle = {
   fontSize: "1.3rem", // Responsive font sizes
-m :1
+  m: 1,
 };
