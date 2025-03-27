@@ -1,7 +1,7 @@
 import logo from "../../Images/logo.png";
 import bg from "../../Images/infobg.jpg";
 import { Box, Stack, Typography } from "@mui/material";
-
+import SocialMediaLinks from "./SocialMediaLinks"
 const Info = () => {
   return (
     <Stack sx={boxStyle}>
@@ -10,15 +10,18 @@ const Info = () => {
       </Box>
       <Stack sx={contentStyle}>
         <Typography variant="h1" sx={titleStyle}>
-          Welcome in <br /> INSIGHT EYE
+          Welcome in <br /> INSIGHTEYE
         </Typography>
 
         <Typography component="ul"  sx={desStyle}>
-          <Typography component="li" sx={desStyle }>frist one</Typography>
-          <Typography component="li" sx={desStyle} >second on</Typography>
-          <Typography component="li" sx={desStyle}> thered on</Typography>
+          <Typography component="li" sx={desStyle }>Count
+
+</Typography>
+          <Typography component="li" sx={desStyle} >Predict </Typography>
+          <Typography component="li" sx={desStyle}> Visualize </Typography>
         </Typography>
       </Stack>
+      <SocialMediaLinks/>
     </Stack>
   );
 };
@@ -61,7 +64,6 @@ const titleStyle = {
 };
 
 const desStyle = {
-  fontSize: "1.5rem", // Responsive font sizes
-  color: "text.secondary",
+  fontSize: "1.3rem", // Responsive font sizes
 m :1
 };
