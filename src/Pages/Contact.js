@@ -2,12 +2,37 @@ import React from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useSetRecoilState } from "recoil";
+import { snackAlertState } from "../Recoil/RecoilState";
+import { baseURL } from "../utils/StaticVariables";
+import { useState } from "react";
 
+import axios from "axios";
 const Contact = () => {
+  const setSnackAlert = useSetRecoilState(snackAlertState);
+  const [loading, setLoading] = useState(false)
+    
+  const showSuccess = () => {
+    setSnackAlert({
+      open: true,
+      message: "Operation successful!",
+      severity: "success",
+    });
+  };
+
+  const showError = () => {
+    setSnackAlert({
+      open: true,
+      message: "Something went wrong!",
+      severity: "error",
+    });
+  };
+
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
+      phone: "",
       message: "",
     },
     validationSchema: Yup.object({
@@ -17,8 +42,24 @@ const Contact = () => {
     }),
     onSubmit: (values, { resetForm }) => {
       console.log("Form Data:", values);
-      alert("Message sent successfully!");
-      resetForm();
+     
+      setLoading(true);
+
+      axios.post(baseURL + "/contact", {
+        ...values,
+      })
+        .then(() => {
+          formik.handleReset()
+          showSuccess()
+          resetForm();
+        })
+        .catch(error => {
+
+          showError()
+          // showSuccess()
+        })
+        .finally(() => setLoading(false))
+
     },
   });
 
@@ -55,6 +96,18 @@ const Contact = () => {
           />
           <TextField
             fullWidth
+            id="phone"
+            name="phone"
+            label="phone"
+            value={formik.values.phone}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.phone && Boolean(formik.errors.phone)}
+            helperText={formik.touched.phone && formik.errors.phone}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
             id="message"
             name="message"
             label="Message"
@@ -67,10 +120,10 @@ const Contact = () => {
             helperText={formik.touched.message && formik.errors.message}
             margin="normal"
           />
-          <Button 
-            type="submit" 
-            variant="contained" 
-            color="primary" 
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
             fullWidth
             sx={{ mt: 2 }}
           >

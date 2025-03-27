@@ -47,9 +47,6 @@ export const filterResultState = atom({
 
 export const authState = atom({
   key: "authState",
-  default: {
-    isAuthenticated: false,
-    username: null,
-    token: null
-  }
+  default:null
 });
+

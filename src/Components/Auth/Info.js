@@ -1,71 +1,79 @@
-import logo from "../../Images/logo.png"
-import bg from "../../Images/infobg.jpg"
+import logo from "../../Images/logo.png";
+import bg from "../../Images/infobg.jpg";
 import { Box, Stack, Typography } from "@mui/material";
-
+import SocialMediaLinks from "./SocialMediaLinks";
 const Info = () => {
-     return (
-          <Stack sx={boxStyle} >
+  return (
+    <Stack
+      sx={boxStyle}
+      justifyContent={"space-between"}
+      alignItems={{ xs: "center", md: "flex-start" }}
+    >
+      <Box sx={logoStyle}>
+        <img src={logo} alt="Logo" />
+      </Box>
 
-               <Box sx={logoStyle}   >
-                    <img src={logo} alt="Logo" />
-               </Box>
-               <Stack sx={contentStyle}>
-                    <Typography
-                         variant="h1"
-                         sx={titleStyle}
-                    >
-                         Welcome in <br /> INSIGHT EYE
-                    </Typography>
+      <Stack sx={contentStyle}>
+        <Typography variant="h1" sx={titleStyle}>
+          Welcome in <br /> INSIGHTEYE
+        </Typography>
 
-                    <Typography
-                         variant="body1"
-                         sx={desStyle}
-                    >
-                         Lorem ipsum was conceived as filler text, formatted in a certain way to enable the presentation of graphic elements in documents, without the need for formal copy. Using Lorem Ipsum allows designers to put together layouts and the form of the content before the content has been created, giving the design and production process more freedom.
+        <Typography component="ul" sx={desStyle}>
+          <Typography component="li" sx={desStyle}>
+            Count
+          </Typography>
+          <Typography component="li" sx={desStyle}>
+            Predict
+          </Typography>
+          <Typography component="li" sx={desStyle}>         
+            Visualize
+          </Typography>
+        </Typography>
+      </Stack>
 
-                         It is widely believed that the history of Lorem Ipsum originates with Cicero in the 1st Century BC and his text De
-                    </Typography>
-               </Stack>
-          </Stack>
-     )
-}
+      <SocialMediaLinks />
+    </Stack>
+  );
+};
 
-export default Info
+export default Info;
 
 const boxStyle = {
-     width: { md: "50%" },
-     minHeight: { xs: "50%", md: "100%" },
-     p: 4,
-     backgroundImage: `url(${bg})`,
-     backgroundSize: "cover",
-     backgroundPosition: "left",
-     border: 3,
-     borderRadius: 5,
-     borderColor: "primary.main"
-}
-
+  width: { md: "50%" },
+  minHeight: "600px",
+  p: 4,
+  backgroundImage: `url(${bg})`,
+  backgroundSize: "cover",
+  backgroundPosition: "left",
+  border: 3,
+  borderRadius: 5,
+  borderColor: "primary.main",
+};
 
 const logoStyle = {
-     width: { xs: "40%", sm: "25%", md: "20%" }, // Responsive width
-     display: "flex",
-     justifyContent: "center",
+  width: { xs: "40%", lg: "28%" }, // Responsive width
+  display: "flex",
+  justifyContent: "center",
 
-     "& img": {
-          width: "100%",
-          height: "auto",
-          objectFit: "contain",
-     },
-}
-const contentStyle = { textAlign: { xs: "center", md: "left " }, p: 2, flexGrow: 1, justifyContent: "center" }
+  "& img": {
+    width: "100%",
+    height: "auto",
+    objectFit: "contain",
+  },
+};
+const contentStyle = {
+  textAlign: { xs: "center", md: "left " },
+  p: 2,
+
+  justifyContent: "center",
+};
 
 const titleStyle = {
-     fontSize: { xs: "24px", sm: "32px", md: "40px", lg: "4rem" }, // Responsive font sizes
-     fontWeight: "bold",
-
-}
+  fontSize: { xs: "24px", sm: "32px", md: "40px", lg: "4rem" }, // Responsive font sizes
+  fontWeight: "bold",
+};
 
 const desStyle = {
-     fontSize: { xs: "14px", sm: "16px", md: "18px" }, // Responsive font sizes
-     color: "text.secondary",
-     mt: 4,
-}
+  fontSize: "1.3rem", // Responsive font sizes
+  m: 1,
+};

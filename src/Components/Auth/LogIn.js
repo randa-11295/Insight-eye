@@ -1,18 +1,19 @@
-import { baseURL } from "../../utils/StaticVariables";
 import InputTextCustom from "../Inputs/InputTextCustom";
 import LoadBtn from "../Reusable/LoadBtn";
 import { useFormik } from "formik";
-import axios from "axios";
 import { Box, Link, Typography, Stack } from "@mui/material";
 import { useState } from "react";
 import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
-
+import {useAxiosWithAuth} from "../../services/api"
+import axios from "axios"
+import {baseURL} from "../../utils/StaticVariables" 
 const LogIn = () => {
   const [loading, setLoading] = useState(false)
   const setAuthRecoil = useSetRecoilState(authState);
   const setSnackAlert = useSetRecoilState(snackAlertState);
+  const api = useAxiosWithAuth();
 
   const showError = () => {
     setSnackAlert({
@@ -22,32 +23,53 @@ const LogIn = () => {
     });
   };
 
-  const formik = useFormik({
+  const formik = useFormik({   
     initialValues: {
       username: "",
       password: "",
     },
-    onSubmit: async (values) => {
+    onSubmit:  (values) => {
+      console.log("start submit")
+      const testVal = {
+        "username": "randaz",
+        "password": "randoda"
+      }
+      console.log(testVal)
+      console.log(values)
+
       setLoading(true)
-      axios.post(baseURL + "/login", values)
-        .then(response => {
-          
-          localStorage.setItem("token", response.data.session_id);
-          localStorage.setItem("username", response.data.username);
-          setAuthRecoil({
-            isAuthenticated: true,
-            username: response.data.username,
-            token: response.data.session_id,
-          });
-        })
-        .catch(() => {
-          showError();
-        })
-        .finally(() => {
-          console.log("Login request completed.");
-          setLoading(false)
+
+      
+      axios.post(baseURL + "login", testVal)
+      .then(response => {
+        console.log("his res", response);
+    
+        if (!response.data.access_token) {
+          throw new Error("Invalid login response"); // This will send execution to the catch block
+        }
+    
+        localStorage.setItem("token", response.data.access_token);
+        localStorage.setItem("refresh_token", response.data.refresh_token);
+        localStorage.setItem("expire", response.data.expires_at);
+        
+        setAuthRecoil({
+          isAuthenticated: true,
+          token: response.data.access_token,
+          refreshToken: response.data.refresh_token,
+          expire: response.data.expires_at,
         });
+      })
+      .catch((error) => {
+        console.log("his error", error);
+        showError();
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
     },
+
+    
   });
 
 
@@ -78,8 +100,8 @@ const LogIn = () => {
 
       <Box component="form" onSubmit={formik.handleSubmit}>
 
-        <InputTextCustom label="Email "
-          placeholder="Enter your email or user name"
+        <InputTextCustom label="Username "
+          placeholder="Enter your user name"
           formik={formik}
           name="username" />
 
@@ -92,7 +114,7 @@ const LogIn = () => {
           value={formik.values.username}
           onChange={formik.handleChange} />
 
-        <LoadBtn fullWidth text={"LogIn"} handle={() => formik.handleSubmit()} loading={loading} />
+        <LoadBtn submit fullWidth text={"LogIn"} handle={() => formik.handleSubmit()} loading={loading} />
 
         <Link component="span" underline="hover" sx={{ cursor: "pointer", padding: "20px", display: "block", textAlign: "center" }}>
           Forget your password ?

@@ -3,10 +3,11 @@ import { Box, Stack } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { addStreamSchema } from "../../utils/validationSchema";
-import { baseURL } from "../../utils/StaticVariables";
 import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
-import axios from "axios";
+import { useRecoilState } from "recoil";
+import { authState } from "../../Recoil/RecoilState";
+import {useAxiosWithAuth} from "../../services/api"
 import CustomBtn from "../../Components/Reusable/CustomBtn";
 import SelectCustom from "../../Components/Inputs/SelectCustom";
 import Holder from "../../Components/HOC/Holder";
@@ -14,10 +15,12 @@ import LoadBtn from "../../Components/Reusable/LoadBtn";
 import InputTextCustom from "../../Components/Inputs/InputTextCustom";
 
 const AddStream = () => {
+    const [authRecoil] = useRecoilState(authState);
     const [loading, setLoading] = useState(false);
+    const api = useAxiosWithAuth();
     const navigate = useNavigate();
-    const formik = useFormik({
 
+    const formik = useFormik({
         initialValues: {
             name: "",
             path: "",
@@ -25,18 +28,15 @@ const AddStream = () => {
         },
         onSubmit: (values) => {
             setLoading(true);
-
-            axios.post(baseURL + "/source", {
-                ...values,
+            api.post("source", {
+                ...values,           
             })
                 .then(() => {
                     formik.handleReset()
                     showSuccess()
                 })
                 .catch(error => {
-
                     showError()
-                    // showSuccess()
                 })
                 .finally(() => setLoading(false))
 
@@ -62,7 +62,7 @@ const AddStream = () => {
         });
     };
     return (
-        <Holder>
+        <Holder title="add stream">
             <Box component="form">
                 <InputTextCustom formik={formik} name="name" label="Name" placeholder="add your Stream Name" />
                 <InputTextCustom formik={formik} name="path" label="Source" placeholder="add Stream Source or Stream Path" />

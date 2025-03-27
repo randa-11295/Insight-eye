@@ -6,8 +6,8 @@ import CorporateFareOutlinedIcon from '@mui/icons-material/CorporateFareOutlined
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
-const getIcon = (IconComponent) => (isSelected) => (
-  <IconComponent sx={{ color: isSelected ? "black" : "inherit", marginLeft: "auto" }} />
+const getIcon = (IconComponent) =>  (
+  <IconComponent sx={{ color: "inherit", marginLeft: "auto" }} />
 );
 
 export const navbarContentArr = [
@@ -16,7 +16,6 @@ export const navbarContentArr = [
   { text: "Frames Search", url: "/frames-search", icon: getIcon(SearchOutlinedIcon) },
   { text: "Prediction", url: "/prediction", icon: getIcon(CorporateFareOutlinedIcon) },
   { text: "Setting", url: "/setting", icon: getIcon(SettingsOutlinedIcon) },
-  { text: "Contact us", url: "/contact-us", icon: getIcon(LogoutOutlinedIcon) },
   { text: "Log out", url: false, icon: getIcon(LogoutOutlinedIcon) },
 ];
 
@@ -50,6 +49,6 @@ export const chartColors = ["rgb(75, 192, 192)", "rgb(255, 99, 132)", "rgb(54, 1
 
 
 export const BASE64_IMAGE_PREFIX = "data:image/jpeg;base64,";
-export const baseURL = "http://16.170.216.227"
+export const baseURL = "http://16.170.216.227/"
 
 

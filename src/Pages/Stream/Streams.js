@@ -1,4 +1,3 @@
-import axios from "axios";
 import Holder from "../../Components/HOC/Holder";
 import CustomBtn from "../../Components/Reusable/CustomBtn";
 import TableReusable from "../../Components/Reusable/TableReusable";
@@ -9,7 +8,7 @@ import { Box, Stack } from "@mui/system";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { popupState, selectedStreamState } from "../../Recoil/RecoilState";
 import { streamColumns } from "../../utils/StaticVariables";
-
+import {useAxiosWithAuth} from "../../services/api"
 
 const Streams = () => {
 
@@ -19,7 +18,7 @@ const Streams = () => {
     const [error, setError] = useState(null);
     const setPopup = useSetRecoilState(popupState);
     const [selectedData, setSelectedStream] = useRecoilState(selectedStreamState);
-
+    const api = useAxiosWithAuth();
     // Function to update selected rows using Recoil
     const changeSelectDataRow = (selectedNewData) => {
         const isInSelectedData = selectedData.some(el => selectedNewData.id === el.id);
@@ -30,7 +29,7 @@ const Streams = () => {
     };
 
     const getAllStreams = () => {
-        axios.get(baseURL + "/source")
+        api.get("source")
             .then(response => {
                 console.log(response.data);
                 setStreamData(response.data);
@@ -48,8 +47,7 @@ const Streams = () => {
 
     const handelDeleteReqFromApi = () => {
         const selectedIDs = selectedData.map(el => el.id);
-
-        axios.delete(baseURL + "/source", {
+        api.delete("source", {
             data: { ids: selectedIDs }
         })
             .then(() => {

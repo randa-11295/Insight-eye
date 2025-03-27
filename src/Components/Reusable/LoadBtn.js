@@ -11,6 +11,7 @@ export default function LoadBtn(props) {
       onClick={props.handle}
       fullWidth={props.fullWidth}
       size="large"
+      type={props.submit && "submit"}
     >
       {props.text || "Conform"}
     </LoadingButton>

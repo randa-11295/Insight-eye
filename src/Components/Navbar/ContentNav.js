@@ -13,22 +13,30 @@ import logoImg from "../../Images/logo.png"
 import { v4 as uuid } from "uuid";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
+import {useAxiosWithAuth} from "../../services/api"
 
 const ContentNav = (props) => {
+  
   const navigate = useNavigate();
   const location = useLocation();
   const setAuthRecoil = useSetRecoilState(authState);
+  const api = useAxiosWithAuth();
 
   const handelLogout = () => {
-    localStorage.removeItem("token")
-    localStorage.removeItem("username")
 
-    setAuthRecoil({
-      isAuthenticated: false,
-      username: null,
-      token: null,
-    })
+    api.post("logout")
+        .then( ()=> {
+          localStorage.removeItem("token")
+          localStorage.removeItem("expire")
+      
+          setAuthRecoil(null)
+        })
+        .catch(() => {
+          console.log("error")
+          // showError();
+        })
   }
+
   const changeRouteHandel = (url) => {
     url ? navigate(url) : handelLogout()
   }
@@ -36,8 +44,8 @@ const ContentNav = (props) => {
   const listStyle = (url, path) => ({
     borderRadius: 2,
     bgcolor: url === path && "primary.main",
-    color: url === path && "black",
     overflow: "hidden",
+ 
 
   });
 
@@ -61,14 +69,16 @@ const ContentNav = (props) => {
               }}
             >
               <ListItemButton
-                sx={{ justifyContent: "space-between", display: "flex" }}
+                sx={{ justifyContent: "space-between", display: "flex" ,    "&:hover" : {
+                  background :"#063A36"
+                }}}
               >
                 <ListItemText
                   primary={el.text}
                   sx={{ textAlign: "start" }}
                 />
                 <ListItemIcon >
-                  {el.icon(el.url === location.pathname)}
+                  {el.icon}
                 </ListItemIcon>
               </ListItemButton>
             </ListItem>

@@ -2,7 +2,7 @@ import Info from "../Components/Auth/Info";
 import LogIn from "../Components/Auth/LogIn";
 import { Stack, Box } from "@mui/system";
 import Otp from "../Components/Auth/Otp";
-
+import Contact from "./Contact";
 const Welcome = () => {
 
 
@@ -22,6 +22,7 @@ const Welcome = () => {
         <Box sx={{ margin : "auto",width  : {xl :"60%"} ,height : "100%"}}>
 
         <LogIn />
+        {/* <Contact /> */}
         </Box>
         {/* <Otp /> */}
       </Box>
