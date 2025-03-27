@@ -5,19 +5,19 @@ export const theme = createTheme({
     palette: {
       mode: "dark",
       primary: {
-        main: "#16AA9D",
+        main: "#15C5BB",
       },
       secondary: {
-        main: "#004D5C",
+        main: "#fff",
       },
       background: {
-        default: "#002B36", // Dark greenish background
-        paper: "#003D40",
+        default: "#031716", // Dark greenish background
+        paper: "#041F1E",
       },
-      text: {
-        primary: "#E0F2F1",
-        secondary: "#A7FFEB",
-      },
+    //   text: {
+    //     primary: "#01FFFF",
+    //     secondary: "#00A0A8",
+    //   },
     },
   });
 export default theme;
