@@ -85,7 +85,6 @@ const Dashbourd = () => {
     const paramStream = () => {
         api.get("param_stream/users")
         .then(response => {
-            console.log("test",response.data);
              const res = convertToObjArray(response.data[0]);
              setParamStreamData(res);
             // setLoading(false);
