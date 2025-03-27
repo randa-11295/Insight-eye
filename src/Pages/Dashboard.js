@@ -55,11 +55,22 @@ const RenderSection = ({ title, data, fullWidth = false }) => (
 
 const Dashbourd = () => {
     const [streamData , setStreamData] = useState([])
+    const [paramStreamData , setParamStreamData] = useState({})
     const api = useAxiosWithAuth();
+
+    function convertToObjArray(inputObj) {
+        return Object.keys(inputObj)
+          .filter(key => key !== "user_id") 
+          .map(key => ({
+            title: key.replace(/_/g, ' '), 
+            val: inputObj[key]
+          }));
+      }
+      
+
     const getAllStreams = () => {
         api.get("source")
         .then(response => {
-            console.log(response.data);
             const res = response.data?.map(el => ({ title: el.name, val: ( el.status === "inactive" ? "Off" :"On")  }));
             setStreamData(res);
             // setLoading(false);
@@ -71,8 +82,24 @@ const Dashbourd = () => {
             });
     };
 
+    const paramStream = () => {
+        api.get("param_stream/users")
+        .then(response => {
+            console.log("test",response.data);
+             const res = convertToObjArray(response.data[0]);
+             setParamStreamData(res);
+            // setLoading(false);
+        })
+            .catch(error => {
+                console.log(error)
+                // setError(error);
+                // setLoading(false);
+            });
+    };
+
 useEffect(()=>{
 getAllStreams()
+paramStream()
 },[])
     return (
         <Stack 
@@ -80,11 +107,11 @@ getAllStreams()
             flexWrap="wrap" 
             gap={4} 
             justifyContent="space-between"
-            alignItems="stretch" // Ensures all items stretch to the same height
+            alignItems="stretch"
         >
-            <RenderSection title="Personal Info" data={personalInfo} />
+            <RenderSection title="Personal Info" data={paramStreamData} />
             <RenderSection title="Camera Status" data={streamData} />
-            <RenderSection title="System Information" data={systemInfo} fullWidth />
+            <RenderSection title="System Information" data={paramStreamData} fullWidth />
         </Stack>
     );
 };
