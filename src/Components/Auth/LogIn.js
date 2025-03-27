@@ -40,7 +40,7 @@ const LogIn = () => {
       setLoading(true)
 
       
-      axios.post(baseURL + "login", testVal)
+      axios.post(baseURL + "login", values)
       .then(response => {
         console.log("his res", response);
     
