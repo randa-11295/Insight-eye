@@ -4,10 +4,12 @@ import { Box, Stack, Typography } from "@mui/material";
 import SocialMediaLinks from "./SocialMediaLinks"
 const Info = () => {
   return (
-    <Stack sx={boxStyle}>
+    <Stack sx={boxStyle} justifyContent={"space-between"} alignItems={{xs: "center" , md: "flex-start"}}>
+
       <Box sx={logoStyle}>
         <img src={logo} alt="Logo" />
       </Box>
+
       <Stack sx={contentStyle}>
         <Typography variant="h1" sx={titleStyle}>
           Welcome in <br /> INSIGHTEYE
@@ -21,7 +23,9 @@ const Info = () => {
           <Typography component="li" sx={desStyle}> Visualize </Typography>
         </Typography>
       </Stack>
+
       <SocialMediaLinks/>
+
     </Stack>
   );
 };
@@ -30,7 +34,7 @@ export default Info;
 
 const boxStyle = {
   width: { md: "50%" },
-  minHeight: { xs: "50%", md: "100%" },
+  minHeight:  "600px" ,
   p: 4,
   backgroundImage: `url(${bg})`,
   backgroundSize: "cover",
@@ -54,7 +58,7 @@ const logoStyle = {
 const contentStyle = {
   textAlign: { xs: "center", md: "left " },
   p: 2,
-  flexGrow: 1,
+
   justifyContent: "center",
 };
 
