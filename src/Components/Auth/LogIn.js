@@ -9,6 +9,7 @@ import { authState } from "../../Recoil/RecoilState";
 import {useAxiosWithAuth} from "../../services/api"
 import axios from "axios"
 import {baseURL} from "../../utils/StaticVariables" 
+
 const LogIn = () => {
   const [loading, setLoading] = useState(false)
   const setAuthRecoil = useSetRecoilState(authState);
@@ -29,24 +30,13 @@ const LogIn = () => {
       password: "",
     },
     onSubmit:  (values) => {
-      console.log("start submit")
-
-      const testVal = {
-        "username": "randa@1295",
-        "password": "randa@1295"
-      }
-      console.log(testVal)
-      console.log(values)
 
       setLoading(true)
 
       
-      axios.post(baseURL + "login", testVal)
+      api.post( "login", values)
       .then(response => {
-        console.log("his res", response);
-    
-      
-    
+ 
         localStorage.setItem("token", response.data.access_token);
         localStorage.setItem("refresh_token", response.data.refresh_token);
         localStorage.setItem("expire", response.data.expires_at);

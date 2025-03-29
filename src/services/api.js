@@ -21,7 +21,7 @@ export const useAxiosWithAuth = () => {
   
 
   const token = useRecoilValue(authState)?.token; 
-console.log(token)
+console.log("token run in api")
   api.interceptors.request.use(
     (config) => {
       if (token) {

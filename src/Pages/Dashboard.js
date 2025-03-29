@@ -5,6 +5,7 @@ import HighlightedText from "../Components/Reusable/HighlightedText";
 import { useAxiosWithAuth } from "../services/api";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
+import axios from "axios"
 
 const personalInfo = [
   { title: "First Name", val: "Randa" },
@@ -63,8 +64,7 @@ const Dashbourd = () => {
           val: el.status === "inactive" ? "Off" : "On",
         }));
         setStreamData(res);
-        // setLoading(false);
-        console.log("suc");
+        console.log("suc" . response);
       })
       .catch((error) => {
         console.log("error");
@@ -83,20 +83,18 @@ const Dashbourd = () => {
         // setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("error" ,error);
         // setError(error);
         // setLoading(false);
       });
   };
 
   useEffect(() => {
-    console.log("out", authRecoil?.token);
-    // if (authRecoil?.token) {
-      console.log("in");
+    if (authRecoil?.token) {
       getAllStreams();
       paramStream();
-    // }
-  }, []);
+    }
+  }, [authRecoil]);
   return (
     <Stack
       direction="row"
