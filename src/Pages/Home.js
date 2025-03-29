@@ -22,7 +22,6 @@ function Home() {
   };
 
   useEffect(() => {
-    console.log(authRecoil)
     if (localStorage?.token && !authRecoil?.token) {
       setAuthRecoil({
         isAuthenticated: true,
@@ -40,13 +39,13 @@ function Home() {
   return (
     <div>
       {!authRecoil?.token ? <Welcome /> : <Box sx={{ display: "flex", overflow: "hidden" }}>
-        <TopNav openHandel={openHandel} drawerWidth={drawerWidth} />
         <SideNav
           openHandel={openHandel}
           mobileOpen={mobileOpen}
           drawerWidth={drawerWidth}
         />
         <Box component="main" sx={BoxStyle}>
+        <TopNav openHandel={openHandel}  />
           <Toolbar />
           <Outlet />
         </Box>
@@ -64,5 +63,5 @@ export default Home;
 const BoxStyle = {
   flexGrow: 1,
   p: 3,
-  width: { xs: "100vw", md: `calc(100% - ${drawerWidth}px)` },
+  width: { xs: "100vw",  },
 };
