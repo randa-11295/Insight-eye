@@ -12,6 +12,11 @@ export function convertToObjArray(inputObj) {
     .map((key) => {
       let value = inputObj[key];
 
+      // Convert boolean to string
+      if (typeof value === "boolean") {
+        value = value.toString();
+      }
+
       // Strictly check if it's an ISO date format (YYYY-MM-DDTHH:mm:ss.sssZ)
       const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+/;
 
