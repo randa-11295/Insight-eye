@@ -30,9 +30,10 @@ const LogIn = () => {
     },
     onSubmit:  (values) => {
       console.log("start submit")
+
       const testVal = {
-        "username": "randaz",
-        "password": "randoda"
+        "username": "randa@1295",
+        "password": "randa@1295"
       }
       console.log(testVal)
       console.log(values)
@@ -40,13 +41,11 @@ const LogIn = () => {
       setLoading(true)
 
       
-      axios.post(baseURL + "login", values)
+      axios.post(baseURL + "login", testVal)
       .then(response => {
         console.log("his res", response);
     
-        if (!response.data.access_token) {
-          throw new Error("Invalid login response"); // This will send execution to the catch block
-        }
+      
     
         localStorage.setItem("token", response.data.access_token);
         localStorage.setItem("refresh_token", response.data.refresh_token);
