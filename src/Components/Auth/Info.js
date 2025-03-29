@@ -4,30 +4,20 @@ import { Box, Stack, Typography } from "@mui/material";
 import SocialMediaLinks from "./SocialMediaLinks";
 const Info = () => {
   return (
-    <Stack
-      sx={boxStyle}
-      justifyContent={"space-between"}
-      alignItems={{ xs: "center", md: "flex-start" }}
-    >
+    <Stack sx={boxStyle} justifyContent={"space-between"} alignItems="center">
       <Box sx={logoStyle}>
         <img src={logo} alt="Logo" />
       </Box>
 
       <Stack sx={contentStyle}>
-        <Typography variant="h1" sx={titleStyle}>
-          Welcome in <br /> INSIGHTEYE
+        <Typography variant="h2" sx={titleStyle}>
+          Welcome to
         </Typography>
-
-        <Typography component="ul" sx={desStyle}>
-          <Typography component="li" sx={desStyle}>
-            Count
-          </Typography>
-          <Typography component="li" sx={desStyle}>
-            Predict
-          </Typography>
-          <Typography component="li" sx={desStyle}>         
-            Visualize
-          </Typography>
+        <Typography variant="h1" my={3} sx={companytitleStyle}>
+        INSIGHTEYE
+        </Typography>
+        <Typography component="p" sx={desStyle} variant="body2" color="text.secondary">
+          Count - Predict - Visualize
         </Typography>
       </Stack>
 
@@ -62,18 +52,20 @@ const logoStyle = {
   },
 };
 const contentStyle = {
-  textAlign: { xs: "center", md: "left " },
+  textAlign: "center",
   p: 2,
 
   justifyContent: "center",
 };
 
 const titleStyle = {
-  fontSize: { xs: "24px", sm: "32px", md: "40px", lg: "4rem" }, // Responsive font sizes
-  fontWeight: "bold",
+  fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5", lg: "3rem" },
 };
 
+const companytitleStyle = {
+  fontSize: { xs: "3rem", sm: "4rem", md: "3rem", lg: "5rem" ,  xl : "6rem" }, 
+  fontWeight : 900 
+};
 const desStyle = {
-  fontSize: "1.3rem", // Responsive font sizes
-  m: 1,
+  fontSize: "1.3rem",
 };
