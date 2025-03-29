@@ -83,7 +83,6 @@ const RenderSection = ({ title, data, fullWidth = false }) =>
       .get("param_stream/users")
       .then((response) => {
           const res = convertToObjArray(response.data[0]);
-          console.log(res)
         setParamStreamData(res);
         // setLoading(false);
       })
