@@ -30,10 +30,10 @@ const ContentNav = (props) => {
     setAuthRecoil(null)
     api.post("logout")
         .then( ()=> {
-          console.log("res")
+          console.log("res logout")
         })
         .catch(() => {
-          console.log("error")
+          console.log("error logout")
           // showError();
         })
   }
