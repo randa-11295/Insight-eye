@@ -11,14 +11,9 @@ const Logs = () => {
 
   const getAllLogs = () => {
     api
-      .get("source")
+      .get("auth/logs/me")
       .then((response) => {
-        const res = response.data?.map((el) => ({
-          title: el.name,
-          val: el.status === "inactive" ? "Off" : "On",
-        }));
-        //    setStreamData(res);
-        console.log("error stream");
+        setLogsData(response.data.logs);
       })
       .catch((error) => {
         console.log(error);
