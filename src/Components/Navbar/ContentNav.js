@@ -29,6 +29,13 @@ const ContentNav = (props) => {
 
     setAuthRecoil(null)
     api.post("logout")
+        .then( ()=> {
+          console.log("res")
+        })
+        .catch(() => {
+          console.log("error")
+          // showError();
+        })
   }
 
   const changeRouteHandel = (url) => {
