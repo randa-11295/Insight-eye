@@ -24,15 +24,16 @@ const ContentNav = (props) => {
 
   const handelLogout = () => {
 
+    localStorage.removeItem("token")
+    localStorage.removeItem("expire")
+
+    setAuthRecoil(null)
     api.post("logout")
         .then( ()=> {
-          localStorage.removeItem("token")
-          localStorage.removeItem("expire")
-      
-          setAuthRecoil(null)
+          console.log("res logout")
         })
         .catch(() => {
-          console.log("error")
+          console.log("error logout")
           // showError();
         })
   }

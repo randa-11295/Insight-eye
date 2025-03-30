@@ -5,13 +5,9 @@ import HighlightedText from "../Components/Reusable/HighlightedText";
 import { useAxiosWithAuth } from "../services/api";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
+import axios from "axios"
+import {convertToObjArray} from "../utils/helpers"
 
-const personalInfo = [
-  { title: "First Name", val: "Randa" },
-  { title: "Last Name", val: "Mohamed" },
-  { title: "Email", val: "Randa.12@gmail.com" },
-  { title: "Company Name", val: "Spacetoon" },
-];
 
 const RenderSection = ({ title, data, fullWidth = false }) =>
   data.length > 0 && (
@@ -39,20 +35,14 @@ const RenderSection = ({ title, data, fullWidth = false }) =>
     </Stack>
   );
 
-const Dashbourd = () => {
-  const [streamData, setStreamData] = useState([]);
-  const [paramStreamData, setParamStreamData] = useState({});
-  const api = useAxiosWithAuth();
-  const [authRecoil] = useRecoilState(authState);
 
-  function convertToObjArray(inputObj) {
-    return Object.keys(inputObj)
-      .filter((key) => key !== "user_id")
-      .map((key) => ({
-        title: key.replace(/_/g, " "),
-        val: inputObj[key],
-      }));
-  }
+  const Dashbourd = () => {
+  const [streamData, setStreamData] = useState([]);
+  const [paramStreamData, setParamStreamData] = useState([]);
+  const [personalInfo, setPersonalInfo] = useState([]);
+  const [authRecoil] = useRecoilState(authState);
+  const api = useAxiosWithAuth();
+
 
   const getAllStreams = () => {
     api
@@ -63,40 +53,53 @@ const Dashbourd = () => {
           val: el.status === "inactive" ? "Off" : "On",
         }));
         setStreamData(res);
-        // setLoading(false);
-        console.log("suc");
       })
       .catch((error) => {
-        console.log("error");
+        console.log("error stream");
         console.log(error);
         // setError(error);
         // setLoading(false);
       });
   };
 
+  const getUserInfo = () => {
+    api
+      .get("user_info")
+      .then((response) => {
+        const res = convertToObjArray(response.data);
+        setPersonalInfo(res);
+        // setLoading(false);
+      })
+      .catch((error) => {
+        console.log("error info " ,error);
+        // setError(error);
+        // setLoading(false);
+      });
+  };
+
+
   const paramStream = () => {
     api
       .get("param_stream/users")
       .then((response) => {
-        const res = convertToObjArray(response.data[0]);
+          const res = convertToObjArray(response.data[0]);
         setParamStreamData(res);
         // setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("error" ,error);
         // setError(error);
         // setLoading(false);
       });
   };
 
   useEffect(() => {
-    console.log("out", authRecoil?.token);
-    // if (authRecoil?.token) {
-      console.log("in");
+    if (authRecoil?.token) {
       getAllStreams();
       paramStream();
-    // }
-  }, []);
+      getUserInfo();
+    }
+  }, [authRecoil]);
   return (
     <Stack
       direction="row"
