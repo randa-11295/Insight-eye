@@ -24,17 +24,11 @@ const ContentNav = (props) => {
 
   const handelLogout = () => {
 
+    localStorage.removeItem("token")
+    localStorage.removeItem("expire")
+
+    setAuthRecoil(null)
     api.post("logout")
-        .then( ()=> {
-          localStorage.removeItem("token")
-          localStorage.removeItem("expire")
-      
-          setAuthRecoil(null)
-        })
-        .catch(() => {
-          console.log("error")
-          // showError();
-        })
   }
 
   const changeRouteHandel = (url) => {
