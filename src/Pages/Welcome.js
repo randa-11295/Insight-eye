@@ -3,9 +3,8 @@ import LogIn from "../Components/Auth/LogIn";
 import { Stack, Box } from "@mui/system";
 import Otp from "../Components/Auth/Otp";
 import Contact from "./Contact";
+
 const Welcome = () => {
-
-
 
   return (
     <Stack direction={{ xs: "column", md: "row" }} justifyContent="stretch" alignItems="stretch" gap={4}

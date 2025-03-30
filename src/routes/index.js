@@ -11,8 +11,7 @@ import UpdateStreams from "../Pages/Stream/UpdateStreams";
 import Search from "../Pages/Search"
 import Stream from "../Pages/Stream/Streams"
 import ShowStreams from "../Pages/Stream/ShowStreams";
-import Login from "../Pages/Welcome";
-import Contact from "../Pages/Contact";
+import Logs from "../Pages/Logs";
 
 export const AppRouter = () => {
 
@@ -26,6 +25,7 @@ export const AppRouter = () => {
           <Route path="/streams/show-streams" element={<ShowStreams />} />
           <Route path="/streams/update-streams" element={<UpdateStreams />} />
           <Route path="/frames-search" element={<Search />} />
+          <Route path="/logs" element={<Logs />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Route>
       </Routes>
