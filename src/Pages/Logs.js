@@ -1,9 +1,14 @@
 import Holder from "../Components/HOC/Holder";
 import { useEffect, useState } from "react";
-import { Stack } from "@mui/material";
 import { useAxiosWithAuth } from "../services/api";
-
-import { convertToObjArray } from "../utils/helpers";
+import {
+  Card,
+  CardContent,
+  Typography,
+  CardHeader,
+  Avatar,
+  Stack,
+} from "@mui/material";
 
 const Logs = () => {
   const [logsData, setLogsData] = useState([]);
@@ -17,19 +22,50 @@ const Logs = () => {
       })
       .catch((error) => {
         console.log(error);
-        // setError(error);
-        // setLoading(false);
       });
   };
 
   useEffect(() => {
     getAllLogs();
   }, []);
-  return (
-    <Holder title={"logs"}>
 
-        this is logs
-    </Holder>
+  return (
+    <Stack spacing={2}>
+      {logsData.map((log) => (
+        <Card key={log.log_id} sx={{ borderRadius: 3, boxShadow: 3 }}>
+          {/* Card Header with Avatar, Username, and Status on Right */}
+          <CardHeader
+            avatar={
+              <Avatar sx={{ bgcolor: "primary.main" }}>
+                {log.username.charAt(0).toUpperCase()}
+              </Avatar>
+            }
+            title={log.username}
+            subheader={new Date(log.created_at).toLocaleString()}
+            action={
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: "bold",
+                  color: log.status === "success" ? "green" : "red",
+                  pr: 2, // Padding to keep it aligned properly
+                }}
+              >
+                {log.status.toUpperCase()}
+              </Typography>
+            }
+          />
+
+          <CardContent>
+            {/* Post Content */}
+            <Typography variant="body2"  sx={{ textTransform: "capitalize"  ,color : "secondary.main"}}>
+              {log.action_type.replace("_", " ")}
+            </Typography>
+            <Typography pt={1} variant="h6">{log.content}</Typography>
+          </CardContent>
+        </Card>
+      ))}
+    </Stack>
   );
 };
 
