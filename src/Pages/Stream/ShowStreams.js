@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { authState } from "../../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
+import {Card , Typography , CardContent , CardMedia , Box , Divider} from "@mui/material";
+import { BASE64_IMAGE_PREFIX } from "../../utils/StaticVariables";
 
 const WebSocketComponent = ({ userId }) => {
   const [messages, setMessages] = useState([]);
@@ -9,25 +11,33 @@ const WebSocketComponent = ({ userId }) => {
 
   useEffect(() => {
     console.log(localStorage.token);
+    const token = localStorage.token;
     const streamid = "226d039d-87a4-495f-a8be-5f6b39a09fff";
-    const streamUrl = "ws://16.170.216.227/stream?stream_id=" + streamid;
-    //     const socket = new WebSocket(`ws://16.170.216.227/stream?session_id=${authRecoil.token}`);
+    
+    const streamUrl = `ws://16.170.216.227/stream?stream_id=${streamid}&token=${token}`;
     const socket = new WebSocket(streamUrl);
-    const testToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhbmRhQDEyOTUiLCJleHAiOjE3NDM4NDQ2OTMuODk0MDE5LCJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiY3JlYXRlZF9hdCI6MTc0Mzc1NDY5My44OTQwMjl9.a14MtYZGHdaRwxnu-LhXFx-QPZl7LraK3VvVLvXAJP4";
+    
     socket.onopen = () => {
-      console.log("WebSocket Connected", {
-        headers: {
-          Authorization: `Bearer ${testToken}`,
-        },
-      });
+      console.log("WebSocket Connected");
     };
-
     socket.onmessage = (event) => {
-      console.log("Message received:", event);
-      setMessages(event.data);
+      console.log("Message received:", event.data);
+    
+      // Parse the JSON string into an object
+      try {
+        const messageObj = JSON.parse(event.data);
+        console.log("Parsed message:", messageObj);
+    
+        // Example: accessing stream_id and frame
+        console.log("Stream ID:", messageObj?.stream_id);
+        console.log("Frame Data:", messageObj?.frame);
+    
+        // Set state or handle the data as needed
+        setMessages(messageObj);
+      } catch (error) {
+        console.log("Error parsing JSON:", error);
+      }
     };
-
     socket.onerror = (error) => {
       console.error("WebSocket Error:", error);
     };
@@ -46,7 +56,13 @@ const WebSocketComponent = ({ userId }) => {
   return (
     <div>
       <h2>WebSocket Messages</h2>
-      {messages}
+      <CardMedia
+          component="img"
+          height="200"
+          image={BASE64_IMAGE_PREFIX + messages?.frame}
+          alt={messages?.frame}
+          sx={{ objectFit: "cover" }}
+        />
     </div>
   );
 };
