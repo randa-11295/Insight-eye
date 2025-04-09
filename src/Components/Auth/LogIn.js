@@ -40,13 +40,14 @@ const LogIn = () => {
         localStorage.setItem("token", response.data.access_token);
         localStorage.setItem("refresh_token", response.data.refresh_token);
         localStorage.setItem("expire", response.data.expires_at);
-        
-        setAuthRecoil({
-          isAuthenticated: true,
-          token: response.data.access_token,
-          refreshToken: response.data.refresh_token,
-          expire: response.data.expires_at,
-        });
+        // setAuthRecoil({
+        //   isAuthenticated: true,
+        //   token: response.data.access_token,
+        //   refreshToken: response.data.refresh_token,
+        //   expire: response.data.expires_at,
+        // });
+        window.location.reload();
+
       })
       .catch((error) => {
         console.log("his error", error);

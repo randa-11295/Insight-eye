@@ -1,50 +1,20 @@
-import { useEffect, useState } from "react";
-import { authState } from "../../Recoil/RecoilState";
+import { Grid } from "@mui/material";
+import StreamCards from "../../Components/Stream/StreamCards";
+import { selectedStreamState } from "../../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
 
-const WebSocketComponent = ({ userId }) => {
-  const [messages, setMessages] = useState([]);
-  const [ws, setWs] = useState(null);
-  const [authRecoil] = useRecoilState(authState);
-
-  useEffect(() => {
-//     const socket = new WebSocket(`ws://16.170.216.227/stream?session_id=${authRecoil.token}`);
-    const socket = new WebSocket(`ws://16.170.216.227/stream?session_id=${authRecoil.token}&stream_id=e1cb4c46-e95e-4dc2-942b-860431bdeed9"
-"}`);
-
-    socket.onopen = () => {
-      console.log("WebSocket Connected");
-    };
-
-    socket.onmessage = (event) => {
-     
-      console.log("Message received:", event.data);
-      setMessages( event.data);
-    };
-
-    socket.onerror = (error) => {
-      console.error("WebSocket Error:", error);
-    };
-
-    socket.onclose = () => {
-      console.log("WebSocket Disconnected");
-    };
-
-    setWs(socket);
-
-    return () => {
-      socket.close();
-    };
-  }, [authRecoil.token]); // Reconnect if userId changes
-
+const ShowStream = () => {
+  const [selectedData] = useRecoilState(selectedStreamState);
 
   return (
-    <div>
-      <h2>WebSocket Messages</h2>
-     {messages }
-    
-    </div>
+    <Grid container spacing={3}>
+      {selectedData.map((el) => (
+        <Grid item key={el.id} xs={12} sm={6} md={4} lg={3} my={5}>
+          <StreamCards data={el} />
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 
-export default WebSocketComponent;
+export default ShowStream;

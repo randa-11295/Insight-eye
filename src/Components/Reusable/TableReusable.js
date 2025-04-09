@@ -10,12 +10,27 @@ import {
   Checkbox,
 } from "@mui/material";
 import TableLoader from "./TableLoaderReusable";
-import { useTheme } from "@mui/material/styles"; // Use theme for colors
+import { useTheme } from "@mui/material/styles";
+import { useRecoilState } from "recoil";
+import { selectedStreamState } from "../../Recoil/RecoilState";
 
-const TableReusable = ({ data, columns, loading, handelChangeSelect }) => {
-  const theme = useTheme(); // Get theme colors
+const TableReusable = ({ data, columns, loading }) => {
+  const theme = useTheme();
+  const [selectedData, setSelectedData] = useRecoilState(selectedStreamState);
 
   if (loading) return <TableLoader columns={columns.length || 12} />;
+
+  const isSelected = (row) => {
+    return selectedData.some((item) => item.id === row.id);
+  };
+
+  const handleCheckboxChange = (row) => {
+    if (isSelected(row)) {
+      setSelectedData(selectedData.filter((item) => item.id !== row.id));
+    } else {
+      setSelectedData([...selectedData, row]);
+    }
+  };
 
   return (
     <TableContainer
@@ -31,9 +46,9 @@ const TableReusable = ({ data, columns, loading, handelChangeSelect }) => {
         {/* Table Header */}
         <TableHead>
           <TableRow sx={{ backgroundColor: theme.palette.background.default }}>
-            {handelChangeSelect && (
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>Select</TableCell>
-            )}
+            <TableCell align="center" sx={{ fontWeight: "bold" }}>
+              Select
+            </TableCell>
             {columns.map((col) => (
               <TableCell
                 key={col.field}
@@ -60,21 +75,35 @@ const TableReusable = ({ data, columns, loading, handelChangeSelect }) => {
               <TableRow
                 key={rowIndex}
                 sx={{
-                  backgroundColor: theme.palette.background.default,
-                  "&:nth-of-type(odd)": { backgroundColor: theme.palette.action.hover },
-                  "&:hover": { backgroundColor: theme.palette.action.selected },
+                  backgroundColor: isSelected(row)
+                    ? theme.palette.action.selected
+                    : rowIndex % 2 === 0
+                    ? theme.palette.background.default
+                    : theme.palette.action.hover,
+                  "&:hover": {
+                    backgroundColor: theme.palette.action.selected,
+                  },
                 }}
               >
-                {handelChangeSelect && (
-                  <TableCell align="center" sx={{ width: "50px" }}>
-                    <Checkbox onChange={() => handelChangeSelect(row)} />
-                  </TableCell>
-                )}
+                <TableCell align="center" sx={{ width: "50px" }}>
+                  <Checkbox
+                    checked={isSelected(row)}
+                    onChange={() => handleCheckboxChange(row)}
+                  />
+                </TableCell>
 
                 {columns.map((col) => (
-                  <TableCell key={col.field} align="center" sx={{ color: theme.palette.text.secondary }}>
+                  <TableCell
+                    key={col.field}
+                    align="center"
+                    sx={{ color: theme.palette.text.secondary }}
+                  >
                     {col.field === "frame" ? (
-                      <img src={`data:image/jpeg;base64,${row[col.field]}`} alt="Frame" width="50" />
+                      <img
+                        src={`data:image/jpeg;base64,${row[col.field]}`}
+                        alt="Frame"
+                        width="50"
+                      />
                     ) : (
                       row[col.field] || row.metadata?.[col.field] || "—"
                     )}
@@ -84,7 +113,11 @@ const TableReusable = ({ data, columns, loading, handelChangeSelect }) => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length + (handelChangeSelect ? 1 : 0)} align="center" sx={{ color: theme.palette.text.secondary }}>
+              <TableCell
+                colSpan={columns.length + 1}
+                align="center"
+                sx={{ color: theme.palette.text.secondary }}
+              >
                 No data available
               </TableCell>
             </TableRow>
