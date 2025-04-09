@@ -5,7 +5,7 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Typography, 
+  Typography,
   Box,
   Button,
   Dialog,
@@ -14,8 +14,10 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { BASE64_IMAGE_PREFIX } from "../../utils/StaticVariables";
-import StreamCards from "../../Components/Stream/StreamCards";
-
+import DesBtn from "../Reusable/DesBtn";
+import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 const WebSocketComponent = ({ userId }) => {
   const [messages, setMessages] = useState(null);
   const [ws, setWs] = useState(null);
@@ -86,7 +88,6 @@ const WebSocketComponent = ({ userId }) => {
 
   return (
     <div>
- 
       {/* Video display */}
       <Card>
         <CardMedia
@@ -100,26 +101,28 @@ const WebSocketComponent = ({ userId }) => {
           alt="Video Stream"
           sx={{ objectFit: "cover" }}
         />
-        <CardContent>
+     
+        <CardContent sx={{display : "flex" , justifyContent : "space-between", alignItems:"center"}}>
+          <Typography variant="body2" color="text.secondary" sx={{flexGrow : 1}}>
+            Live video feed from your camera
+          </Typography>
+          <DesBtn
+            text="open full screen"
+            noBoarder={true}
+            handle={openFullScreen}
+          >
+            <FullscreenIcon />
+          </DesBtn>
           {!isVideoPlaying ? (
-            <Button variant="contained" color="primary" onClick={startVideo}>
-              Start Video
-            </Button>
+            <DesBtn text="start stream" noBoarder={true} handle={startVideo}>
+              <PlayCircleFilledIcon />
+            </DesBtn>
           ) : (
-            <Button variant="contained" color="secondary" onClick={stopVideo}>
-              Stop Video
-            </Button>
+            <DesBtn text="stop stream" noBoarder={true} handle={stopVideo}>
+              <PauseCircleIcon />
+            </DesBtn>
           )}
-          <Button variant="outlined" color="primary" onClick={openFullScreen}>
-            Open Fullscreen
-          </Button>
         </CardContent>
-        <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              Live video feed from your camera
-            </Typography>
-            
-          </CardContent>
       </Card>
 
       {/* Fullscreen Popup */}
