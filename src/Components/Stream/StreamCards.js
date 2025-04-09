@@ -87,7 +87,6 @@ const WebSocketComponent = ({ data }) => {
 
   return (
     <div>
-      {/* Video display */}
       <Card>
         <CardMedia
           component="img"
