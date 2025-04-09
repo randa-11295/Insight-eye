@@ -1,16 +1,25 @@
 import { Box } from "@mui/material";
 import StreamCards from "../../Components/Stream/StreamCards";
+import { selectedStreamState } from "../../Recoil/RecoilState"
+import { useRecoilState } from "recoil";
+import {useEffect}  from "react"
 
-const WebSocketComponent = ({ userId }) => {
+const ShowStream = () => {
+  const [selectedData] = useRecoilState(selectedStreamState);
+
+  useEffect(()=>{
+    console.log(selectedData)
+  },[selectedData])
+
   return (
-    <div>
-      <h2>WebSocket Video Stream</h2>
-      <Box sx={{ width: "25%", py: 2 }}>
-        <StreamCards />
+ 
+    
+      <Box sx={{  py: 2 }}>
+        {selectedData.map(el=>  <StreamCards data={el} /> )}
+       
       </Box>
-      {/* Video display */}
-    </div>
+ 
   );
 };
 
-export default WebSocketComponent;
+export default ShowStream;

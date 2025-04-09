@@ -18,7 +18,7 @@ import DesBtn from "../Reusable/DesBtn";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
-const WebSocketComponent = ({ userId }) => {
+const WebSocketComponent = ({ data }) => {
   const [messages, setMessages] = useState(null);
   const [ws, setWs] = useState(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -28,8 +28,7 @@ const WebSocketComponent = ({ userId }) => {
   // Open WebSocket connection
   const startVideo = () => {
     const token = localStorage.token;
-    const streamid = "226d039d-87a4-495f-a8be-5f6b39a09fff";
-    const streamUrl = `ws://16.170.216.227/stream?stream_id=${streamid}&token=${token}`;
+    const streamUrl = `ws://16.170.216.227/stream?stream_id=${data.id}&token=${token}`;
     const socket = new WebSocket(streamUrl);
 
     socket.onopen = () => {
@@ -104,12 +103,13 @@ const WebSocketComponent = ({ userId }) => {
      
         <CardContent sx={{display : "flex" , justifyContent : "space-between", alignItems:"center"}}>
           <Typography variant="body2" color="text.secondary" sx={{flexGrow : 1}}>
-            Live video feed from your camera
+            Live video feed from <b>{data.name}</b> Camera
           </Typography>
           <DesBtn
             text="open full screen"
             noBoarder={true}
             handle={openFullScreen}
+            disabled={!messages}
           >
             <FullscreenIcon />
           </DesBtn>
@@ -132,7 +132,7 @@ const WebSocketComponent = ({ userId }) => {
         fullWidth
         maxWidth="md"
       >
-        <DialogTitle>Full Screen Video</DialogTitle>
+        <DialogTitle>Full Screen {data.name} Video</DialogTitle>
         <DialogContent>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <CardMedia
