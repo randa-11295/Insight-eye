@@ -48,6 +48,6 @@ export const chartColors = ["rgb(75, 192, 192)", "rgb(255, 99, 132)", "rgb(54, 1
 
 
 export const BASE64_IMAGE_PREFIX = "data:image/jpeg;base64,";
-export const baseURL = "http://16.170.216.227/"
+export const baseURL = "https://16.170.216.227/"
 
 
