@@ -5,13 +5,13 @@ import Otp from "../Components/Auth/Otp";
 import Contact from "./Contact";
 
 const Welcome = () => {
-
+// const [authRoute , setAuthroute] = useState("login")
   return (
     <Stack direction={{ xs: "column", md: "row" }} justifyContent="stretch" alignItems="stretch" gap={4}
       sx={{
         minHeight: "100vh",
         p: 4
-      }}
+      }}z
     >
       <Info />
       <Box sx={{
