@@ -73,7 +73,7 @@ export default function UpdateStreams({
   };
 
   return (
-    <Box component="form" onSubmit={formik.handleSubmit} sx={{ maxWidth: '800px', mx: 'auto', p: 3 }}>
+    <Box component="form" onSubmit={formik.handleSubmit} sx={{  mx: 'auto', p: 3 }}>
       {formik.values.streams.length > 0 ? (
         formik.values.streams.map((stream, index) => (
           <Paper
