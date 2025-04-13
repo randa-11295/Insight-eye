@@ -59,6 +59,7 @@ const LogIn = () => {
       title="Login"
       des="login to your account  to access all features in INSIGHT EYE"
       contentRoute={{ linkText: " Forget your password ?", route: "/" }}
+      loading={loading}
       footerRoute={{
         title: "  New user ?",
         linkText: " Contact us",

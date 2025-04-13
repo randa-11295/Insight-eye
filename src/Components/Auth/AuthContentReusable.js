@@ -1,13 +1,6 @@
 import InputTextCustom from "../Inputs/InputTextCustom";
 import LoadBtn from "../Reusable/LoadBtn";
 import { Box, Link, Typography, Stack } from "@mui/material";
-import { useState } from "react";
-import { snackAlertState } from "../../Recoil/RecoilState";
-import { useSetRecoilState } from "recoil";
-import { authState } from "../../Recoil/RecoilState";
-import { useAxiosWithAuth } from "../../services/api";
-import axios from "axios";
-import { baseURL } from "../../utils/StaticVariables";
 
 const AuthContentReusable = ({
   title,
@@ -16,19 +9,8 @@ const AuthContentReusable = ({
   children,
   contentRoute,
   footerRoute,
+  loading
 }) => {
-  const [loading, setLoading] = useState(false);
-  const setAuthRecoil = useSetRecoilState(authState);
-  const setSnackAlert = useSetRecoilState(snackAlertState);
-  const api = useAxiosWithAuth();
-
-  const showError = () => {
-    setSnackAlert({
-      open: true,
-      message: "Email or Password is wrong",
-      severity: "error",
-    });
-  };
 
   return (
     <Stack justifyContent="space-around" gap={4} sx={{ height: "100%" }}>
