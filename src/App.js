@@ -1,7 +1,7 @@
 
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./utils/theme";
-import { AppRouter } from "./routes";
+import AppRouter  from "./routes/AppRouter";
 import { RecoilRoot } from 'recoil';
 
 

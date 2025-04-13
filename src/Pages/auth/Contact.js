@@ -3,8 +3,8 @@ import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useSetRecoilState } from "recoil";
-import { snackAlertState } from "../Recoil/RecoilState";
-import { baseURL } from "../utils/StaticVariables";
+import { snackAlertState } from "../../Recoil/RecoilState";
+import { baseURL } from "../../utils/StaticVariables";
 import { useState } from "react";
 
 import axios from "axios";
