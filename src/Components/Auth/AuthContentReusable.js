@@ -9,9 +9,8 @@ const AuthContentReusable = ({
   children,
   contentRoute,
   footerRoute,
-  loading
+  loading,
 }) => {
-
   return (
     <Stack justifyContent="space-around" gap={3} sx={{ height: "100%" }}>
       <Box>
@@ -59,18 +58,20 @@ const AuthContentReusable = ({
           loading={loading}
         />
 
-        <Link
-          component="span"
-          underline="hover"
-          sx={{
-            cursor: "pointer",
-            padding: "20px",
-            display: "block",
-            textAlign: "center",
-          }}
-        >
-          {contentRoute.linkText}
-        </Link>
+        {contentRoute && (
+          <Link
+            component="span"
+            underline="hover"
+            sx={{
+              cursor: "pointer",
+              padding: "20px",
+              display: "block",
+              textAlign: "center",
+            }}
+          >
+            {contentRoute.linkText}
+          </Link>
+        )}
       </Box>
 
       <Typography sx={{ textAlign: "center" }}>

@@ -71,10 +71,9 @@ const Contact = () => {
       des="Get in touch with us for questions, feedback, or support — we’re here to help!"
       loading={loading}
       btnText={"Send Massage"}
-      contentRoute={{ linkText: " Forget your password ?", route: "/" }}
       footerRoute={{
-        title: "  New user ?",
-        linkText: " Contact us",
+        title: "Every thing is okay ?",
+        linkText: "Back to login",
         route: "/",
       }}
     />
