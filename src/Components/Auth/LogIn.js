@@ -6,12 +6,13 @@ import { useState } from "react";
 import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
-import {useAxiosWithAuth} from "../../services/api"
-import axios from "axios"
-import {baseURL} from "../../utils/StaticVariables" 
+import { useAxiosWithAuth } from "../../services/api";
+import axios from "axios";
+import { baseURL } from "../../utils/StaticVariables";
+import AuthContentReusable from "./AuthContentReusable";
 
 const LogIn = () => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const setAuthRecoil = useSetRecoilState(authState);
   const setSnackAlert = useSetRecoilState(snackAlertState);
   const api = useAxiosWithAuth();
@@ -24,102 +25,70 @@ const LogIn = () => {
     });
   };
 
-  const formik = useFormik({   
+  const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
-    onSubmit:  (values) => {
+    onSubmit: (values) => {
+      setLoading(true);
 
-      setLoading(true)
-
-      
-      api.post( "login", values)
-      .then(response => {
- 
-        localStorage.setItem("token", response.data.access_token);
-        localStorage.setItem("refresh_token", response.data.refresh_token);
-        localStorage.setItem("expire", response.data.expires_at);
-        // setAuthRecoil({
-        //   isAuthenticated: true,
-        //   token: response.data.access_token,
-        //   refreshToken: response.data.refresh_token,
-        //   expire: response.data.expires_at,
-        // });
-        window.location.reload();
-
-      })
-      .catch((error) => {
-        console.log("his error", error);
-        showError();
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-
+      api
+        .post("login", values)
+        .then((response) => {
+          localStorage.setItem("token", response.data.access_token);
+          localStorage.setItem("refresh_token", response.data.refresh_token);
+          localStorage.setItem("expire", response.data.expires_at);
+          // setAuthRecoil({
+          //   isAuthenticated: true,
+          //   token: response.data.access_token,
+          //   refreshToken: response.data.refresh_token,
+          //   expire: response.data.expires_at,
+          // });
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.log("his error", error);
+          showError();
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     },
-
-    
   });
 
-
   return (
-
-    <Stack justifyContent="space-around" gap={4} sx={{ height: "100%" }}>
-      <Box>
-        <Typography
-          variant="h4"
-          sx={{
-            fontSize: "3rem",
-            fontWeight: "bold",
-            color: "primary.main"
-          }}
-        >
-          LOGIN
-        </Typography>
-
-        <Typography
-          variant="body1"
-          sx={{
-            color: "text.secondary",
-            mt: 1,
-          }}
-        >
-          login to your account  to access all features in INSIGHT EYE</Typography>
-      </Box>
-
+    <AuthContentReusable
+      formik={formik}
+      title="Login"
+      des="login to your account  to access all features in INSIGHT EYE"
+      contentRoute={{ linkText: " Forget your password ?", route: "/" }}
+      footerRoute={{
+        title: "  New user ?",
+        linkText: " Contact us",
+        route: "/",
+      }}
+    >
       <Box component="form" onSubmit={formik.handleSubmit}>
-
-        <InputTextCustom label="Username "
+        <InputTextCustom
+          label="Username "
           placeholder="Enter your user name"
           formik={formik}
-          name="username" />
+          name="username"
+        />
 
-        <InputTextCustom label="password"
+        <InputTextCustom
+          label="password"
           placeholder="Enter your password"
           type="password"
           formik={formik}
           name="password"
-
           value={formik.values.username}
-          onChange={formik.handleChange} />
-
-        <LoadBtn submit fullWidth text={"LogIn"} handle={() => formik.handleSubmit()} loading={loading} />
-
-        <Link component="span" underline="hover" sx={{ cursor: "pointer", padding: "20px", display: "block", textAlign: "center" }}>
-          Forget your password ?
-        </Link>
+          onChange={formik.handleChange}
+        />
       </Box>
+    </AuthContentReusable>
+  );
+};
 
-      <Typography sx={{ textAlign: "center" }}>
-
-        New user ?
-        <Link component="span" underline="hover" sx={{ cursor: "pointer", padding: "10px" }}>
-          Contact us
-        </Link>
-      </Typography>
-    </Stack>
-  )
-}
-
-export default LogIn
+export default LogIn;
