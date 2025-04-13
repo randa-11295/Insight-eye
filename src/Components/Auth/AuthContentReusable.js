@@ -5,12 +5,19 @@ import { useState } from "react";
 import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
-import {useAxiosWithAuth} from "../../services/api"
-import axios from "axios"
-import {baseURL} from "../../utils/StaticVariables" 
+import { useAxiosWithAuth } from "../../services/api";
+import axios from "axios";
+import { baseURL } from "../../utils/StaticVariables";
 
-const AuthContentReusable = ({title , des , formik , children , contentRoute , footerRoute }) => {
-  const [loading, setLoading] = useState(false)
+const AuthContentReusable = ({
+  title,
+  des,
+  formik,
+  children,
+  contentRoute,
+  footerRoute,
+}) => {
+  const [loading, setLoading] = useState(false);
   const setAuthRecoil = useSetRecoilState(authState);
   const setSnackAlert = useSetRecoilState(snackAlertState);
   const api = useAxiosWithAuth();
@@ -23,10 +30,7 @@ const AuthContentReusable = ({title , des , formik , children , contentRoute , f
     });
   };
 
-
-
   return (
-
     <Stack justifyContent="space-around" gap={4} sx={{ height: "100%" }}>
       <Box>
         <Typography
@@ -34,7 +38,7 @@ const AuthContentReusable = ({title , des , formik , children , contentRoute , f
           sx={{
             fontSize: "3rem",
             fontWeight: "bold",
-            color: "primary.main"
+            color: "primary.main",
           }}
         >
           {title}
@@ -47,43 +51,58 @@ const AuthContentReusable = ({title , des , formik , children , contentRoute , f
             mt: 1,
           }}
         >
-          {des}</Typography>
+          {des}
+        </Typography>
       </Box>
 
       <Box component="form" onSubmit={formik.handleSubmit}>
+        {Object.keys(formik.initialValues).map((fieldName) => (
+          <InputTextCustom
+            key={fieldName}
+            label={fieldName}
+            placeholder={`Enter your ${fieldName}`}
+            type={fieldName === "password" ? "password" : "text"}
+            formik={formik}
+            name={fieldName}
+            value={formik.values[fieldName]}
+            onChange={formik.handleChange}
+          />
+        ))}
 
-        {/* <InputTextCustom label="Username "
-          placeholder="Enter your user name"
-          formik={formik}
-          name="username" />
+        <LoadBtn
+          submit
+          fullWidth
+          text={"Send"}
+          handle={() => formik.handleSubmit()}
+          loading={loading}
+        />
 
-        <InputTextCustom label="password"
-          placeholder="Enter your password"
-          type="password"
-          formik={formik}
-          name="password"
-
-          value={formik.values.username}
-          onChange={formik.handleChange} /> */}
-
-          {children}
-
-        <LoadBtn submit fullWidth text={"Send"} handle={() => formik.handleSubmit()} loading={loading} />
-
-        <Link component="span" underline="hover" sx={{ cursor: "pointer", padding: "20px", display: "block", textAlign: "center" }}>
-         {contentRoute.linkText}
+        <Link
+          component="span"
+          underline="hover"
+          sx={{
+            cursor: "pointer",
+            padding: "20px",
+            display: "block",
+            textAlign: "center",
+          }}
+        >
+          {contentRoute.linkText}
         </Link>
       </Box>
 
       <Typography sx={{ textAlign: "center" }}>
-
-       {footerRoute.title}
-        <Link component="span" underline="hover" sx={{ cursor: "pointer", padding: "10px" }}>
-        {footerRoute.linkText}
+        {footerRoute.title}
+        <Link
+          component="span"
+          underline="hover"
+          sx={{ cursor: "pointer", padding: "10px" }}
+        >
+          {footerRoute.linkText}
         </Link>
       </Typography>
     </Stack>
-  )
-}
+  );
+};
 
-export default AuthContentReusable
+export default AuthContentReusable;

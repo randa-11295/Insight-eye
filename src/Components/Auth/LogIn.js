@@ -1,20 +1,16 @@
-import InputTextCustom from "../Inputs/InputTextCustom";
-import LoadBtn from "../Reusable/LoadBtn";
 import { useFormik } from "formik";
-import { Box, Link, Typography, Stack } from "@mui/material";
 import { useState } from "react";
 import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
 import { useAxiosWithAuth } from "../../services/api";
-import axios from "axios";
-import { baseURL } from "../../utils/StaticVariables";
 import AuthContentReusable from "./AuthContentReusable";
 
 const LogIn = () => {
   const [loading, setLoading] = useState(false);
   const setAuthRecoil = useSetRecoilState(authState);
   const setSnackAlert = useSetRecoilState(snackAlertState);
+
   const api = useAxiosWithAuth();
 
   const showError = () => {
@@ -68,26 +64,8 @@ const LogIn = () => {
         linkText: " Contact us",
         route: "/",
       }}
-    >
-      <Box component="form" onSubmit={formik.handleSubmit}>
-        <InputTextCustom
-          label="Username "
-          placeholder="Enter your user name"
-          formik={formik}
-          name="username"
-        />
-
-        <InputTextCustom
-          label="password"
-          placeholder="Enter your password"
-          type="password"
-          formik={formik}
-          name="password"
-          value={formik.values.username}
-          onChange={formik.handleChange}
-        />
-      </Box>
-    </AuthContentReusable>
+    />
+   
   );
 };
 
