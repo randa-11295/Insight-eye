@@ -9,6 +9,7 @@ const AuthContentReusable = ({
   children,
   contentRoute,
   footerRoute,
+  btnText,
   loading,
 }) => {
   return (
@@ -53,7 +54,7 @@ const AuthContentReusable = ({
         <LoadBtn
           submit
           fullWidth
-          text={"Send"}
+          text={btnText}
           handle={() => formik.handleSubmit()}
           loading={loading}
         />
