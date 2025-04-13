@@ -13,7 +13,7 @@ const AuthContentReusable = ({
 }) => {
 
   return (
-    <Stack justifyContent="space-around" gap={4} sx={{ height: "100%" }}>
+    <Stack justifyContent="space-around" gap={3} sx={{ height: "100%" }}>
       <Box>
         <Typography
           variant="h4"

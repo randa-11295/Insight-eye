@@ -13,7 +13,7 @@ const InputTextCustom = (props) => {
 
 
   const styleInput = {
-    my: 1,
+  
     " & .MuiOutlinedInput-root ": props.phone && {
       p: "0 ",
     },
