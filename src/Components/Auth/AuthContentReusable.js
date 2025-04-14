@@ -1,7 +1,7 @@
 import InputTextCustom from "../Inputs/InputTextCustom";
 import LoadBtn from "../Reusable/LoadBtn";
 import { Box, Link, Typography, Stack } from "@mui/material";
-
+import { Link as RouterLink } from "react-router-dom";
 const AuthContentReusable = ({
   title,
   des,
@@ -61,7 +61,7 @@ const AuthContentReusable = ({
 
         {contentRoute && (
           <Link
-            component="span"
+            component={RouterLink}
             underline="hover"
             sx={{
               cursor: "pointer",
@@ -77,8 +77,10 @@ const AuthContentReusable = ({
 
       <Typography sx={{ textAlign: "center" }}>
         {footerRoute.title}
+
         <Link
-          component="span"
+          to={footerRoute.route}
+          component={RouterLink}
           underline="hover"
           sx={{ cursor: "pointer", padding: "10px" }}
         >

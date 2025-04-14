@@ -3,7 +3,6 @@ import { useState } from "react";
 import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
-import { useAxiosWithAuth } from "../../services/api";
 import AuthContentReusable from "../../Components/Auth/AuthContentReusable";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
@@ -59,12 +58,12 @@ const LogIn = () => {
       title="Login"
       btnText={"Send Massage"}
       des="login to your account  to access all features in INSIGHT EYE"
-      contentRoute={{ linkText: " Forget your password ?", route: "/" }}
+      // contentRoute={{ linkText: " Forget your password ?", route: "/" }}
       loading={loading}
       footerRoute={{
         title: "  New user ?",
         linkText: " Contact us",
-        route: "/",
+        route: "/contact",
       }}
     />
    

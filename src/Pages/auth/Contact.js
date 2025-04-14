@@ -73,7 +73,7 @@ const Contact = () => {
       footerRoute={{
         title: "Every thing is okay ?",
         linkText: "Back to login",
-        route: "/",
+        route: "/login",
       }}
     />
   );
