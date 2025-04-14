@@ -20,29 +20,39 @@ import ShowStreams from "../Pages/Stream/ShowStreams";
 import UpdateStreams from "../Pages/Stream/UpdateStreams";
 import Search from "../Pages/Search";
 import Logs from "../Pages/Logs";
+import { useRecoilState } from "recoil";
+import { authState } from "../Recoil/RecoilState";
 
 const AppRouter = () => {
+  const [authRecoil] = useRecoilState(authState);
+
   return (
     <Router>
       <Routes>
-        {/* Unauthenticated Routes */}
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/contact" element={<Contact />} />
-          {/* <Route path="/otp" element={<Otp />} /> */}
-          <Route path="/" element={<Navigate to="/login" />} />
-        </Route>
-
-        {/* Authenticated Routes */}
-        <Route element={<AppLayout />}>
-          <Route path="" element={<Dashboard />} />
-          <Route path="/streams" element={<Streams />} />
-          <Route path="/streams/add-stream" element={<AddStream />} />
-          <Route path="/streams/show-streams" element={<ShowStreams />} />
-          <Route path="/streams/update-streams" element={<UpdateStreams />} />
-          <Route path="/frames-search" element={<Search />} />
-          <Route path="/logs" element={<Logs />} />
-        </Route>
+        {!authRecoil?.token ? (
+          // Unauthenticated Routes
+          <>
+            <Route element={<AuthLayout />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/contact" element={<Contact />} />
+              {/* <Route path="/otp" element={<Otp />} /> */}
+              <Route path="/" element={<Navigate to="/login" />} />
+            </Route>
+          </>
+        ) : (
+          // Authenticated Routes
+          <>
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/streams" element={<Streams />} />
+              <Route path="/streams/add-stream" element={<AddStream />} />
+              <Route path="/streams/show-streams" element={<ShowStreams />} />
+              <Route path="/streams/update-streams" element={<UpdateStreams />} />
+              <Route path="/frames-search" element={<Search />} />
+              <Route path="/logs" element={<Logs />} />
+            </Route>
+          </>
+        )}
 
         {/* Catch All */}
         <Route path="*" element={<Navigate to="/" />} />

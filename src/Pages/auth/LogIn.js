@@ -6,7 +6,8 @@ import { useState } from "react";
 import { snackAlertState, authState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
 import { useAxiosWithAuth } from "../../services/api";
-
+import axios from "axios"
+import { baseURL } from "../../utils/StaticVariables";
 const LogIn = () => {
   const [loading, setLoading] = useState(false);
   const setAuthRecoil = useSetRecoilState(authState);
@@ -29,10 +30,10 @@ const LogIn = () => {
     onSubmit: (values) => {
       setLoading(true);
 
-      api
-        .post("login", values)
+      axios
+        .post(baseURL + "login", values)
         .then((response) => {
-          console.log("done");
+          console.log("done" ,response );
           localStorage.setItem("token", response.data.access_token);
           localStorage.setItem("refresh_token", response.data.refresh_token);
           localStorage.setItem("expire", response.data.expires_at);
@@ -42,15 +43,9 @@ const LogIn = () => {
             refreshToken: response.data.refresh_token,
             expire: response.data.expires_at,
           });
-          window.location.reload();
-          setSnackAlert({
-            open: true,
-            message: "all good",
-            severity: "success",
-          });
+
         })
         .catch((error) => {
-          console.log("shit error", error);
           showError();
         })
         .finally(() => {
