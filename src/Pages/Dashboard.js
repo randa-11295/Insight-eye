@@ -104,14 +104,14 @@ const Dashboard = () => {
         headers: { Authorization: `Bearer ${authRecoil.token}` },
       })
       .then((response) => {
-        console.log(response);
-        // const res = convertToObjArray(response.data?.[0] || {});
-        // setParamStreamData(res);
+        console.log("info run" ,response);
+        const res = convertToObjArray(response.data?.[0] || {});
+        setParamStreamData(res);
         setParamError(null);
       })
       .catch((error) => {
         setParamError("Failed to load system information");
-        console.error("Error fetching param stream:", error);
+        console.log("Error fetching param stream:", error);
       })
       .finally(() => setParamLoading(false));
   };
