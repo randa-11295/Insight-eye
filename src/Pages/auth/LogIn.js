@@ -5,14 +5,13 @@ import { Box, Link, Typography, Stack } from "@mui/material";
 import { useState } from "react";
 import { snackAlertState, authState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
-import { useAxiosWithAuth } from "../../services/api";
-import axios from "axios"
+import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
+import { Link as RouterLink } from "react-router-dom"; // ✅ Add this import at the top
 const LogIn = () => {
   const [loading, setLoading] = useState(false);
   const setAuthRecoil = useSetRecoilState(authState);
   const setSnackAlert = useSetRecoilState(snackAlertState);
-  const api = useAxiosWithAuth();
 
   const showError = () => {
     setSnackAlert({
@@ -33,7 +32,7 @@ const LogIn = () => {
       axios
         .post(baseURL + "login", values)
         .then((response) => {
-          console.log("done" ,response );
+          console.log("done", response);
           localStorage.setItem("token", response.data.access_token);
           localStorage.setItem("refresh_token", response.data.refresh_token);
           localStorage.setItem("expire", response.data.expires_at);
@@ -43,7 +42,6 @@ const LogIn = () => {
             refreshToken: response.data.refresh_token,
             expire: response.data.expires_at,
           });
-
         })
         .catch((error) => {
           showError();
@@ -122,7 +120,8 @@ const LogIn = () => {
       <Typography sx={{ textAlign: "center" }}>
         New user ?
         <Link
-          component="span"
+          component={RouterLink}
+          to="/contact"
           underline="hover"
           sx={{ cursor: "pointer", padding: "10px" }}
         >

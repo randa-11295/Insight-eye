@@ -45,7 +45,7 @@ const Contact = () => {
      
       setLoading(true);
 
-      axios.post(baseURL + "/contact", {
+      axios.post(baseURL + "contact", {
         ...values,
       })
         .then(() => {
