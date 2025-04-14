@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 import SnackAlert from "../Components/PopUp/SnackAlert";
 import PopUpReusable from "../Components/PopUp/PopUpReusable"
 import Welcome from "./Welcome";
-import { authState,  isLoginState } from "../Recoil/RecoilState";
+import { authState,   } from "../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 
@@ -30,7 +30,7 @@ function Home() {
       })
     }
 
-  }, [localStorage?.token ,!authRecoil?.token])
+  }, [authRecoil?.token, setAuthRecoil])
   
   useEffect(()=>{
     console.log(authRecoil)

@@ -1,27 +1,31 @@
 import { useEffect, useState } from "react";
-import { Paper, Stack } from "@mui/material";
+import { Stack, Typography, CircularProgress } from "@mui/material";
 import Holder from "../Components/HOC/Holder";
 import HighlightedText from "../Components/Reusable/HighlightedText";
-import { useAxiosWithAuth } from "../services/api";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
-import axios from "axios"
-import {convertToObjArray} from "../utils/helpers"
+import axios from "axios";
+import { convertToObjArray } from "../utils/helpers";
+import { baseURL } from "../utils/StaticVariables";
 
-
-const RenderSection = ({ title, data, fullWidth = false }) =>
-  data.length > 0 && (
-    <Stack
-      sx={{
-        flex: fullWidth ? "1 1 100%" : "1 1 45%",
-      }}
-    >
-      <Holder title={title}>
+// Reusable Section Renderer
+const RenderSection = ({ title, data, fullWidth = false, loading, error }) => (
+  <Stack sx={{ flex: fullWidth ? "1 1 100%" : "1 1 45%" }}>
+    <Holder title={title}>
+      {loading ? (
+        <Stack alignItems="center" justifyContent="center" minHeight="80px">
+          <CircularProgress size={24} />
+        </Stack>
+      ) : error ? (
+        <Typography color="error" fontSize="0.9rem">
+          {error}
+        </Typography>
+      ) : (
         <Stack
           gap={2}
           direction={fullWidth ? "row" : "column"}
           justifyContent={fullWidth ? "space-between" : "flex-start"}
-          sx={{ flex: 1 }} // Ensures inner content stretches
+          sx={{ flex: 1 }}
         >
           {data.map((item, index) => (
             <HighlightedText
@@ -31,75 +35,95 @@ const RenderSection = ({ title, data, fullWidth = false }) =>
             />
           ))}
         </Stack>
-      </Holder>
-    </Stack>
-  );
+      )}
+    </Holder>
+  </Stack>
+);
 
-
-  const Dashbourd = () => {
+// Dashboard Component
+const Dashboard = () => {
   const [streamData, setStreamData] = useState([]);
   const [paramStreamData, setParamStreamData] = useState([]);
   const [personalInfo, setPersonalInfo] = useState([]);
+
+  const [streamLoading, setStreamLoading] = useState(true);
+  const [paramLoading, setParamLoading] = useState(true);
+  const [infoLoading, setInfoLoading] = useState(true);
+
+  const [streamError, setStreamError] = useState(null);
+  const [paramError, setParamError] = useState(null);
+  const [infoError, setInfoError] = useState(null);
+
   const [authRecoil] = useRecoilState(authState);
-  const api = useAxiosWithAuth();
 
-
+  // Get all streams
   const getAllStreams = () => {
-    api
-      .get("source")
+    setStreamLoading(true);
+    axios
+      .get(`${baseURL}source`, {
+        headers: { Authorization: `Bearer ${authRecoil.token}` },
+      })
       .then((response) => {
         const res = response.data?.map((el) => ({
           title: el.name,
           val: el.status === "inactive" ? "Off" : "On",
         }));
         setStreamData(res);
+        setStreamError(null);
       })
       .catch((error) => {
-        console.log("error stream");
-        console.log(error);
-        // setError(error);
-        // setLoading(false);
-      });
+        setStreamError("Failed to load camera status");
+        console.error("Error fetching stream data:", error);
+      })
+      .finally(() => setStreamLoading(false));
   };
 
+  // Get user personal info
   const getUserInfo = () => {
-    api
-      .get("user_info")
+    setInfoLoading(true);
+    axios
+      .get(`${baseURL}user_info`, {
+        headers: { Authorization: `Bearer ${authRecoil.token}` },
+      })
       .then((response) => {
-        const res = convertToObjArray(response.data);
-        setPersonalInfo(res);
-        // setLoading(false);
+        setPersonalInfo(convertToObjArray(response.data));
+        setInfoError(null);
       })
       .catch((error) => {
-        console.log("error info " ,error);
-        // setError(error);
-        // setLoading(false);
-      });
+        setInfoError("Failed to load personal info");
+        console.error("Error fetching user info:", error);
+      })
+      .finally(() => setInfoLoading(false));
   };
 
-
+  // Get param stream
   const paramStream = () => {
-    api
-      .get("param_stream/users")
+    setParamLoading(true);
+    axios
+      .get("param_stream/users", {
+        headers: { Authorization: `Bearer ${authRecoil.token}` },
+      })
       .then((response) => {
-          const res = convertToObjArray(response.data[0]);
-        setParamStreamData(res);
-        // setLoading(false);
+        console.log(response);
+        // const res = convertToObjArray(response.data?.[0] || {});
+        // setParamStreamData(res);
+        setParamError(null);
       })
       .catch((error) => {
-        console.log("error" ,error);
-        // setError(error);
-        // setLoading(false);
-      });
+        setParamError("Failed to load system information");
+        console.error("Error fetching param stream:", error);
+      })
+      .finally(() => setParamLoading(false));
   };
 
   useEffect(() => {
-    if (authRecoil?.token) {
+    if (authRecoil.token) {
       getAllStreams();
       paramStream();
       getUserInfo();
     }
-  }, [authRecoil]);
+  }, [authRecoil.token]);
+
   return (
     <Stack
       direction="row"
@@ -108,15 +132,27 @@ const RenderSection = ({ title, data, fullWidth = false }) =>
       justifyContent="space-between"
       alignItems="stretch"
     >
-      <RenderSection title="Personal Info" data={personalInfo} />
-      <RenderSection title="Camera Status" data={streamData} />
+      <RenderSection
+        title="Personal Info"
+        data={personalInfo}
+        loading={infoLoading}
+        error={infoError}
+      />
+      <RenderSection
+        title="Camera Status"
+        data={streamData}
+        loading={streamLoading}
+        error={streamError}
+      />
       <RenderSection
         title="System Information"
         data={paramStreamData}
         fullWidth
+        loading={paramLoading}
+        error={paramError}
       />
     </Stack>
   );
 };
 
-export default Dashbourd;
+export default Dashboard;

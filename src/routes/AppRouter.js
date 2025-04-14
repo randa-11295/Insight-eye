@@ -22,9 +22,23 @@ import Search from "../Pages/Search";
 import Logs from "../Pages/Logs";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
+import { useEffect } from "react";
 
 const AppRouter = () => {
-  const [authRecoil] = useRecoilState(authState);
+  const [authRecoil , setAuthRecoil] = useRecoilState(authState);
+
+useEffect(() => {
+    if (localStorage?.token && !authRecoil?.token) {
+      setAuthRecoil({
+        isAuthenticated: true,
+        expire: localStorage.expire,
+        token: localStorage.token,
+      })
+    }
+
+  }, [authRecoil?.token, setAuthRecoil])
+  
+
 
   return (
     <Router>
