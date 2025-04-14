@@ -68,3 +68,17 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+<!--   -->
+## important thing to add 
+
+1- handel error and ui in stream 
+2- change all request from api to axios 
+3- handel validations 
+4- update responsive in tablet 
+5- clean code 
+6- add forget password 
+7- handle refresh token 
+
