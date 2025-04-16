@@ -72,7 +72,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 
 <!--   -->
-## important thing to add 
+## important things to add 
 
 1- handel error and ui in stream 
 2- change all request from api to axios 
@@ -81,4 +81,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 5- clean code 
 6- add forget password 
 7- handle refresh token 
+8- fix search bugs 
+
+
 
