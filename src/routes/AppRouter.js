@@ -20,6 +20,7 @@ import ShowStreams from "../Pages/Stream/ShowStreams";
 import UpdateStreams from "../Pages/Stream/UpdateStreams";
 import Search from "../Pages/Search";
 import Logs from "../Pages/Logs";
+import Predictions from "../Pages/Predictions";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
 import { useEffect } from "react";
@@ -63,6 +64,7 @@ useEffect(() => {
               <Route path="/streams/show-streams" element={<ShowStreams />} />
               <Route path="/streams/update-streams" element={<UpdateStreams />} />
               <Route path="/frames-search" element={<Search />} />
+              <Route path="/predictions" element={<Predictions />} />
               <Route path="/logs" element={<Logs />} />
             </Route>
           </>

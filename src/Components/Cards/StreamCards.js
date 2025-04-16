@@ -28,7 +28,7 @@ const WebSocketComponent = ({ data }) => {
   // Open WebSocket connection
   const startVideo = () => {
     const token = localStorage.token;
-    const streamUrl = `ws://16.170.216.227/stream?stream_id=${data.id}&token=${token}`;
+    const streamUrl = `wss://16.170.216.227/stream?stream_id=${data.id}&token=${token}`;
     const socket = new WebSocket(streamUrl);
 
     socket.onopen = () => {

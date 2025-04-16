@@ -2,7 +2,7 @@
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import LiveTvOutlinedIcon from '@mui/icons-material/LiveTvOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import CorporateFareOutlinedIcon from '@mui/icons-material/CorporateFareOutlined';
+import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
@@ -15,6 +15,7 @@ export const navbarContentArr = [
   { text: "Streams", url: "/streams", icon: getIcon(LiveTvOutlinedIcon) },
   { text: "Frames Search", url: "/frames-search", icon: getIcon(SearchOutlinedIcon) },
   { text: "Logs", url: "/logs", icon: getIcon(SettingsOutlinedIcon) },
+  { text: "Predictions", url: "/predictions", icon: getIcon(LightbulbOutlinedIcon) },
   { text: "Log out", url: false, icon: getIcon(LogoutOutlinedIcon) },
 ];
 
