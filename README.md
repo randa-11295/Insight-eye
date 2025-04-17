@@ -83,7 +83,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 7- handle refresh token 
 8- fix search bugs 
 9- system information error
-10 - fix chart at search frames
+10 -fix chart at search frames
+11 -handle date filtration on  predictions
+12- add frames data api
 
 
 
