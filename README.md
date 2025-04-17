@@ -86,6 +86,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 10 -fix chart at search frames
 11 -handle date filtration on  predictions
 12- add frames data api
-
+13- be sure from stop stream
+14- handle errors in login 
 
 
