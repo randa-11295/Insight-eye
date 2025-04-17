@@ -30,7 +30,7 @@ const PredictionsCard = ({ streamId, streamName }) => {
           headers: { Authorization: `Bearer ${localStorage.token}` },
         }
       );
-      console.log(data.predictions[0].prediction)
+      console.log(data.predictions[0].prediction);
       setPredictionsData(data.predictions[0].prediction);
       // setSelected(data.map((s) => s.id)); // check everything by default
       // setError(null);
@@ -55,7 +55,7 @@ const PredictionsCard = ({ streamId, streamName }) => {
       elevation={4}
     >
       {/* Title */}
-      <Typography variant="h6" component="h2" mb={1}>
+      <Typography variant="h6" component="h2" mb={1} textAlign={"center"}>
         {streamName}
       </Typography>
 
@@ -70,8 +70,10 @@ const PredictionsCard = ({ streamId, streamName }) => {
         }}
       >
         {loading && <CircularProgress />}
-        {error && <Typography color="error">{error}</Typography>}
-        {!loading && !error && <PredictionsChart predictionsData={predictionsData}/>}
+        {error && !loading &&  <Typography color="error">{error}</Typography>}
+        {!loading && !error && (
+          <PredictionsChart predictionsData={predictionsData} />
+        )}
       </Box>
     </Card>
   );
