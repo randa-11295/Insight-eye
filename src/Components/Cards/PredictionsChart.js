@@ -62,10 +62,12 @@ const PredictionsChart = ({ predictionsData = {} }) => {
       datalabels: {
         anchor: "end",
         align: "end",
+        offset: -4,
+        clamp: true,
         formatter: (v) => v,
         font: { weight: "bold", size: 12 },
-        color: textColor,                // ← value labels follow theme
-      },
+        color: textColor,
+      }, 
       tooltip: {
         backgroundColor: tooltipBg,
         titleColor: textColor,
