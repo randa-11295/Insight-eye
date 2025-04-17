@@ -83,6 +83,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 7- handle refresh token 
 8- fix search bugs 
 9- system information error
+10 - fix chart at search frames
 
 
 
