@@ -1,4 +1,5 @@
-import { Bar } from 'react-chartjs-2';
+import React from "react";
+import { Bar } from "react-chartjs-2";
 import { chartColors } from "../../utils/StaticVariables";
 import {
   Chart as ChartJS,
@@ -8,31 +9,37 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import React from 'react';
+} from "chart.js";
 
+// ⬇️ one‑time Chart.js registration
 ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-const dataObject = {
-  camera_id: '226d039d-87a4-495f-a8be-5f6b39a09fff',
-  prediction: {
-    next_hour: 34,
-    next_day: 31,
-    next_week: 29,
-  },
-};
+/**
+ * Helper that turns "next_hour" → "Next Hour"
+ * Feel free to tweak if you prefer a different style.
+ */
+const prettifyLabel = (key = "") =>
+  key
+    .replace(/_/g, " ")            // snake_case → snake case
+    .replace(/\b\w/g, (c) => c.toUpperCase()); // capitalize every word
 
-const PredictionsChart = () => {
+/**
+ * @param {{ predictionsData?: Record<string, number> }} props
+ * predictionsData example:
+ *   { next_hour: 34, next_day: 31, next_week: 29 }
+ */
+const PredictionsChart = ({ predictionsData = {} }) => {
+  // Extract labels and values from the object
+  const labels = Object.keys(predictionsData).map(prettifyLabel);
+  const values = Object.values(predictionsData);
+
+  // Build the Chart.js‑compatible data object
   const data = {
-    labels: ['Next Hour', 'Next Day', 'Next Week'],
+    labels,
     datasets: [
       {
-        label: 'Predicted Count',
-        data: [
-          dataObject.prediction.next_hour,
-          dataObject.prediction.next_day,
-          dataObject.prediction.next_week,
-        ],
+        data: values,
+        // If there are more bars than colors, Chart.js will reuse colors
         backgroundColor: chartColors,
       },
     ],
@@ -40,38 +47,21 @@ const PredictionsChart = () => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Allow full height
+    maintainAspectRatio: false, // allows parent to control height
     plugins: {
-      title: {
-        display: true,
-        text: 'Predicted Counts for Camera',
-        font: {
-          size: 18,
-        },
-      },
-      legend: {
-        display: false,
-      },
+      legend: { display: false },
     },
     scales: {
       y: {
         beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Predicted Count',
-        },
       },
       x: {
-        title: {
-          display: true,
-          text: 'Period',
-        },
       },
     },
   };
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div style={{ width: "100%", height: "100%" }}>
       <Bar data={data} options={options} />
     </div>
   );

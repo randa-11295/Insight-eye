@@ -122,7 +122,6 @@ const Predictions = () => {
               <PredictionsCard
                 streamId={id}
                 streamName={stream?.name}
-                status={stream?.status}
               />
             </Grid>
           );
