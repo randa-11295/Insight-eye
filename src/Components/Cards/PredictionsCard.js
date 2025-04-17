@@ -84,7 +84,7 @@ const PredictionsCard = ({ streamId, streamName }) => {
               )}
               {!loading && !error && (
                 <PredictionsChart
-                  predictionsData={Object.values(predictionsData)}
+                  predictionsData={predictionsData}
                 />
               )}
             </Box>
