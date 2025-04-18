@@ -23,22 +23,15 @@ import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 const WebSocketComponent = ({ data }) => {
   const [messages, setMessages] = useState(null);
   const [ws, setWs] = useState(null);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [authRecoil] = useRecoilState(authState);
   const [openPopup, setOpenPopup] = useState(false);
 
-  const startVideo = () => {
-    if (ws || isVideoPlaying) return; // prevent reconnect
-
+  const startStream = () => {
     const token = authRecoil.token;
     const streamUrl = `wss://16.170.216.227/stream?stream_id=${data.id}&token=${token}`;
     const socket = new WebSocket(streamUrl);
 
-    socket.onopen = () => {
-      console.log("WebSocket Connected");
-      setIsVideoPlaying(true);
-    };
-
+    socket.onopen = () => console.log("WebSocket Connected");
     socket.onmessage = (event) => {
       try {
         const messageObj = JSON.parse(event.data);
@@ -47,56 +40,45 @@ const WebSocketComponent = ({ data }) => {
         console.log("Error parsing JSON:", err);
       }
     };
-
     socket.onerror = (err) => console.error("WebSocket Error:", err);
-
-    socket.onclose = () => {
-      console.log("WebSocket Disconnected");
-      setIsVideoPlaying(false);
-    };
+    socket.onclose = () => console.log("WebSocket Disconnected");
 
     setWs(socket);
   };
 
-  const stopStreamOnServer = () =>
-    axios.post(
-      `${baseURL}stop_stream/${data.id}`,
-      {},
-      { headers: { Authorization: `Bearer ${authRecoil.token}` } }
-    );
-
-  const stopVideo = async () => {
+  const stopStream = async () => {
     if (ws) ws.close();
     setWs(null);
-    setIsVideoPlaying(false);
-
     try {
-      await stopStreamOnServer();
+      await axios.post(
+        `${baseURL}stop_stream/${data.id}`,
+        {},
+        { headers: { Authorization: `Bearer ${authRecoil.token}` } }
+      );
     } catch (err) {
       console.error("Failed to stop stream:", err);
     }
   };
 
-  // Auto start if stream is active
+  // Control stream based on `props.data.is_streaming`
   useEffect(() => {
     const isStreaming = data?.is_streaming === "on" || data?.is_streaming === true;
-    if (isStreaming) {
-      startVideo();
+
+    if (isStreaming && !ws) {
+      startStream();
+    } else if (!isStreaming && ws) {
+      stopStream();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.is_streaming]);
 
-  // Clean up on unmount
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (ws) {
         ws.close();
         setWs(null);
-        if (isVideoPlaying) {
-          stopStreamOnServer().catch((err) =>
-            console.error("Error on unmount stop:", err)
-          );
-        }
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -131,13 +113,13 @@ const WebSocketComponent = ({ data }) => {
             <FullscreenIcon />
           </DesBtn>
 
-          {!isVideoPlaying ? (
-            <DesBtn text="start stream" noBoarder handle={startVideo}>
-              <PlayCircleFilledIcon />
+          {data?.is_streaming ? (
+            <DesBtn text="stop stream" noBoarder handle={stopStream}>
+              <PauseCircleIcon />
             </DesBtn>
           ) : (
-            <DesBtn text="stop stream" noBoarder handle={stopVideo}>
-              <PauseCircleIcon />
+            <DesBtn text="start stream" noBoarder handle={startStream}>
+              <PlayCircleFilledIcon />
             </DesBtn>
           )}
         </CardContent>
