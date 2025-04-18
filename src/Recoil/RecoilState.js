@@ -53,7 +53,7 @@ export const authState = atom({
 export const streamState = atom({
   key: "streamState",
   default: {
-    data: [],
+    data: null,
     selected: [],
     loading: false,
     error: null,

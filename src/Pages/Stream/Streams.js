@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Holder from "../../Components/HOC/Holder";
 import CustomBtn from "../../Components/Reusable/CustomBtn";
 import TableReusable from "../../Components/Reusable/TableReusable";
@@ -11,14 +12,23 @@ import {
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { streamColumns } from "../../utils/StaticVariables";
 import { useAxiosWithAuth } from "../../services/api";
+import useFetchStreams from "../../hooks/useFetchStreams"; // ✅ use your hook
 
 const Streams = () => {
-  const { data, loading } = useRecoilValue(streamState); // Read stream list & loading
-  const setStream = useSetRecoilState(streamState); // Write to stream state
+  const { data, loading } = useRecoilValue(streamState);
+  const setStream = useSetRecoilState(streamState);
   const [selectedData, setSelectedStream] = useRecoilState(selectedStreamState);
   const setPopup = useSetRecoilState(popupState);
   const api = useAxiosWithAuth();
   const navigate = useNavigate();
+  const { refetchStreams } = useFetchStreams(); // ✅ Destructure the hook
+
+  // ✅ Refetch if there's no data loaded
+  useEffect(() => {
+    if (data === null) {
+      refetchStreams();
+    }
+  }, [data, refetchStreams]);
 
   // ⬇️ Handle checkbox selection
   const changeSelectDataRow = (selectedNewData) => {
@@ -33,19 +43,19 @@ const Streams = () => {
   // ⬇️ Delete selected streams
   const handelDeleteReqFromApi = async () => {
     const selectedIDs = selectedData.map((el) => el.id);
+    setStream((prev) => ({ ...prev, loading: true }));
 
-    setStream((prev) => ({ ...prev, loading: true })); // Start loading
     try {
       await api.delete("source", { data: { ids: selectedIDs } });
-      setSelectedStream([]); // Clear selected checkboxes
+      setSelectedStream([]);
+      refetchStreams(); // ✅ Refresh list after deletion
     } catch (error) {
       console.error("Delete Error:", error);
     } finally {
-      setStream((prev) => ({ ...prev, loading: false })); // End loading
+      setStream((prev) => ({ ...prev, loading: false }));
     }
   };
 
-  // ⬇️ Open confirm delete popup
   const openPopup = () => {
     setPopup({
       isOpen: true,
