@@ -44,27 +44,7 @@ const Predictions = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchStreams();
-  }, []);
-
-  const fetchStreams = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`${baseURL}source`, {
-        headers: { Authorization: `Bearer ${localStorage.token}` },
-      });
-      setStreams(data);
-      setSelected(data.map((s) => s.id));
-      setError(null);
-    } catch (err) {
-      console.error("Error fetching stream data:", err);
-      setError("Failed to load camera list. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  
   const handleToggle = (id) =>
     setSelected((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -74,17 +54,7 @@ const Predictions = () => {
     <Fragment>
       {/* Error message */}
       {error && (
-        <Alert
-          severity="error"
-          action={
-            <Button color="inherit" size="small" onClick={fetchStreams}>
-              Retry
-            </Button>
-          }
-          sx={{ mb: 3 }}
-        >
-          {error}
-        </Alert>
+        <p>some thing wrong</p>
       )}
 
       {/* Selector */}
