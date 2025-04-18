@@ -2,9 +2,14 @@ import { Grid } from "@mui/material";
 import StreamCards from "../../Components/Cards/StreamCards";
 import { selectedStreamState } from "../../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
+import { useEffect } from "react";
 
 const ShowStream = () => {
   const [selectedData] = useRecoilState(selectedStreamState);
+  
+useEffect(()=>{
+console.log(selectedData)
+},[selectedData])
 
   return (
     <Grid container spacing={3}>

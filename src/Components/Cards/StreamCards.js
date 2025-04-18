@@ -19,18 +19,20 @@ import DesBtn from "../Reusable/DesBtn";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
+import useFetchStreams from "../../hooks/useFetchStreams";
+
 const WebSocketComponent = ({ data }) => {
   const [messages, setMessages] = useState(null);
   const [ws, setWs] = useState(null);
   const [authRecoil] = useRecoilState(authState);
   const [openPopup, setOpenPopup] = useState(false);
   const [streaming, setStreaming] = useState(false); // ✅ Stream controlled by state
+  const { refetchStreams } = useFetchStreams(); // ✅ Destructure the hook
 
   useEffect(() => {
-    console.log(data.is_streaming);
-    if (data.is_streaming) {
+    console.log(data);
+    if (data.is_streaming === true) {
       startStream();
-      setStreaming(true);
     }
   }, [data]);
 
@@ -67,18 +69,21 @@ const WebSocketComponent = ({ data }) => {
     if (ws) ws.close();
     setWs(null);
     setStreaming(false);
-
+  
     try {
       await axios.post(
         `${baseURL}stop_stream/${data.id}`,
         {},
         { headers: { Authorization: `Bearer ${authRecoil.token}` } }
       );
+      
+      // ✅ Run only if POST succeeded
+      refetchStreams();
     } catch (err) {
       console.error("Failed to stop stream:", err);
     }
   };
-
+  
   // ✅ Clean up WebSocket on unmount
   useEffect(() => {
     return () => {
