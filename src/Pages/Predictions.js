@@ -1,4 +1,3 @@
-// Predictions.jsx  –  MUI‑styled version
 import { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import {
@@ -14,12 +13,8 @@ import {
 import PredictionsCard from "../Components/Cards/PredictionsCard";
 import { baseURL } from "../utils/StaticVariables";
 
-/**
- * StreamSelector (MUI)
- * --------------------
- * Renders one checkbox per stream in a responsive Grid.
- */
-const StreamSelector = ({ streams, selectedIds, onToggle }) => (
+/* StreamSelector (MUI) */
+const StreamSelector = ({ streams, selectedIds, onToggle, loading }) => (
   <Grid container spacing={2} sx={{ mb: 3 }}>
     {streams.map((stream) => (
       <Grid item xs={12} sm={6} md={4} key={stream.id}>
@@ -28,7 +23,7 @@ const StreamSelector = ({ streams, selectedIds, onToggle }) => (
             <Checkbox
               checked={selectedIds.includes(stream.id)}
               onChange={() => onToggle(stream.id)}
-              // tint with primary colour but you can override here
+              disabled={loading}
               sx={{
                 "&.Mui-checked": {
                   color: "primary.main",
@@ -44,13 +39,11 @@ const StreamSelector = ({ streams, selectedIds, onToggle }) => (
 );
 
 const Predictions = () => {
-  /* --------------------------- state --------------------------- */
   const [streams, setStreams] = useState([]);
   const [selectedIds, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  /* ----------------------- fetch on mount ---------------------- */
   useEffect(() => {
     fetchStreams();
   }, []);
@@ -62,7 +55,7 @@ const Predictions = () => {
         headers: { Authorization: `Bearer ${localStorage.token}` },
       });
       setStreams(data);
-      setSelected(data.map((s) => s.id)); // check everything by default
+      setSelected(data.map((s) => s.id));
       setError(null);
     } catch (err) {
       console.error("Error fetching stream data:", err);
@@ -72,69 +65,64 @@ const Predictions = () => {
     }
   };
 
-  /* -------------- checkbox toggle handler -------------- */
   const handleToggle = (id) =>
     setSelected((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
 
-  /* -------------------- render states ------------------- */
-  if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" mt={4}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Alert
-        severity="error"
-        action={
-          <Button color="inherit" size="small" onClick={fetchStreams}>
-            Retry
-          </Button>
-        }
-        sx={{ mt: 4 }}
-      >
-        {error}
-      </Alert>
-    );
-  }
-
-  /* -------------------------- UI ------------------------- */
   return (
     <Fragment>
-      {/* 1️⃣  Selector */}
+      {/* Error message */}
+      {error && (
+        <Alert
+          severity="error"
+          action={
+            <Button color="inherit" size="small" onClick={fetchStreams}>
+              Retry
+            </Button>
+          }
+          sx={{ mb: 3 }}
+        >
+          {error}
+        </Alert>
+      )}
+
+      {/* Selector */}
       <StreamSelector
         streams={streams}
         selectedIds={selectedIds}
         onToggle={handleToggle}
+        loading={loading}
       />
 
-      {/* 2️⃣  Cards */}
-      <Grid container spacing={3}>
-        {selectedIds.map((id) => {
-          const stream = streams.find((s) => s.id === id);
-          return (
-            <Grid item xs={12} md={6} key={id}>
-              <PredictionsCard
-                streamId={id}
-                streamName={stream?.name}
-              />
-            </Grid>
-          );
-        })}
+      {/* Loader */}
+      {loading && (
+        <Box display="flex" justifyContent="center" my={4}>
+          <CircularProgress />
+        </Box>
+      )}
 
-        {selectedIds.length === 0 && (
-          <Grid item xs={12}>
-            <Typography variant="body2" fontStyle="italic" textAlign="center">
-              Select at least one camera to see its predictions.
-            </Typography>
-          </Grid>
-        )}
-      </Grid>
+      {/* Cards */}
+      {!loading && (
+        <Grid container spacing={3}>
+          {selectedIds.map((id) => {
+            const stream = streams.find((s) => s.id === id);
+            return (
+              <Grid item xs={12} md={6} key={id}>
+                <PredictionsCard streamId={id} streamName={stream?.name} />
+              </Grid>
+            );
+          })}
+
+          {selectedIds.length === 0 && (
+            <Grid item xs={12}>
+              <Typography variant="body2" fontStyle="italic" textAlign="center">
+                Select at least one camera to see its predictions.
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
+      )}
     </Fragment>
   );
 };
