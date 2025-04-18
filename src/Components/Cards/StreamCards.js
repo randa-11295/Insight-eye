@@ -25,13 +25,18 @@ const WebSocketComponent = ({ data }) => {
   const [ws, setWs] = useState(null);
   const [authRecoil] = useRecoilState(authState);
   const [openPopup, setOpenPopup] = useState(false);
+  const [streaming, setStreaming] = useState(false); // ✅ Stream controlled by state
 
   const startStream = () => {
     const token = authRecoil.token;
     const streamUrl = `wss://16.170.216.227/stream?stream_id=${data.id}&token=${token}`;
     const socket = new WebSocket(streamUrl);
 
-    socket.onopen = () => console.log("WebSocket Connected");
+    socket.onopen = () => {
+      console.log("WebSocket Connected");
+      setStreaming(true);
+    };
+
     socket.onmessage = (event) => {
       try {
         const messageObj = JSON.parse(event.data);
@@ -40,8 +45,13 @@ const WebSocketComponent = ({ data }) => {
         console.log("Error parsing JSON:", err);
       }
     };
+
     socket.onerror = (err) => console.error("WebSocket Error:", err);
-    socket.onclose = () => console.log("WebSocket Disconnected");
+
+    socket.onclose = () => {
+      console.log("WebSocket Disconnected");
+      setStreaming(false);
+    };
 
     setWs(socket);
   };
@@ -49,6 +59,8 @@ const WebSocketComponent = ({ data }) => {
   const stopStream = async () => {
     if (ws) ws.close();
     setWs(null);
+    setStreaming(false);
+
     try {
       await axios.post(
         `${baseURL}stop_stream/${data.id}`,
@@ -60,20 +72,7 @@ const WebSocketComponent = ({ data }) => {
     }
   };
 
-  // Control stream based on `props.data.is_streaming`
-  useEffect(() => {
-    const isStreaming = data?.is_streaming === "on" || data?.is_streaming === true;
-
-    if (isStreaming && !ws) {
-      startStream();
-    } else if (!isStreaming && ws) {
-      stopStream();
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.is_streaming]);
-
-  // Cleanup on unmount
+  // ✅ Clean up WebSocket on unmount
   useEffect(() => {
     return () => {
       if (ws) {
@@ -81,8 +80,7 @@ const WebSocketComponent = ({ data }) => {
         setWs(null);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ws]);
 
   const openFullScreen = () => setOpenPopup(true);
   const closeFullScreen = () => setOpenPopup(false);
@@ -109,16 +107,16 @@ const WebSocketComponent = ({ data }) => {
             Live video feed from <b>{data.name}</b> Camera
           </Typography>
 
-          <DesBtn text="open full screen" noBoarder handle={openFullScreen} disabled={!messages}>
+          <DesBtn text="Open Full Screen" noBoarder handle={openFullScreen} disabled={!messages}>
             <FullscreenIcon />
           </DesBtn>
 
-          {data?.is_streaming ? (
-            <DesBtn text="stop stream" noBoarder handle={stopStream}>
+          {streaming ? (
+            <DesBtn text="Stop Stream" noBoarder handle={stopStream}>
               <PauseCircleIcon />
             </DesBtn>
           ) : (
-            <DesBtn text="start stream" noBoarder handle={startStream}>
+            <DesBtn text="Start Stream" noBoarder handle={startStream}>
               <PlayCircleFilledIcon />
             </DesBtn>
           )}
