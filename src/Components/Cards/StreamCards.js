@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";                                   // <-- NEW
+import axios from "axios";
 import { authState } from "../../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
-import { baseURL } from "../../utils/StaticVariables";
+import { baseURL, BASE64_IMAGE_PREFIX } from "../../utils/StaticVariables";
 import {
   Card,
   CardContent,
@@ -15,7 +15,6 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { BASE64_IMAGE_PREFIX } from "../../utils/StaticVariables";
 import DesBtn from "../Reusable/DesBtn";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
@@ -28,14 +27,17 @@ const WebSocketComponent = ({ data }) => {
   const [authRecoil] = useRecoilState(authState);
   const [openPopup, setOpenPopup] = useState(false);
 
-  /* ---------------- WebSocket controls ---------------- */
-
   const startVideo = () => {
+    if (ws || isVideoPlaying) return; // prevent reconnect
+
     const token = authRecoil.token;
     const streamUrl = `wss://16.170.216.227/stream?stream_id=${data.id}&token=${token}`;
     const socket = new WebSocket(streamUrl);
 
-    socket.onopen = () => console.log("WebSocket Connected");
+    socket.onopen = () => {
+      console.log("WebSocket Connected");
+      setIsVideoPlaying(true);
+    };
 
     socket.onmessage = (event) => {
       try {
@@ -47,46 +49,62 @@ const WebSocketComponent = ({ data }) => {
     };
 
     socket.onerror = (err) => console.error("WebSocket Error:", err);
-    socket.onclose  = () => console.log("WebSocket Disconnected");
+
+    socket.onclose = () => {
+      console.log("WebSocket Disconnected");
+      setIsVideoPlaying(false);
+    };
 
     setWs(socket);
-    setIsVideoPlaying(true);
   };
 
   const stopStreamOnServer = () =>
-    axios.post(baseURL + `stop_stream/${data.id}`,
+    axios.post(
+      `${baseURL}stop_stream/${data.id}`,
       {},
       { headers: { Authorization: `Bearer ${authRecoil.token}` } }
     );
 
   const stopVideo = async () => {
     if (ws) ws.close();
+    setWs(null);
     setIsVideoPlaying(false);
+
     try {
-      await stopStreamOnServer();                       // <-- NEW
+      await stopStreamOnServer();
     } catch (err) {
       console.error("Failed to stop stream:", err);
     }
   };
 
-  /* ---------------- cleanup on unmount ---------------- */
+  // Auto start if stream is active
+  useEffect(() => {
+    const isStreaming = data?.is_streaming === "on" || data?.is_streaming === true;
+    if (isStreaming) {
+      startVideo();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.is_streaming]);
+
+  // Clean up on unmount
   useEffect(() => {
     return () => {
-      if (ws) ws.close();
-      // notify backend if stream was playing
-      if (isVideoPlaying) {
-        stopStreamOnServer().catch((err) =>
-          console.error("Failed to stop stream:", err)
-        );
+      if (ws) {
+        ws.close();
+        setWs(null);
+        if (isVideoPlaying) {
+          stopStreamOnServer().catch((err) =>
+            console.error("Error on unmount stop:", err)
+          );
+        }
       }
     };
-  }, [ws, isVideoPlaying, data.id, authRecoil.token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  /* ---------------- dialog handlers ---------------- */
   const openFullScreen = () => setOpenPopup(true);
   const closeFullScreen = () => setOpenPopup(false);
 
-  /* ---------------- render ---------------- */
   return (
     <div>
       <Card>
@@ -125,7 +143,6 @@ const WebSocketComponent = ({ data }) => {
         </CardContent>
       </Card>
 
-      {/* full‑screen dialog */}
       <Dialog open={openPopup} onClose={closeFullScreen} fullWidth maxWidth="md">
         <DialogTitle>Full Screen {data.name} Video</DialogTitle>
         <DialogContent>
