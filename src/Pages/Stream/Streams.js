@@ -25,6 +25,7 @@ const Streams = () => {
 
   // ✅ Refetch if there's no data loaded
   useEffect(() => {
+    console.log(data);
     if (data === null) {
       refetchStreams();
     }
@@ -32,7 +33,9 @@ const Streams = () => {
 
   // ⬇️ Handle checkbox selection
   const changeSelectDataRow = (selectedNewData) => {
-    const isInSelectedData = selectedData.some((el) => el.id === selectedNewData.id);
+    const isInSelectedData = selectedData.some(
+      (el) => el.id === selectedNewData.id
+    );
     setSelectedStream(
       isInSelectedData
         ? selectedData.filter((el) => el.id !== selectedNewData.id)

@@ -19,13 +19,20 @@ import DesBtn from "../Reusable/DesBtn";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
-
 const WebSocketComponent = ({ data }) => {
   const [messages, setMessages] = useState(null);
   const [ws, setWs] = useState(null);
   const [authRecoil] = useRecoilState(authState);
   const [openPopup, setOpenPopup] = useState(false);
   const [streaming, setStreaming] = useState(false); // ✅ Stream controlled by state
+
+  useEffect(() => {
+    console.log(data.is_streaming);
+    if (data.is_streaming) {
+      startStream();
+      setStreaming(true);
+    }
+  }, [data]);
 
   const startStream = () => {
     const token = authRecoil.token;
@@ -101,13 +108,26 @@ const WebSocketComponent = ({ data }) => {
         />
 
         <CardContent
-          sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          <Typography variant="body2" color="text.secondary" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ flexGrow: 1 }}
+          >
             Live video feed from <b>{data.name}</b> Camera
           </Typography>
 
-          <DesBtn text="Open Full Screen" noBoarder handle={openFullScreen} disabled={!messages}>
+          <DesBtn
+            text="Open Full Screen"
+            noBoarder
+            handle={openFullScreen}
+            disabled={!messages}
+          >
             <FullscreenIcon />
           </DesBtn>
 
@@ -123,7 +143,12 @@ const WebSocketComponent = ({ data }) => {
         </CardContent>
       </Card>
 
-      <Dialog open={openPopup} onClose={closeFullScreen} fullWidth maxWidth="md">
+      <Dialog
+        open={openPopup}
+        onClose={closeFullScreen}
+        fullWidth
+        maxWidth="md"
+      >
         <DialogTitle>Full Screen {data.name} Video</DialogTitle>
         <DialogContent>
           <Box sx={{ display: "flex", justifyContent: "center" }}>

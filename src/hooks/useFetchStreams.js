@@ -6,9 +6,11 @@ import { streamState } from "../Recoil/RecoilState";
 import { baseURL } from "../utils/StaticVariables";
 
 const useFetchStreams = () => {
+  
   const setStreamRecoil = useSetRecoilState(streamState);
 
   const fetchStreams = useCallback(async () => {
+    console.log("call stream api now")
     // Start fresh
     setStreamRecoil({
       data: [],
