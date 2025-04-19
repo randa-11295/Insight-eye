@@ -13,8 +13,12 @@ import PrintBtn from "../Components/Reusable/PrintBtn";
 import { Stack, Card, Pagination, Box, Typography } from "@mui/material";
 import { useSetRecoilState } from "recoil";
 import { popupState, snackAlertState } from "../Recoil/RecoilState";
-import { dataRenderTypeInSearchArr, searchFramesColumns, baseURL } from "../utils/StaticVariables";
-import {useAxiosWithAuth} from "../services/api"
+import {
+  dataRenderTypeInSearchArr,
+  searchFramesColumns,
+  baseURL,
+} from "../utils/StaticVariables";
+import { useAxiosWithAuth } from "../services/api";
 
 const Search = () => {
   const setPopup = useSetRecoilState(popupState);
@@ -28,7 +32,7 @@ const Search = () => {
   const [total, setTotal] = useState(0);
   const [numOfPages, setNumOfPages] = useState(0);
   const api = useAxiosWithAuth();
-  const childRef = useRef(null); 
+  const childRef = useRef(null);
 
   const handleToggleChange = (event, newValue) => {
     if (newValue !== null) setSelectedShowMethod(newValue);
@@ -37,7 +41,7 @@ const Search = () => {
   useEffect(() => {
     if (!searchData.length) return;
 
-    const chartDataFormat = searchData.map(el => ({
+    const chartDataFormat = searchData.map((el) => ({
       camera_id: el.metadata?.camera_id,
       date: el.metadata?.date || 0,
       time: el.metadata?.time || 0,
@@ -58,69 +62,103 @@ const Search = () => {
     setPopup({
       isOpen: true,
       title: "Select Date and Time Range",
-      content: <FilterSearch ref={childRef} changeFilterHandle={setFilter} total={total} />,
+      content: (
+        <FilterSearch
+          ref={childRef}
+          changeFilterHandle={setFilter}
+          total={total}
+        />
+      ),
       sendReq: handleClick,
     });
   };
 
   const changePageHandle = (event, newPage) => setPage(newPage);
 
-  const showError = () => setSnackAlert({ open: true, message: "Something went wrong!", severity: "error" });
+  const showError = () =>
+    setSnackAlert({
+      open: true,
+      message: "Something went wrong!",
+      severity: "error",
+    });
 
   useEffect(() => {
-
     setLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    api.get(`search_results`, {
-      params: {
-        page,
-        per_page: filter.limit,
-        end_time: filter.endTime,
-        start_time: filter.startTime,
-        start_date: filter.startDate,
-        end_date: filter.endDate,
-        camera_id: filter.id
-      }
-    })
-      .then(response => {
+    api
+      .get(`search_results`, {
+        params: {
+          page,
+          per_page: filter.limit,
+          end_time: filter.endTime,
+          start_time: filter.startTime,
+          start_date: filter.startDate,
+          end_date: filter.endDate,
+          camera_id: filter.id,
+        },
+      })
+      .then((response) => {
         setSearchData(response.data.data);
         setNumOfPages(response.data.num_of_pages);
         setTotal(response.data.total_count);
       })
-      .catch(()=>{
-        setSearchData([])
-        showError()})
+      .catch(() => {
+        setSearchData([]);
+        showError();
+      })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, filter]);
 
   return (
     <Box p={2}>
-      {!loading && <Stack my={4} direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-between" alignItems="center">
-
-        <Typography variant="body1" color="textPrimary">
-        Avertible Recoded Frames : <strong> {total || 0}</strong>
-        </Typography>
-        <Stack direction={{ xs: "column", md: "row" }} spacing={2}  >
-
-          <ReusableToggleBtns options={dataRenderTypeInSearchArr} value={selectedShowMethod} handleToggleChange={handleToggleChange} />
-          <DesBtn text="Filter" handle={openPopup} customStyle={{ minWidth: "auto" }}>
-            <FilterAltOutlinedIcon />
-          </DesBtn>
-          <PrintBtn data={searchData}
-            columns={searchFramesColumns} />
-
+      {!loading && (
+        <Stack
+          my={4}
+          direction={{ xs: "column", md: "row" }}
+          spacing={2}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Typography variant="body1" color="textPrimary">
+            Avertible Recoded Frames : <strong> {total || 0}</strong>
+          </Typography>
+          <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+            <ReusableToggleBtns
+              options={dataRenderTypeInSearchArr}
+              value={selectedShowMethod}
+              handleToggleChange={handleToggleChange}
+            />
+            <DesBtn
+              text="Filter"
+              handle={openPopup}
+              customStyle={{ minWidth: "auto" }}
+            >
+              <FilterAltOutlinedIcon />
+            </DesBtn>
+            <PrintBtn data={searchData} columns={searchFramesColumns} />
+          </Stack>
         </Stack>
-      </Stack>}
+      )}
 
-      {selectedShowMethod === "cards" && (loading ? <SkeletonLoaderReusable /> : (
-        searchData.length > 0 ? (
-          <GridContainer items={searchData?.map(el => <CardSearch key={el.frame} data={el} />)} />
-        ) : <Card sx={{ p: 3, my: 4, textAlign: "center" }}>No Data Available in Frame result</Card>
-      ))}
+      {selectedShowMethod === "cards" &&
+        (loading ? (
+          <SkeletonLoaderReusable />
+        ) : searchData.length > 0 ? (
+          <GridContainer
+            items={searchData?.map((el) => (
+              <CardSearch key={el.frame} data={el} />
+            ))}
+          />
+        ) : (
+          <Card sx={{ p: 3, my: 4, textAlign: "center" }}>
+            No Data Available in Frame result
+          </Card>
+        ))}
 
       {selectedShowMethod === "table" && (
-        <TableReusable print
+        <TableReusable
+          print
           data={searchData}
           columns={searchFramesColumns}
           loading={loading}
@@ -130,11 +168,21 @@ const Search = () => {
         />
       )}
 
-      {selectedShowMethod === "chart" && <ChartSearch loading={loading}   chartData={searchChartData} />}
+      {selectedShowMethod === "chart" && (
+        <ChartSearch loading={loading} chartData={searchChartData} />
+      )}
 
-      {!loading && <Stack justifyContent="center" sx={{ mt: 4 }}>
-        <Pagination count={numOfPages} color="primary" sx={{ margin: "auto" }} page={page} onChange={changePageHandle} />
-      </Stack>}
+      {!loading && (
+        <Stack justifyContent="center" sx={{ mt: 4 }}>
+          <Pagination
+            count={numOfPages}
+            color="primary"
+            sx={{ margin: "auto" }}
+            page={page}
+            onChange={changePageHandle}
+          />
+        </Stack>
+      )}
     </Box>
   );
 };
