@@ -65,6 +65,7 @@ useEffect(() => {
               <Route path="/streams/update-streams" element={<UpdateStreams />} />
               <Route path="/frames-search" element={<Search />} />
               <Route path="/predictions" element={<Predictions />} />
+              <Route path="/setting" element={<p>test </p>} />
               <Route path="/logs" element={<Logs />} />
             </Route>
           </>
