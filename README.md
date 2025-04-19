@@ -92,6 +92,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 16- make loader 5  length  ----------------------------------------  done
 17 - fix loading in get stream
 18 - handle errors
-19- update freams name instade of id 
+19- update frames name instead of id 
 20- remove select from search table
 21- fix search chart and make it render all data after and before filter 
