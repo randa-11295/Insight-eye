@@ -47,6 +47,7 @@ const Search = () => {
     setSearchChartData(chartDataFormat);
   }, [searchData]);
 
+  //*  that make parent submit run
   const handleClick = () => {
     if (childRef.current) {
       childRef.current.submit();
