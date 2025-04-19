@@ -1,19 +1,18 @@
-import { useState, useEffect, Fragment } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import {
   Box,
   Grid,
   Checkbox,
   FormControlLabel,
   CircularProgress,
-  Alert,
-  Button,
   Typography,
 } from "@mui/material";
-import PredictionsCard from "../Components/Cards/PredictionsCard";
-import { baseURL } from "../utils/StaticVariables";
 
-/* StreamSelector (MUI) */
+import PredictionsCard from "../Components/Cards/PredictionsCard";
+import useFetchStreams from "../hooks/useFetchStreams";
+import { useRecoilValue } from "recoil";
+import { streamState } from "../Recoil/RecoilState";
+
 const StreamSelector = ({ streams, selectedIds, onToggle, loading }) => (
   <Grid container spacing={2} sx={{ mb: 3 }}>
     {streams.map((stream) => (
@@ -39,25 +38,27 @@ const StreamSelector = ({ streams, selectedIds, onToggle, loading }) => (
 );
 
 const Predictions = () => {
-  const [streams, setStreams] = useState([]);
-  const [selectedIds, setSelected] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { refetchStreams } = useFetchStreams(); // Auto fetch
+  const { data: streams, loading, error } = useRecoilValue(streamState);
 
-  
+  const [selectedIds, setSelected] = useState([]);
+
+  // 🔁 Auto-select all stream IDs once data loads
+  useEffect(() => {
+    if (streams.length) {
+      setSelected(streams.map((s) => s.id));
+    }
+  }, [streams]);
+
   const handleToggle = (id) =>
     setSelected((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
 
   return (
-    <Fragment>
-      {/* Error message */}
-      {error && (
-        <p>some thing wrong</p>
-      )}
+    <>
+      {error && <Typography color="error">Something went wrong</Typography>}
 
-      {/* Selector */}
       <StreamSelector
         streams={streams}
         selectedIds={selectedIds}
@@ -65,14 +66,12 @@ const Predictions = () => {
         loading={loading}
       />
 
-      {/* Loader */}
       {loading && (
         <Box display="flex" justifyContent="center" my={4}>
           <CircularProgress />
         </Box>
       )}
 
-      {/* Cards */}
       {!loading && (
         <Grid container spacing={3}>
           {selectedIds.map((id) => {
@@ -93,7 +92,7 @@ const Predictions = () => {
           )}
         </Grid>
       )}
-    </Fragment>
+    </>
   );
 };
 
