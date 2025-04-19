@@ -43,7 +43,7 @@ const StreamSelector = ({ streams, selectedIds, onToggle, loading }) => (
 );
 
 const Predictions = () => {
-  // const { refetchStreams } = useFetchStreams(); // Auto fetch
+  const { refetchStreams } = useFetchStreams(); // Auto fetch
   const { data: streams, loading, error } = useRecoilValue(streamState);
 
   const [selectedIds, setSelected] = useState([]);
@@ -53,12 +53,17 @@ const Predictions = () => {
     console.log(filter);
   }, [filter]);
 
+  useEffect(() => {
+    console.log("streams", streams);
+    if (streams === null) refetchStreams();
+  }, [refetchStreams, streams]);
+
   // 🔁 Auto-select all stream IDs once data loads
   useEffect(() => {
     if (streams?.length) {
       setSelected(streams?.map((s) => s.id));
     }
-  }, [streams]);  
+  }, [streams]);
 
   const handleToggle = (id) =>
     setSelected((prev) =>
@@ -71,7 +76,7 @@ const Predictions = () => {
 
   //*  that make parent submit run
   const handleClick = () => {
-    console.log("run api")
+    console.log("run api");
     if (childRef.current) {
       childRef.current.submit();
     }

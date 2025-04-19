@@ -96,3 +96,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 20- remove select from search table
 21- fix search chart and make it render all data after and before filter 
 22 - fix system info bug
+23 - make stream data run only one time 

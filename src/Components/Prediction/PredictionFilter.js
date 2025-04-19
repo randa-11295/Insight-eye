@@ -1,15 +1,36 @@
-import React, { forwardRef, useImperativeHandle } from "react";
-import { useFormik } from 'formik';
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import { useFormik } from "formik";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import DateTimePicker from "../Inputs/DateTimePicker";
-import { Stack } from "@mui/system";
+import {
+  Stack,
+  Typography,
+  FormControlLabel,
+  Checkbox,
+  Box,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
+import { useRecoilValue } from "recoil";
+import { streamState } from "../../Recoil/RecoilState"; // ✅ Make sure the path is correct
 
 const PredictionFilter = forwardRef((props, ref) => {
+  const { changeFilterHandle } = props;
+  const { data: cameraOptions, loading, error } = useRecoilValue(streamState); // ✅ use streamState
+
+  useEffect(() => {
+    console.log("cameraOptions :", cameraOptions);
+  }, [cameraOptions]);
+
   const formik = useFormik({
     initialValues: {
-      camera_id: "", // will hold comma-separated string like "cam1,cam3"
-    }, // Load saved values
+      camera_id: "", // comma-separated
+      startDate: null,
+      endDate: null,
+      startTime: null,
+      endTime: null,
+    },
     onSubmit: (values) => {
       const formattedValues = {
         ...values,
@@ -31,105 +52,102 @@ const PredictionFilter = forwardRef((props, ref) => {
           : null,
       };
 
-      console.log(formattedValues);
-      props.changeFilterHandle(formattedValues);
+      console.log("Submitted Filter:", formattedValues);
+      changeFilterHandle(formattedValues);
     },
   });
 
   useImperativeHandle(ref, () => ({
-    submit: formik?.handleSubmit,
+    submit: formik.handleSubmit,
   }));
 
+  const handleCameraCheckboxChange = (cameraId) => {
+    const selected = formik.values.camera_id
+      ? formik.values.camera_id.split(",").filter(Boolean)
+      : [];
+
+    const updated = selected.includes(cameraId)
+      ? selected.filter((id) => id !== cameraId)
+      : [...selected, cameraId];
+
+    formik.setFieldValue("camera_id", updated.join(","));
+  };
+
+  const selectedIds = formik.values.camera_id
+    ? formik.values.camera_id.split(",").filter(Boolean)
+    : [];
+
   return (
-    <>
-         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Stack gap={2} component="form" onSubmit={formik?.handleSubmit}>
-                <DateTimePicker label="Start" dateValue={formik?.values.startDate} timeValue={formik?.values.startTime}
-                onDateChange={(date) => formik?.setFieldValue("startDate", date)}
-                onTimeChange={(time) => formik?.setFieldValue("startTime", time)} maxDate={formik?.values.endDate} />
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Stack gap={3} component="form" onSubmit={formik.handleSubmit}>
+        {/* 🔲 Stream Checkbox Selector */}
+        <Box>
+          <Typography fontWeight={600} mb={1}>
+            Select Cameras:
+          </Typography>
 
-                 <DateTimePicker label="End" dateValue={formik?.values.endDate} timeValue={formik?.values.endTime}
-                onDateChange={(date) => formik?.setFieldValue("endDate", date)}
-                onTimeChange={(time) => formik?.setFieldValue("endTime", time)} minDate={formik?.values.startDate} />
+          {loading && (
+            <Box display="flex" justifyContent="center" my={2}>
+              <CircularProgress size={24} />
+            </Box>
+          )}
 
-        </Stack>
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
+          {!loading && !error && cameraOptions?.length > 0 && (
+            <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+              {cameraOptions.map((cam) => (
+                <Box
+                  key={cam.id}
+                  sx={{ width: "50%", boxSizing: "border-box", px: 1, py: 0.5 }}
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={selectedIds.includes(cam.id)}
+                        onChange={() => handleCameraCheckboxChange(cam.id)}
+                      />
+                    }
+                    label={cam.name}
+                  />
+                </Box>
+              ))}
+            </Box>
+          )}
+
+          {!loading && !error && cameraOptions?.length === 0 && (
+            <Typography variant="body2" color="text.secondary">
+              No cameras available.
+            </Typography>
+          )}
+        </Box>
+
+        {/* 📅 Start Date & Time */}
+        <DateTimePicker
+          label="Start"
+          dateValue={formik.values.startDate}
+          timeValue={formik.values.startTime}
+          onDateChange={(date) => formik.setFieldValue("startDate", date)}
+          onTimeChange={(time) => formik.setFieldValue("startTime", time)}
+          maxDate={formik.values.endDate}
+        />
+
+        {/* 📅 End Date & Time */}
+        <DateTimePicker
+          label="End"
+          dateValue={formik.values.endDate}
+          timeValue={formik.values.endTime}
+          onDateChange={(date) => formik.setFieldValue("endDate", date)}
+          onTimeChange={(time) => formik.setFieldValue("endTime", time)}
+          minDate={formik.values.startDate}
+        />
+      </Stack>
     </LocalizationProvider>
-      tesst
-    </>
   );
 });
 
 export default PredictionFilter;
-
-// import { useFormik } from 'formik';
-// import axios from 'axios';
-// import React from 'react';
-
-// const CAMERA_OPTIONS = ['cam1', 'cam2', 'cam3', 'cam4'];
-
-// const QueryForm = () => {
-//   const formik = useFormik({
-//     initialValues: {
-//       camera_id: '',      // will hold comma-separated string like "cam1,cam3"
-//       start_date: '',
-//       end_date: '',
-//       start_time: '',
-//       end_time: '',
-//     },
-//     onSubmit: async (values) => {
-//     console.log(values)
-//     },
-//   });
-
-//   const handleCameraCheckboxChange = (camera) => {
-//     const selected = formik.values.camera_id
-//       ? formik.values.camera_id.split(',').filter(Boolean)
-//       : [];
-
-//     const updated = selected.includes(camera)
-//       ? selected.filter((c) => c !== camera)
-//       : [...selected, camera];
-
-//     formik.setFieldValue('camera_id', updated.join(','));
-//   };
-
-//   return (
-//     <form onSubmit={formik.handleSubmit}>
-//       {/* 🔲 Camera Section */}
-//       <div>
-//         <label><strong>Camera ID</strong></label>
-//         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '12px' }}>
-//           {CAMERA_OPTIONS.map((cam) => (
-//             <label key={cam}>
-//               <input
-//                 type="checkbox"
-//                 checked={formik.values.camera_id.includes(cam)}
-//                 onChange={() => handleCameraCheckboxChange(cam)}
-//               />
-//               {cam}
-//             </label>
-//           ))}
-//         </div>
-//       </div>
-
-//       {/* 🗓️ Other Fields */}
-//       {['start_date', 'end_date', 'start_time', 'end_time'].map((field) => (
-//         <div key={field} style={{ marginBottom: '12px' }}>
-//           <label htmlFor={field}>{field.replace('_', ' ')}:</label>
-//           <input
-//             id={field}
-//             name={field}
-//             type="text"
-//             value={formik.values[field]}
-//             onChange={formik.handleChange}
-//             placeholder={field}
-//           />
-//         </div>
-//       ))}
-
-//       <button type="submit">Submit</button>
-//     </form>
-//   );
-// };
-
-// export default QueryForm;
