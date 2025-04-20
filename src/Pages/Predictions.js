@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Box, Grid, CircularProgress, Typography } from "@mui/material";
+import { Box, Grid, Stack, CircularProgress, Typography } from "@mui/material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import PredictionsCard from "../Components/Prediction/PredictionsCard";
 import useFetchStreams from "../hooks/useFetchStreams";
@@ -9,8 +9,7 @@ import PredictionFilter from "../Components/Prediction/PredictionFilter";
 import DesBtn from "../Components/Reusable/DesBtn";
 import axios from "axios";
 import { baseURL } from "../utils/StaticVariables";
-import { Stack } from "@mui/system";
-
+import { convertKeysToKebabCase } from "../utils/helpers";
 const Predictions = () => {
   const { refetchStreams } = useFetchStreams();
   const { data: streams, loading, error } = useRecoilValue(streamState);
@@ -27,7 +26,7 @@ const Predictions = () => {
     setPredictionLoading(true);
     try {
       const { data } = await axios.get(`${baseURL}prediction_data`, {
-        params: filterParams,
+        params: convertKeysToKebabCase(filterParams),
         headers: {
           Authorization: `Bearer ${localStorage.token}`,
         },
@@ -78,7 +77,11 @@ const Predictions = () => {
       isOpen: true,
       title: "Select Date and Time Range",
       content: (
-        <PredictionFilter filter={filter} ref={childRef} changeFilterHandle={setFilter} />
+        <PredictionFilter
+          filter={filter}
+          ref={childRef}
+          changeFilterHandle={setFilter}
+        />
       ),
       sendReq: handleClick,
     });
@@ -86,9 +89,14 @@ const Predictions = () => {
 
   return (
     <>
-      <Stack mb={4} direction={{md :"row"}} justifyContent="space-between" gap={2}>
-        <Typography >
-        Predictions show charts based on the cameras and time you choose 
+      <Stack
+        mb={4}
+        direction={{ md: "row" }}
+        justifyContent="space-between"
+        gap={2}
+      >
+        <Typography>
+          Predictions show charts based on the cameras and time you choose
         </Typography>
         <DesBtn
           text="Filter"
@@ -123,7 +131,7 @@ const Predictions = () => {
       {!predictionLoading && predictions.length > 0 && (
         <Grid container spacing={3}>
           {predictions.map((item, index) => (
-            <Grid item xs={12} sm={6}    key={item.camera_id}>
+            <Grid item xs={12} sm={6} key={item.camera_id}>
               <PredictionsCard data={item} />
             </Grid>
           ))}

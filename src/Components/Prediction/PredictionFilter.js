@@ -19,18 +19,8 @@ const PredictionFilter = forwardRef((props, ref) => {
   const { changeFilterHandle } = props;
   const { data: cameraOptions, loading, error } = useRecoilValue(streamState); // ✅ use streamState
 
-  useEffect(() => {
-    console.log("cameraOptions :", cameraOptions);
-  }, [cameraOptions]);
-
   const formik = useFormik({
-    initialValues: {
-      camera_id: "", // comma-separated
-      startDate: null,
-      endDate: null,
-      startTime: null,
-      endTime: null,
-    },
+    initialValues: props.filter,
     onSubmit: (values) => {
       const formattedValues = {
         ...values,
