@@ -1,82 +1,68 @@
-import { useEffect, useState } from "react";
-import {
-  Box,
-  Grid,
-  Checkbox,
-  FormControlLabel,
-  CircularProgress,
-  Typography,
-} from "@mui/material";
+import { useEffect, useState, useRef } from "react";
+import { Box, Grid, CircularProgress, Typography } from "@mui/material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import PredictionsCard from "../Components/Prediction/PredictionsCard";
 import useFetchStreams from "../hooks/useFetchStreams";
-import { useRecoilValue } from "recoil";
-import { streamState } from "../Recoil/RecoilState";
-import { useSetRecoilState } from "recoil";
-import { popupState } from "../Recoil/RecoilState";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { streamState, popupState } from "../Recoil/RecoilState";
 import PredictionFilter from "../Components/Prediction/PredictionFilter";
-import { useRef } from "react";
 import DesBtn from "../Components/Reusable/DesBtn";
-
-const StreamSelector = ({ streams, selectedIds, onToggle, loading }) => (
-  <Grid container spacing={2} sx={{ mb: 3 }}>
-    {streams?.map((stream) => (
-      <Grid item xs={12} sm={6} md={4} key={stream.id}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={selectedIds.includes(stream.id)}
-              onChange={() => onToggle(stream.id)}
-              disabled={loading}
-              sx={{
-                "&.Mui-checked": {
-                  color: "primary.main",
-                },
-              }}
-            />
-          }
-          label={stream.name}
-        />
-      </Grid>
-    ))}
-  </Grid>
-);
+import axios from "axios";
+import { baseURL } from "../utils/StaticVariables";
 
 const Predictions = () => {
-  const { refetchStreams } = useFetchStreams(); // Auto fetch
+  const { refetchStreams } = useFetchStreams();
   const { data: streams, loading, error } = useRecoilValue(streamState);
+  const setPopup = useSetRecoilState(popupState);
+  const childRef = useRef(null);
 
-  const [selectedIds, setSelected] = useState([]);
   const [filter, setFilter] = useState({});
+  const [predictions, setPredictions] = useState([]);
+  const [predictionLoading, setPredictionLoading] = useState(false);
 
-  useEffect(() => {
-    console.log(filter);
-  }, [filter]);
+  // Fetch predictions from API
+  const fetchPredictions = async (filterParams) => {
+    setPredictionLoading(true);
+    try {
+      const { data } = await axios.get(`${baseURL}prediction_data`, {
+        params: filterParams,
+        headers: {
+          Authorization: `Bearer ${localStorage.token}`,
+        },
+      });
+      setPredictions(data.predictions);
+      console.log(data.predictions);
+    } catch (err) {
+      console.error("Error fetching predictions", err);
+      setPredictions([]);
+    } finally {
+      setPredictionLoading(false);
+    }
+  };
 
+  // Fetch streams on mount if null
   useEffect(() => {
-    console.log("streams", streams);
+    console.log(streams);
     if (streams === null) refetchStreams();
   }, [refetchStreams, streams]);
 
-  // 🔁 Auto-select all stream IDs once data loads
+  // Set default camera_id after streams load
   useEffect(() => {
     if (streams?.length) {
-      setSelected(streams?.map((s) => s.id));
+      const allIds = streams.map((s) => s.id).join(",");
+      setFilter((prev) => ({ ...prev, camera_id: allIds }));
     }
   }, [streams]);
 
-  const handleToggle = (id) =>
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
+  // Call predictions API on filter change
+  useEffect(() => {
+    if (filter.camera_id) {
+      fetchPredictions(filter);
+    }
+  }, [filter]);
 
-  const setPopup = useSetRecoilState(popupState);
-
-  const childRef = useRef(null);
-
-  //*  that make parent submit run
+  // Submit popup form
   const handleClick = () => {
-    console.log("run api");
     if (childRef.current) {
       childRef.current.submit();
     }
@@ -87,11 +73,7 @@ const Predictions = () => {
       isOpen: true,
       title: "Select Date and Time Range",
       content: (
-        <PredictionFilter
-          ref={childRef}
-          changeFilterHandle={setFilter}
-          // total={total}
-        />
+        <PredictionFilter ref={childRef} changeFilterHandle={setFilter} />
       ),
       sendReq: handleClick,
     });
@@ -106,14 +88,14 @@ const Predictions = () => {
       >
         <FilterAltOutlinedIcon />
       </DesBtn>
+
       {error && <Typography color="error">Something went wrong</Typography>}
 
-      <StreamSelector
-        streams={streams}
-        selectedIds={selectedIds}
-        onToggle={handleToggle}
-        loading={loading}
-      />
+      {!loading && streams?.length === 0 && (
+        <Typography color="warning.main" textAlign="center" mt={4}>
+          You must add at least one camera stream.
+        </Typography>
+      )}
 
       {loading && (
         <Box display="flex" justifyContent="center" my={4}>
@@ -121,25 +103,26 @@ const Predictions = () => {
         </Box>
       )}
 
-      {!loading && (
-        <Grid container spacing={3}>
-          {selectedIds?.map((id) => {
-            const stream = streams.find((s) => s.id === id);
-            return (
-              <Grid item xs={12} md={6} key={id}>
-                <PredictionsCard streamId={id} streamName={stream?.name} />
-              </Grid>
-            );
-          })}
+      {predictionLoading && (
+        <Box display="flex" justifyContent="center" my={4}>
+          <CircularProgress />
+        </Box>
+      )}
 
-          {selectedIds?.length === 0 && (
-            <Grid item xs={12}>
-              <Typography variant="body2" fontStyle="italic" textAlign="center">
-                Select at least one camera to see its predictions.
-              </Typography>
+      {!predictionLoading && predictions.length > 0 && (
+        <Grid container spacing={3}>
+          {predictions.map((item, index) => (
+            <Grid item xs={12} md={6} key={item.camera_id}>
+              <PredictionsCard data={item} />
             </Grid>
-          )}
+          ))}
         </Grid>
+      )}
+
+      {!predictionLoading && predictions.length === 0 && (
+        <Typography textAlign="center" mt={4}>
+          No prediction data found.
+        </Typography>
       )}
     </>
   );
