@@ -9,6 +9,7 @@ import PredictionFilter from "../Components/Prediction/PredictionFilter";
 import DesBtn from "../Components/Reusable/DesBtn";
 import axios from "axios";
 import { baseURL } from "../utils/StaticVariables";
+import { Stack } from "@mui/system";
 
 const Predictions = () => {
   const { refetchStreams } = useFetchStreams();
@@ -22,7 +23,7 @@ const Predictions = () => {
 
   // Fetch predictions from API
   const fetchPredictions = async (filterParams) => {
-    console.log("run predictions api ")
+    console.log("run predictions api ");
     setPredictionLoading(true);
     try {
       const { data } = await axios.get(`${baseURL}prediction_data`, {
@@ -32,7 +33,7 @@ const Predictions = () => {
         },
       });
       setPredictions(data.predictions);
-      console.log("api" ,data.predictions);
+      console.log("api", data.predictions);
     } catch (err) {
       console.error("Error fetching predictions", err);
       setPredictions([]);
@@ -43,10 +44,12 @@ const Predictions = () => {
 
   // Fetch streams on mount if null
   useEffect(() => {
-    if (streams === null){
-      console.log( "null stream" ,streams);
-       refetchStreams();}
-  }, [ streams]);
+    if (streams === null) {
+      console.log("null stream", streams);
+      refetchStreams();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streams]);
 
   // Set default camera_id after streams load
   useEffect(() => {
@@ -75,7 +78,7 @@ const Predictions = () => {
       isOpen: true,
       title: "Select Date and Time Range",
       content: (
-        <PredictionFilter ref={childRef} changeFilterHandle={setFilter} />
+        <PredictionFilter filter={filter} ref={childRef} changeFilterHandle={setFilter} />
       ),
       sendReq: handleClick,
     });
@@ -83,14 +86,19 @@ const Predictions = () => {
 
   return (
     <>
-      <DesBtn
-        text="Filter"
-        disabled={true}
-        handle={openPopup}
-        customStyle={{ minWidth: "auto" }}
-      >
-        <FilterAltOutlinedIcon />
-      </DesBtn>
+      <Stack mb={4} direction={{md :"row"}} justifyContent="space-between" gap={2}>
+        <Typography >
+        Predictions show charts based on the cameras and time you choose 
+        </Typography>
+        <DesBtn
+          text="Filter"
+          disabled={streams?.length < 0}
+          handle={openPopup}
+          customStyle={{ minWidth: "auto" }}
+        >
+          <FilterAltOutlinedIcon />
+        </DesBtn>
+      </Stack>
 
       {error && <Typography color="error">Something went wrong</Typography>}
 
@@ -115,7 +123,7 @@ const Predictions = () => {
       {!predictionLoading && predictions.length > 0 && (
         <Grid container spacing={3}>
           {predictions.map((item, index) => (
-            <Grid item xs={12} md={6} key={item.camera_id}>
+            <Grid item xs={12} sm={6}    key={item.camera_id}>
               <PredictionsCard data={item} />
             </Grid>
           ))}
