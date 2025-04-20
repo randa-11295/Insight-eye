@@ -22,6 +22,7 @@ const Predictions = () => {
 
   // Fetch predictions from API
   const fetchPredictions = async (filterParams) => {
+    console.log("run predictions api ")
     setPredictionLoading(true);
     try {
       const { data } = await axios.get(`${baseURL}prediction_data`, {
@@ -31,7 +32,7 @@ const Predictions = () => {
         },
       });
       setPredictions(data.predictions);
-      console.log(data.predictions);
+      console.log("api" ,data.predictions);
     } catch (err) {
       console.error("Error fetching predictions", err);
       setPredictions([]);
@@ -42,9 +43,10 @@ const Predictions = () => {
 
   // Fetch streams on mount if null
   useEffect(() => {
-    console.log(streams);
-    if (streams === null) refetchStreams();
-  }, [refetchStreams, streams]);
+    if (streams === null){
+      console.log( "null stream" ,streams);
+       refetchStreams();}
+  }, [ streams]);
 
   // Set default camera_id after streams load
   useEffect(() => {
@@ -83,6 +85,7 @@ const Predictions = () => {
     <>
       <DesBtn
         text="Filter"
+        disabled={true}
         handle={openPopup}
         customStyle={{ minWidth: "auto" }}
       >
@@ -97,13 +100,13 @@ const Predictions = () => {
         </Typography>
       )}
 
-      {loading && (
+      {loading && !predictionLoading && (
         <Box display="flex" justifyContent="center" my={4}>
           <CircularProgress />
         </Box>
       )}
 
-      {predictionLoading && (
+      {!loading && predictionLoading && (
         <Box display="flex" justifyContent="center" my={4}>
           <CircularProgress />
         </Box>

@@ -7,11 +7,6 @@ const PredictionsCard = ({ data }) => {
 
   const hasData = prediction && Object.keys(prediction).length > 0;
 
-  useEffect(() => {
-    console.log(data);
-    console.log(hasData);
-  }, [data, hasData]);
-  
   return (
     <Card
       elevation={4}
