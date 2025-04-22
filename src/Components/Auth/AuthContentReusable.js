@@ -61,6 +61,7 @@ const AuthContentReusable = ({
 
         {contentRoute && (
           <Link
+          to={contentRoute.route}
             component={RouterLink}
             underline="hover"
             sx={{

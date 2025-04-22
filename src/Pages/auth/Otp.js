@@ -9,7 +9,7 @@ import { baseURL } from "../../utils/StaticVariables";
 import * as Yup from "yup";
 
 const OTP = () => {
-  const [otpSent, setOtpSent] = useState("verify");
+  const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const setSnackAlert = useSetRecoilState(snackAlertState);
 

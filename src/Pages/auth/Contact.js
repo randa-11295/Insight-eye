@@ -70,6 +70,7 @@ const Contact = () => {
       des="Get in touch with us for questions, feedback, or support — we’re here to help!"
       loading={loading}
       btnText={"Send Massage"}
+      contentRoute={{ linkText: " Forget your password ?", route: "/otp" }}
       footerRoute={{
         title: "Every thing is okay ?",
         linkText: "Back to login",
