@@ -13,22 +13,24 @@ import {
   FormHelperText,      
 } from '@mui/material';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
+// import * as yup from 'yup';
 import { selectedStreamState } from "../../Recoil/RecoilState"
-import { useRecoilState } from "recoil";
-import {useAxiosWithAuth} from "../../services/api"
+import axios from 'axios';
+import { baseURL } from '../../utils/StaticVariables';
+import { useRecoilValue } from 'recoil';
+import { authState } from '../../Recoil/RecoilState';
 
-const validationSchema = yup.object({
+// const validationSchema = yup.object({
   
-  streams: yup.array().of(
-    yup.object({
-      id: yup.string().required(),
-      name: yup.string().required('Name is required'),
-      path: yup.string().required('Source path is required'),
-      type: yup.string().required('Type is required')
-    })
-  )
-});
+//   streams: yup.array().of(
+//     yup.object({
+//       id: yup.string().required(),
+//       name: yup.string().required('Name is required'),
+//       path: yup.string().required('Source path is required'),
+//       type: yup.string().required('Type is required')
+//     })
+//   )
+// });
 
 export default function UpdateStreams({
   loading = false,
@@ -36,8 +38,8 @@ export default function UpdateStreams({
   onBack
 }) {
 
-  const [selectedData] = useRecoilState(selectedStreamState);
-  const api = useAxiosWithAuth();
+  const selectedData = useRecoilValue(selectedStreamState);
+  const { token } = useRecoilValue(authState);
   const formik = useFormik({
     initialValues: {
       streams: selectedData
@@ -45,13 +47,15 @@ export default function UpdateStreams({
     // validationSchema,
     // enableReinitialize: true,
     onSubmit: (values) => {
-      console.log("original",selectedData);
-      console.log("update",values.streams);
-      console.log("sperate",{...values});
 
-      api.put( "stream", 
+      axios.put(
+        `${baseURL}stream`,
         values.streams,
-    )
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then(response => {
             formik.handleReset()
             // setLoading(false);
