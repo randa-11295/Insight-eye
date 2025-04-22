@@ -1,72 +1,70 @@
-import Holder from "../Components/HOC/Holder";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Card, Box, Typography } from "@mui/material";
 import { useAxiosWithAuth } from "../services/api";
-import {
-  Card,
-  CardContent,
-  Typography,
-  CardHeader,
-  Avatar,
-  Stack,
-} from "@mui/material";
 
-const Logs = () => {
-  const [logsData, setLogsData] = useState([]);
+export default function Logs() {
+  const [logs, setLogs] = useState([]);
   const api = useAxiosWithAuth();
 
-  const getAllLogs = () => {
+  useEffect(() => {
     api
       .get("auth/logs/me")
-      .then((response) => {
-        setLogsData(response.data.logs);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+      .then((res) => setLogs(res.data.logs))
+      .catch(console.error);
+  }, [api]);
 
-  useEffect(() => {
-    getAllLogs();
-  }, []);
+  const formatDate = (iso) => new Date(iso).toLocaleDateString("en-GB"); // DD/MM/YYYY
+  const formatTime = (iso) => new Date(iso).toLocaleTimeString("en-GB"); // HH:MM:SS
 
   return (
-    <Stack spacing={2}>
-      {logsData.map((log) => (
-        <Card key={log.log_id} sx={{ borderRadius: 3, boxShadow: 3 }}>
-          {/* Card Header with Avatar, Username, and Status on Right */}
-          <CardHeader
-            avatar={
-              <Avatar sx={{ bgcolor: "primary.main" }}>
-                {log.username.charAt(0).toUpperCase()}
-              </Avatar>
-            }
-            title={log.username}
-            subheader={new Date(log.created_at).toLocaleString()}
-            action={
-              <Typography
-                variant="body2"
-                sx={{
-                  fontWeight: "bold",
-                  color: log.status === "success" ? "green" : "red",
-                  pr: 2, // Padding to keep it aligned properly
-                }}
-              >
-                {log.status.toUpperCase()}
-              </Typography>
-            }
-          />
+    <Box px={2} py={1}>
+      {/* Header */}
+      <Box display="flex" gap={2}  p={2} flexWrap="wrap" >
+        <Typography flex={1}  color="primary" fontWeight="bold">
+          Date:
+        </Typography>
+        <Typography flex={1}  color="primary" fontWeight="bold">
+          Time:
+        </Typography>
+        <Typography flex={2} color="primary"  fontWeight="bold">
+          Activity:
+        </Typography>
+      </Box>
 
-          <CardContent>
-            {/* Post Content */}
-            <Typography variant="body2"  sx={{ textTransform: "capitalize"  ,color : "secondary.main"}}>
-              {log.action_type.replace("_", " ")}
-            </Typography>
-            <Typography pt={1} variant="h6">{log.content}</Typography>
-          </CardContent>
+      {/* Rows */}
+      {logs.map((log, i) => (
+        <Card
+          key={log.log_id}
+        
+         
+        
+          sx={{
+              display: "flex" , 
+              gap :2 ,
+              p :2,  
+            flexDirection: { xs: "column", sm: "row" },
+            // only add bottom margin if it's not the last row
+            ...(i < logs.length - 1 && { mb: 1 }),
+          
+            borderRadius: 1,
+          }}
+        >
+          <Typography flex={1} variant="body2" color="grey.100">
+            {formatDate(log.created_at)}
+          </Typography>
+          <Typography flex={1} variant="body2" color="grey.100">
+            {formatTime(log.created_at)}
+          </Typography>
+          <Typography
+            flex={2}
+            variant="body2"
+            color="grey.100"
+            sx={{ textTransform: "capitalize" }}
+          >
+            {log.action_type.replace(/_/g, " ")} {log.content}
+          </Typography>
         </Card>
       ))}
-    </Stack>
+    </Box>
   );
-};
-
-export default Logs;
+}
