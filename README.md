@@ -99,3 +99,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 23 - make stream data run only one time 
 24 - fix api call towies  in prediction  
 25 - update and clean alerts
+26- handle no data stream flow

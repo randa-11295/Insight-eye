@@ -15,7 +15,7 @@ export const useAxiosWithAuth = () => {
   const token = useRecoilValue(authState)?.token;
 
   return useMemo(() => {
-    console.log("token run in api"); // This will now run **only** when token changes
+    // console.log("token run in api"); // This will now run **only** when token changes
 
     api.interceptors.request.use(
       (config) => {
