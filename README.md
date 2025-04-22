@@ -98,3 +98,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 22 - fix system info bug
 23 - make stream data run only one time 
 24 - fix api call towies  in prediction  
+25 - update and clean alerts

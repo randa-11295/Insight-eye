@@ -10,7 +10,7 @@ import AuthLayout from "../layouts/AuthLayout";
 // Auth Pages
 import Login from "../Pages/auth/LogIn";
 import Contact from "../Pages/auth/Contact";
-import Otp from "../Pages/auth/Otp";
+import OTP from "../Pages/auth/OTP";
 
 // Dashboard Pages
 import Dashboard from "../Pages/Dashboard";
@@ -50,7 +50,7 @@ useEffect(() => {
             <Route element={<AuthLayout />}>
               <Route path="/login" element={<Login />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/otp" element={<Otp />} />
+              <Route path="/otp" element={<OTP />} />
               <Route path="/" element={<Navigate to="/login" />} />
             </Route>
           </>
