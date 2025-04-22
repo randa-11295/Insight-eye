@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { authState } from "../../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
+import { baseURL, BASE64_IMAGE_PREFIX } from "../../utils/StaticVariables";
 import {
   Card,
   CardContent,
@@ -13,77 +15,87 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { BASE64_IMAGE_PREFIX } from "../../utils/StaticVariables";
 import DesBtn from "../Reusable/DesBtn";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
+import useFetchStreams from "../../hooks/useFetchStreams";
+
 const WebSocketComponent = ({ data }) => {
   const [messages, setMessages] = useState(null);
   const [ws, setWs] = useState(null);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [authRecoil] = useRecoilState(authState);
   const [openPopup, setOpenPopup] = useState(false);
+  const [streaming, setStreaming] = useState(false); // ✅ Stream controlled by state
+  const { refetchStreams } = useFetchStreams(); // ✅ Destructure the hook
 
-  // Open WebSocket connection
-  const startVideo = () => {
-    const token = localStorage.token;
-    const streamUrl = `ws://16.170.216.227/stream?stream_id=${data.id}&token=${token}`;
+  useEffect(() => {
+    console.log(data);
+    if (data.is_streaming === true) {
+      startStream();
+    }
+  }, [data]);
+
+  const startStream = () => {
+    const token = authRecoil.token;
+    const streamUrl = `wss://16.170.216.227/stream?stream_id=${data.id}&token=${token}`;
     const socket = new WebSocket(streamUrl);
 
     socket.onopen = () => {
       console.log("WebSocket Connected");
+      setStreaming(true);
     };
 
     socket.onmessage = (event) => {
-      console.log("Message received:", event.data);
       try {
         const messageObj = JSON.parse(event.data);
-        console.log("Parsed message:", messageObj);
         setMessages(messageObj);
-      } catch (error) {
-        console.log("Error parsing JSON:", error);
+      } catch (err) {
+        console.log("Error parsing JSON:", err);
       }
     };
 
-    socket.onerror = (error) => {
-      console.error("WebSocket Error:", error);
-    };
+    socket.onerror = (err) => console.error("WebSocket Error:", err);
 
     socket.onclose = () => {
       console.log("WebSocket Disconnected");
+      setStreaming(false);
     };
 
     setWs(socket);
-    setIsVideoPlaying(true);
   };
 
-  // Stop WebSocket connection
-  const stopVideo = () => {
-    if (ws) {
-      ws.close();
+  const stopStream = async () => {
+    if (ws) ws.close();
+    setWs(null);
+    setStreaming(false);
+  
+    try {
+      await axios.post(
+        `${baseURL}stop_stream/${data.id}`,
+        {},
+        { headers: { Authorization: `Bearer ${authRecoil.token}` } }
+      );
+      
+      // ✅ Run only if POST succeeded
+      refetchStreams();
+    } catch (err) {
+      console.error("Failed to stop stream:", err);
     }
-    setIsVideoPlaying(false);
   };
-
-  // Handle opening the popup
-  const openFullScreen = () => {
-    setOpenPopup(true);
-  };
-
-  // Handle closing the popup
-  const closeFullScreen = () => {
-    setOpenPopup(false);
-  };
-
-  // Cleanup WebSocket connection on unmount
+  
+  // ✅ Clean up WebSocket on unmount
   useEffect(() => {
     return () => {
       if (ws) {
         ws.close();
+        setWs(null);
       }
     };
   }, [ws]);
+
+  const openFullScreen = () => setOpenPopup(true);
+  const closeFullScreen = () => setOpenPopup(false);
 
   return (
     <div>
@@ -93,38 +105,49 @@ const WebSocketComponent = ({ data }) => {
           height="200"
           image={
             messages?.frame
-              ? BASE64_IMAGE_PREFIX + messages?.frame
+              ? BASE64_IMAGE_PREFIX + messages.frame
               : "/path/to/dump-image.jpg"
           }
           alt="Video Stream"
           sx={{ objectFit: "cover" }}
         />
-     
-        <CardContent sx={{display : "flex" , justifyContent : "space-between", alignItems:"center"}}>
-          <Typography variant="body2" color="text.secondary" sx={{flexGrow : 1}}>
+
+        <CardContent
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ flexGrow: 1 }}
+          >
             Live video feed from <b>{data.name}</b> Camera
           </Typography>
+
           <DesBtn
-            text="open full screen"
-            noBoarder={true}
+            text="Open Full Screen"
+            noBoarder
             handle={openFullScreen}
             disabled={!messages}
           >
             <FullscreenIcon />
           </DesBtn>
-          {!isVideoPlaying ? (
-            <DesBtn text="start stream" noBoarder={true} handle={startVideo}>
-              <PlayCircleFilledIcon />
+
+          {streaming ? (
+            <DesBtn text="Stop Stream" noBoarder handle={stopStream}>
+              <PauseCircleIcon />
             </DesBtn>
           ) : (
-            <DesBtn text="stop stream" noBoarder={true} handle={stopVideo}>
-              <PauseCircleIcon />
+            <DesBtn text="Start Stream" noBoarder handle={startStream}>
+              <PlayCircleFilledIcon />
             </DesBtn>
           )}
         </CardContent>
       </Card>
 
-      {/* Fullscreen Popup */}
       <Dialog
         open={openPopup}
         onClose={closeFullScreen}
@@ -139,7 +162,7 @@ const WebSocketComponent = ({ data }) => {
               height="400"
               image={
                 messages?.frame
-                  ? BASE64_IMAGE_PREFIX + messages?.frame
+                  ? BASE64_IMAGE_PREFIX + messages.frame
                   : "/path/to/dump-image.jpg"
               }
               alt="Video Stream"
@@ -148,9 +171,7 @@ const WebSocketComponent = ({ data }) => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeFullScreen} color="primary">
-            Close
-          </Button>
+          <Button onClick={closeFullScreen}>Close</Button>
         </DialogActions>
       </Dialog>
     </div>

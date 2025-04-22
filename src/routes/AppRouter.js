@@ -10,7 +10,7 @@ import AuthLayout from "../layouts/AuthLayout";
 // Auth Pages
 import Login from "../Pages/auth/LogIn";
 import Contact from "../Pages/auth/Contact";
-// import Otp from "../Pages/auth/Otp";
+import Otp from "../Pages/auth/Otp";
 
 // Dashboard Pages
 import Dashboard from "../Pages/Dashboard";
@@ -20,6 +20,7 @@ import ShowStreams from "../Pages/Stream/ShowStreams";
 import UpdateStreams from "../Pages/Stream/UpdateStreams";
 import Search from "../Pages/Search";
 import Logs from "../Pages/Logs";
+import Predictions from "../Pages/Predictions";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
 import { useEffect } from "react";
@@ -49,7 +50,7 @@ useEffect(() => {
             <Route element={<AuthLayout />}>
               <Route path="/login" element={<Login />} />
               <Route path="/contact" element={<Contact />} />
-              {/* <Route path="/otp" element={<Otp />} /> */}
+              <Route path="/otp" element={<Otp />} />
               <Route path="/" element={<Navigate to="/login" />} />
             </Route>
           </>
@@ -63,6 +64,8 @@ useEffect(() => {
               <Route path="/streams/show-streams" element={<ShowStreams />} />
               <Route path="/streams/update-streams" element={<UpdateStreams />} />
               <Route path="/frames-search" element={<Search />} />
+              <Route path="/predictions" element={<Predictions />} />
+              <Route path="/setting" element={<p>test </p>} />
               <Route path="/logs" element={<Logs />} />
             </Route>
           </>

@@ -31,3 +31,13 @@ export function convertToObjArray(inputObj) {
       };
     });
 }
+
+
+ export function convertKeysToKebabCase(obj) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [
+      key.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase(),
+      value
+    ])
+  );
+}

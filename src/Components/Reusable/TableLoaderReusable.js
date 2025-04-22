@@ -1,7 +1,7 @@
 import React from "react";
 import { Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
-const TableLoaderReusable = ({ rows = 12, columns = 5 }) => {
+const TableLoaderReusable = ({ rows = 5, columns = 5 }) => {
   return (
     <TableContainer component={Paper}>
       <Table>

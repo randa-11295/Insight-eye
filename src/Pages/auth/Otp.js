@@ -27,7 +27,8 @@ function Otp() {
       setLoading(true);
       axios
         .post('/send-otp', { email: values.email })
-        .then(() => {
+        .then((res) => {
+          console.log(Otp)
           setOtpSent(true);
           setAlert({ open: true, message: 'OTP sent successfully!', severity: 'success' });
         })

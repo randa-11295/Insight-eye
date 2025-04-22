@@ -2,9 +2,10 @@
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import LiveTvOutlinedIcon from '@mui/icons-material/LiveTvOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import CorporateFareOutlinedIcon from '@mui/icons-material/CorporateFareOutlined';
+import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 
 const getIcon = (IconComponent) =>  (
   <IconComponent sx={{ color: "inherit", marginLeft: "auto" }} />
@@ -14,7 +15,9 @@ export const navbarContentArr = [
   { text: "Dashboard", url: "/", icon: getIcon(DashboardOutlinedIcon) },
   { text: "Streams", url: "/streams", icon: getIcon(LiveTvOutlinedIcon) },
   { text: "Frames Search", url: "/frames-search", icon: getIcon(SearchOutlinedIcon) },
-  { text: "Logs", url: "/logs", icon: getIcon(SettingsOutlinedIcon) },
+  { text: "Logs", url: "/logs", icon: getIcon(EditNoteOutlinedIcon) },
+  { text: "Predictions", url: "/predictions", icon: getIcon(LightbulbOutlinedIcon) },
+  { text: "Setting", url: "/setting", icon: getIcon(SettingsOutlinedIcon) },
   { text: "Log out", url: false, icon: getIcon(LogoutOutlinedIcon) },
 ];
 

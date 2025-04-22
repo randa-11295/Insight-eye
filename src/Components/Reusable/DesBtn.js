@@ -7,6 +7,7 @@ export default function DesBtn(props) {
         <IconButton  disabled={props.disabled} onClick={props.handle} color="primary" size="small">{props.children}</IconButton>
       ) : (
         <Button
+        disabled={props.disabled}
           color={!props.close ? "primary" : "default"} // make btn color gray if it close btn
           sx={btnStyle}
           onClick={props.handle}

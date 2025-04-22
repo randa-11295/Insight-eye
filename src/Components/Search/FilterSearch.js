@@ -35,13 +35,13 @@ const FilterSearch = forwardRef((props, ref) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Stack gap={2} component="form" onSubmit={formik.handleSubmit}>
-                <DateTimePicker label="Start" dateValue={formik.values.startDate} timeValue={formik.values.startTime}
-                    onDateChange={(date) => formik.setFieldValue("startDate", date)}
-                    onTimeChange={(time) => formik.setFieldValue("startTime", time)} maxDate={formik.values.endDate} />
+                <DateTimePicker label="Start" dateValue={formik?.values.startDate} timeValue={formik.values.startTime}
+                    onDateChange={(date) => formik?.setFieldValue("startDate", date)}
+                    onTimeChange={(time) => formik?.setFieldValue("startTime", time)} maxDate={formik.values.endDate} />
 
-                <DateTimePicker label="End" dateValue={formik.values.endDate} timeValue={formik.values.endTime}
-                    onDateChange={(date) => formik.setFieldValue("endDate", date)}
-                    onTimeChange={(time) => formik.setFieldValue("endTime", time)} minDate={formik.values.startDate} />
+                <DateTimePicker label="End" dateValue={formik?.values.endDate} timeValue={formik.values.endTime}
+                    onDateChange={(date) => formik?.setFieldValue("endDate", date)}
+                    onTimeChange={(time) => formik?.setFieldValue("endTime", time)} minDate={formik.values.startDate} />
 
                 <SelectCustom label="Select Stream Name" arr={["camera_0", "camera_1", "camera_2"]} name={"id"} formik={formik} />
                 <SelectCustom label="Select Frame Limit" arr={[10, 25, 50, 75, 100, 150, 200, props.total]} name={"limit"} formik={formik} />

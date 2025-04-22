@@ -50,3 +50,12 @@ export const authState = atom({
   default:null
 });
 
+export const streamState = atom({
+  key: "streamState",
+  default: {
+    data: null,
+    selected: [],
+    loading: false,
+    error: null,
+  },
+});

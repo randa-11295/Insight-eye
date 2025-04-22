@@ -15,6 +15,7 @@ const AppLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authRecoil, setAuthRecoil] = useRecoilState(authState);
 
+
   useEffect(() => {
     if (localStorage?.token && !authRecoil?.token) {
       setAuthRecoil({
