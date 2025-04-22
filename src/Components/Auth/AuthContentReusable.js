@@ -55,7 +55,7 @@ const AuthContentReusable = ({
           submit
           fullWidth
           text={btnText}
-          handle={() => formik.handleSubmit()}
+          handle={ () => formik?.handleSubmit()}
           loading={loading}
         />
 
