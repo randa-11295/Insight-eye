@@ -9,7 +9,7 @@ import { baseURL } from "../../utils/StaticVariables";
 import * as Yup from "yup";
 
 const OTP = () => {
-  const [otpSent, setOtpSent] = useState(false);
+  const [otpSent, setOtpSent] = useState("verify");
   const [loading, setLoading] = useState(false);
   const setSnackAlert = useSetRecoilState(snackAlertState);
 
@@ -31,7 +31,7 @@ const OTP = () => {
 
   const sendOTPFormik = useFormik({
     initialValues: {
-      email: "",
+      email: "randa.mohamed1295@gmail.com",
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -65,15 +65,14 @@ const OTP = () => {
 
     onSubmit: (values) => {
       setLoading(true);
-
       axios
-        .post(baseURL + "verify-otp", {
+        .post(baseURL + "otp/verify-otp", {
           email: sendOTPFormik.values.email,
           otp: values.OTP,
-          expiration: "600",
+          expiration: "20000",
         })
         .then((response) => {
-          console.log("don" ,response.data.message);
+          console.log("done" ,response.data.message);
           setOtpSent("verify");
           showSuccess();
         })
