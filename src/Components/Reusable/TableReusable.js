@@ -14,7 +14,7 @@ import { useTheme } from "@mui/material/styles";
 import { useRecoilState } from "recoil";
 import { selectedStreamState } from "../../Recoil/RecoilState";
 
-const TableReusable = ({ data, columns, loading }) => {
+const TableReusable = ({ data, columns, loading , selected }) => {
   const theme = useTheme();
   const [selectedData, setSelectedData] = useRecoilState(selectedStreamState);
 
@@ -46,9 +46,9 @@ const TableReusable = ({ data, columns, loading }) => {
         {/* Table Header */}
         <TableHead>
           <TableRow sx={{ backgroundColor: theme.palette.background.default }}>
-            <TableCell align="center" sx={{ fontWeight: "bold" }}>
+          {selected &&  <TableCell align="center" sx={{ fontWeight: "bold" }}>
               Select
-            </TableCell>
+            </TableCell>}
             {columns.map((col) => (
               <TableCell
                 key={col.field}
@@ -85,12 +85,14 @@ const TableReusable = ({ data, columns, loading }) => {
                   },
                 }}
               >
-                <TableCell align="center" sx={{ width: "50px" }}>
-                  <Checkbox
-                    checked={isSelected(row)}
-                    onChange={() => handleCheckboxChange(row)}
-                  />
-                </TableCell>
+                {selected && (
+                  <TableCell align="center" sx={{ width: "50px" }}>
+                    <Checkbox
+                      checked={isSelected(row)}
+                      onChange={() => handleCheckboxChange(row)}
+                    />
+                  </TableCell>
+                )}
 
                 {columns.map((col) => (
                   <TableCell

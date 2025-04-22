@@ -16,7 +16,7 @@ export default function CardSearch({ data }) {
 
         <CardContent>
           <Typography variant="h6" fontWeight="bold" color="primary">
-            Camera #{data?.metadata?.camera_id}
+            Camera {data?.metadata?.name}
           </Typography>
 
           <Box display="flex" justifyContent="space-between" mt={1}>

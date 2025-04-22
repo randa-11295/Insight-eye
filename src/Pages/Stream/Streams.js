@@ -85,6 +85,7 @@ const Streams = () => {
     >
       <Box my={2}>
         <TableReusable
+          selected
           handelChangeSelect={changeSelectDataRow}
           showCheckbox
           data={data}

@@ -41,7 +41,7 @@ const Search = () => {
     if (!searchData.length) return;
 
     const chartDataFormat = searchData.map((el) => ({
-      camera_id: el.metadata?.camera_id,
+      camera_id: el.metadata?.name,
       date: el.metadata?.date || 0,
       time: el.metadata?.time || 0,
       person_count: el.metadata?.person_count || 0,
@@ -166,7 +166,6 @@ const Search = () => {
           loading={loading}
           page={page}
           count={total}
-          onPageChange={changePageHandle}
         />
       )}
 

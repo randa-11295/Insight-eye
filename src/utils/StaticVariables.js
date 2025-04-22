@@ -29,7 +29,7 @@ export const dataRenderTypeInSearchArr = [
 ];
 
   export const searchFramesColumns = [
-    { field: "camera_id", headerName: "Camera ID" },
+    { field: "name", headerName: "Camera Name" },
     { field: "date", headerName: "Date" },
     { field: "time", headerName: "Time" },
     { field: "person_count", headerName: "Person Count" },
