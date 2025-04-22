@@ -1,23 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Card, Typography, CircularProgress } from '@mui/material';
-import { useAxiosWithAuth } from '../services/api';
+import axios from 'axios';
+import { baseURL } from '../utils/StaticVariables';
+import { useRecoilValue } from 'recoil';
+import { authState } from '../Recoil/RecoilState';
 
 export default function Logs() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const api = useAxiosWithAuth();
-
+  const { token } = useRecoilValue(authState);
   useEffect(() => {
     setLoading(true);
-    api
-      .get('auth/logs/me')
+   
+    axios
+    .get(`${baseURL}auth/logs/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(res => setLogs(res.data.logs || []))
       .catch(err => {
         setError(err.response?.data?.message || err.message);
       })
       .finally(() => setLoading(false));
-  }, [api]);
+  }, []);
 
   const formatDate = iso => new Date(iso).toLocaleDateString('en-GB');
   const formatTime = iso => new Date(iso).toLocaleTimeString('en-GB');

@@ -10,22 +10,21 @@ import {
   streamState,
 } from "../../Recoil/RecoilState";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { streamColumns } from "../../utils/StaticVariables";
-import { useAxiosWithAuth } from "../../services/api";
+import { baseURL, streamColumns } from "../../utils/StaticVariables";
 import useFetchStreams from "../../hooks/useFetchStreams"; // ✅ use your hook
+import axios from "axios";
+import { authState } from "../../Recoil/RecoilState";
 
 const Streams = () => {
   const { data, loading } = useRecoilValue(streamState);
   const setStream = useSetRecoilState(streamState);
   const [selectedData, setSelectedStream] = useRecoilState(selectedStreamState);
   const setPopup = useSetRecoilState(popupState);
-  const api = useAxiosWithAuth();
   const navigate = useNavigate();
-  const { refetchStreams } = useFetchStreams(); // ✅ Destructure the hook
-
-  // ✅ Refetch if there's no data loaded
+  const { refetchStreams } = useFetchStreams(); // Destructure the hook
+  const { token } = useRecoilValue(authState);
+  //  Refetch if there's no data loaded
   useEffect(() => {
-    console.log(data);
     if (data === null) {
       refetchStreams();
     }
@@ -43,15 +42,22 @@ const Streams = () => {
     );
   };
 
-  // ⬇️ Delete selected streams
+  // ⬇ Delete selected streams
   const handelDeleteReqFromApi = async () => {
     const selectedIDs = selectedData.map((el) => el.id);
     setStream((prev) => ({ ...prev, loading: true }));
 
     try {
-      await api.delete("source", { data: { ids: selectedIDs } });
+      await axios.delete(`${baseURL}source`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          ids: selectedIDs,
+        },
+      });
       setSelectedStream([]);
-      refetchStreams(); // ✅ Refresh list after deletion
+      refetchStreams(); //  Refresh list after deletion
     } catch (error) {
       console.error("Delete Error:", error);
     } finally {

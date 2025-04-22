@@ -11,18 +11,18 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DesBtn from "../Components/Reusable/DesBtn";
 import PrintBtn from "../Components/Reusable/PrintBtn";
 import { Stack, Card, Pagination, Box, Typography } from "@mui/material";
-import { useSetRecoilState } from "recoil";
-import { popupState, snackAlertState } from "../Recoil/RecoilState";
+import { useSetRecoilState , useRecoilValue} from "recoil";
+import { popupState, snackAlertState , authState } from "../Recoil/RecoilState";
 import {
   dataRenderTypeInSearchArr,
   searchFramesColumns,
   baseURL,
 } from "../utils/StaticVariables";
-import { useAxiosWithAuth } from "../services/api";
 
 const Search = () => {
   const setPopup = useSetRecoilState(popupState);
   const setSnackAlert = useSetRecoilState(snackAlertState);
+  const { token } = useRecoilValue(authState);
   const [selectedShowMethod, setSelectedShowMethod] = useState("cards");
   const [searchData, setSearchData] = useState([]);
   const [searchChartData, setSearchChartData] = useState([]);
@@ -31,7 +31,6 @@ const Search = () => {
   const [filter, setFilter] = useState({});
   const [total, setTotal] = useState(0);
   const [numOfPages, setNumOfPages] = useState(0);
-  const api = useAxiosWithAuth();
   const childRef = useRef(null);
 
   const handleToggleChange = (event, newValue) => {
@@ -85,8 +84,8 @@ const Search = () => {
   useEffect(() => {
     setLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    api
-      .get(`search_results`, {
+    axios
+      .get(baseURL + "search_results", {
         params: {
           page,
           per_page: filter.limit,
@@ -95,6 +94,9 @@ const Search = () => {
           start_date: filter.startDate,
           end_date: filter.endDate,
           camera_id: filter.id,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {

@@ -13,14 +13,14 @@ import logoImg from "../../Images/logo.png"
 import { v4 as uuid } from "uuid";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
-import {useAxiosWithAuth} from "../../services/api"
+import axios from "axios";
+import { baseURL } from "../../utils/StaticVariables";
 
 const ContentNav = (props) => {
   
   const navigate = useNavigate();
   const location = useLocation();
   const setAuthRecoil = useSetRecoilState(authState);
-  const api = useAxiosWithAuth();
 
   const handelLogout = () => {
 
@@ -28,7 +28,7 @@ const ContentNav = (props) => {
     localStorage.removeItem("expire")
 
     setAuthRecoil(null)
-    api.post("logout")
+    axios.post(baseURL ,  "logout")
         .then( ()=> {
           console.log("res logout")
         })
