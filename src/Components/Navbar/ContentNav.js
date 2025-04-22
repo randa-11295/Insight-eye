@@ -23,12 +23,11 @@ const ContentNav = (props) => {
   const setAuthRecoil = useSetRecoilState(authState);
 
   const handelLogout = () => {
-
     localStorage.removeItem("token")
     localStorage.removeItem("expire")
 
     setAuthRecoil(null)
-    axios.post(baseURL ,  "logout")
+    axios.post(baseURL,"logout")
         .then( ()=> {
           console.log("res logout")
         })

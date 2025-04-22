@@ -44,7 +44,7 @@ const Streams = () => {
 
   // ⬇ Delete selected streams
   const handelDeleteReqFromApi = async () => {
-    const selectedIDs = selectedData.map((el) => el.id);
+    const selectedIDs = selectedData?.map((el) => el.id);
     setStream((prev) => ({ ...prev, loading: true }));
 
     try {

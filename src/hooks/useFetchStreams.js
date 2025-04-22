@@ -23,7 +23,7 @@ const useFetchStreams = () => {
       setStreamRecoil((prev) => ({
         ...prev,
         data,
-        selected: data.map((s) => s.id),
+        selected: data?.map((s) => s.id),
         loading: false,
         error: null,
       }));

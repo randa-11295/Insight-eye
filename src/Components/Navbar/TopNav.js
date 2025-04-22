@@ -18,10 +18,15 @@ const TopNav = (props) => {
   }, [location.pathname]);
 
   return (
-    <Toolbar
-      sx={{
-        borderBottom: (theme) => `5px solid ${theme.palette.primary.main}`, // Use MUI theme secondary color
-      }}
+    <Toolbar shadow
+    sx={theme => ({
+      position: 'fixed',
+      width: '100%',
+      zIndex : 10 ,
+      top: 0,
+      backgroundColor: theme.palette.background.default,  // ← same as your page
+      borderBottom: `5px solid ${theme.palette.secondary.main}`,
+    })}
     >
       <IconButton
         aria-label="open drawer"
