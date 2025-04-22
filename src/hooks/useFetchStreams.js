@@ -1,16 +1,16 @@
 // src/hooks/useFetchStreams.js
 import { useEffect, useCallback } from "react";
 import axios from "axios";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { streamState } from "../Recoil/RecoilState";
 import { baseURL } from "../utils/StaticVariables";
 
 const useFetchStreams = () => {
-  
-  const setStreamRecoil = useSetRecoilState(streamState);
+  const [streamRecoil, setStreamRecoil] = useRecoilState(streamState);
 
   const fetchStreams = useCallback(async () => {
-    console.log("call stream api now")
+    console.log("stream from recoil", streamRecoil);
+    console.log("call stream api now");
     // Start fresh
     setStreamRecoil({
       data: [],
@@ -38,7 +38,6 @@ const useFetchStreams = () => {
           loading: false,
         }));
       }, 0);
-
     } catch (err) {
       console.error("Error fetching stream data:", err);
       setStreamRecoil((prev) => ({
