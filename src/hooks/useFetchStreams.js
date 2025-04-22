@@ -8,38 +8,29 @@ import { baseURL } from "../utils/StaticVariables";
 const useFetchStreams = () => {
   const [streamRecoil, setStreamRecoil] = useRecoilState(streamState);
 
-  const fetchStreams = useCallback(async () => {
-    console.log("stream from recoil", streamRecoil);
-    console.log("call stream api now");
-    // Start fresh
-    setStreamRecoil({
-      data: [],
-      selected: [],
-      loading: true,
-      error: null,
-    });
+  // Debug: log whenever any field in the atom changes
+  useEffect(() => {
+    console.log("streamRecoil change hook", streamRecoil);
+  }, [streamRecoil]);
 
+  const fetchStreams = useCallback(async () => {
     try {
       const { data } = await axios.get(`${baseURL}source`, {
         headers: { Authorization: `Bearer ${localStorage.token}` },
       });
 
-      // First, update the data (keep loading true)
+      // Single update: load data, set selected IDs, flip loading off, clear previous error
       setStreamRecoil((prev) => ({
         ...prev,
         data,
         selected: data.map((s) => s.id),
+        loading: false,
+        error: null,
       }));
-
-      // Then, stop loading after a tiny delay (in the next tick)
-      setTimeout(() => {
-        setStreamRecoil((prev) => ({
-          ...prev,
-          loading: false,
-        }));
-      }, 0);
     } catch (err) {
       console.error("Error fetching stream data:", err);
+
+      // Single update on error: flip loading off and record error message
       setStreamRecoil((prev) => ({
         ...prev,
         loading: false,
@@ -48,9 +39,10 @@ const useFetchStreams = () => {
     }
   }, [setStreamRecoil]);
 
+  // Kick off the fetch on mount
   useEffect(() => {
-    fetchStreams(); // Auto-fetch on mount
-  }, [fetchStreams]);
+    if(streamRecoil.data === null) fetchStreams();
+  }, [fetchStreams, streamRecoil.data]);
 
   return { refetchStreams: fetchStreams };
 };

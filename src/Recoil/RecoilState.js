@@ -55,7 +55,7 @@ export const streamState = atom({
   default: {
     data: null,
     selected: [],
-    loading: false,
+    loading: true,
     error: null,
   },
 });
