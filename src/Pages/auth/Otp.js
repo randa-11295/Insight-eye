@@ -3,6 +3,7 @@ import { Box, TextField, Button, Typography, Snackbar, Alert, CircularProgress }
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import {baseURL } from "../../utils/StaticVariables"
 
 function Otp() {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -26,7 +27,7 @@ function Otp() {
     onSubmit: (values) => {
       setLoading(true);
       axios
-        .post('/send-otp', { email: values.email })
+        .post(baseURL +'otp/send-otp', { email: values.email ,  length: 6})
         .then((res) => {
           console.log(Otp)
           setOtpSent(true);
@@ -48,7 +49,7 @@ function Otp() {
 
     setLoading(true);
     axios
-      .post('/verify-otp', { email: formik.values.email, otp: otpString })
+      .post(baseURL + 'otp/verify-otp', { email: formik.values.email, otp: otpString })
       .then(() => {
         setAlert({ open: true, message: 'OTP verified successfully!', severity: 'success' });
       })
