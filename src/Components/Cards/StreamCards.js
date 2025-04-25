@@ -30,7 +30,10 @@ const WebSocketComponent = ({ data }) => {
   const { refetchStreams } = useFetchStreams(); // ✅ Destructure the hook
 
   useEffect(() => {
-    console.log(data);
+    console.log(BASE64_IMAGE_PREFIX + data.static_base64)
+    if (data.static_base64) {
+      setMessages({ frame: data.static_base64 });
+    }
     if (data.is_streaming === true) {
       startStream();
     }
@@ -98,8 +101,8 @@ const WebSocketComponent = ({ data }) => {
   const closeFullScreen = () => setOpenPopup(false);
 
   return (
-    <div>
-      <Card>
+    <>
+      <Card className={{hight : "100%"}}>
         <CardMedia
           component="img"
           height="200"
@@ -109,7 +112,7 @@ const WebSocketComponent = ({ data }) => {
               : "/path/to/dump-image.jpg"
           }
           alt="Video Stream"
-          sx={{ objectFit: "cover" }}
+          sx={{ objectFit: "cover"  }}
         />
 
         <CardContent
@@ -174,7 +177,7 @@ const WebSocketComponent = ({ data }) => {
           <Button onClick={closeFullScreen}>Close</Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 

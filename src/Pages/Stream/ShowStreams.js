@@ -14,7 +14,7 @@ console.log(selectedData)
   return (
     <Grid container spacing={3}>
       {selectedData.map((el) => (
-        <Grid item key={el.id} xs={12} sm={6} md={4} lg={3} my={5}>
+        <Grid item key={el.id} xs={12} sm={6}  lg={4} my={5}>
           <StreamCards data={el} />
         </Grid>
       ))}
