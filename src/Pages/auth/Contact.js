@@ -1,31 +1,15 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useSetRecoilState } from "recoil";
-import { snackAlertState } from "../../Recoil/RecoilState";
 import { baseURL } from "../../utils/StaticVariables";
 import { useState } from "react";
 import AuthContentReusable from "../../Components/Auth/AuthContentReusable";
+import { useSnack } from "../../hooks/useSnack";
+
 import axios from "axios";
 const Contact = () => {
-  const setSnackAlert = useSetRecoilState(snackAlertState);
   const [loading, setLoading] = useState(false);
-
-  const showSuccess = () => {
-    setSnackAlert({
-      open: true,
-      message: "Your Massage send Successful!",
-      severity: "success",
-    });
-  };
-
-  const showError = () => {
-    setSnackAlert({
-      open: true,
-      message: "Something went wrong!",
-      severity: "error",
-    });
-  };
+  const { showError, showSuccess } = useSnack();
 
   const formik = useFormik({
     initialValues: {
@@ -52,12 +36,11 @@ const Contact = () => {
         })
         .then(() => {
           formik.handleReset();
-          showSuccess();
+          showSuccess("your massage send successfully");
           resetForm();
         })
         .catch((error) => {
-          showError();
-          // showSuccess()
+          showError(error.message);
         })
         .finally(() => setLoading(false));
     },
