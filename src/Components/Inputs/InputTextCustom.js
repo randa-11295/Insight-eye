@@ -1,33 +1,41 @@
-import { TextField, Typography } from "@mui/material";
-
+import React, { useState } from "react";
+import {
+  TextField,
+  Typography,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const InputTextCustom = (props) => {
-  
-  let isError =
+  const [showPassword, setShowPassword] = useState(false);
+
+  const isError =
     props.formik?.touched[props.name] &&
     Boolean(props.formik?.errors[props.name]);
 
-  let textHelp =
-    (props.formik?.touched[props.name] && props.formik.errors[props.name])?.replace("." , "_")||
+  const textHelp =
+    (props.formik?.touched[props.name] && props.formik.errors[props.name])?.replace(".", "_") ||
     " ";
 
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
+
+  const isPassword = props.type === "password";
 
   const styleInput = {
     my: 1,
-    " & .MuiOutlinedInput-root ": props.phone && {
-      p: "0 ",
+    "& .MuiOutlinedInput-root": props.phone && {
+      p: "0",
     },
-    
   };
 
   return (
     <div>
       <Typography
-      
         variant="h6"
-        sx={{ fontSize: ".9rem", fontWeight: 600 , textTransform : "capitalize" }}
+        sx={{ fontSize: ".9rem", fontWeight: 600, textTransform: "capitalize" }}
       >
-        {props.label} : 
+        {props.label}:
       </Typography>
       <TextField
         fullWidth
@@ -38,11 +46,19 @@ const InputTextCustom = (props) => {
         error={isError}
         helperText={textHelp}
         name={props.name}
-        type={props.type || "text"}
+        type={isPassword && !showPassword ? "password" : "text"}
         sx={styleInput}
         multiline={props.multi || false}
-        minRows={6}
-       
+        minRows={props.multi ? 6 : undefined}
+        InputProps={{
+          endAdornment: isPassword && (
+            <InputAdornment position="end">
+              <IconButton onClick={handleClickShowPassword} edge="end">
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
     </div>
   );
