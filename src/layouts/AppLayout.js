@@ -8,13 +8,12 @@ import SnackAlert from "../Components/PopUp/SnackAlert";
 import PopUpReusable from "../Components/PopUp/PopUpReusable";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
-
+import SubscriptionWarningCard from "../Components/Cards/SubscriptionWarningCard";
 const drawerWidth = 280;
 
 const AppLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authRecoil, setAuthRecoil] = useRecoilState(authState);
-
 
   useEffect(() => {
     if (localStorage?.token && !authRecoil?.token) {
@@ -40,6 +39,7 @@ const AppLayout = () => {
       <Box component="main" sx={{ flexGrow: 1, p: 3, width: "100vw" }}>
         <TopNav openHandel={() => setMobileOpen(!mobileOpen)} />
         <Toolbar />
+        <SubscriptionWarningCard />
         <Outlet />
         <PopUpReusable />
       </Box>
