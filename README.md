@@ -74,6 +74,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 <!--   -->
 ## important things to fix 
 
+12- add frames data api  //! important
 1- handel error and ui in stream 
 2- change all request from api to axios  ------------------ done
 3- handel validations 
@@ -85,15 +86,14 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 9- system information error
 10 -fix chart at search frames
 11 -handle date filtration on  predictions    --------- add limit to date filter
-12- add frames data api
 13- be sure from stop stream
 14- handle errors in login 
 15- add loader t  o log and no data and errors   ------ done
 16- make loader 5  length  ----------------------------------------  done
 17 - fix loading in get stream
 18 - handle errors
-19- update frames name instead of id 
-20- remove select from search table
+19- update frames name instead of id          --------------- done 
+20- remove select from search table           -------------- done 
 21- fix search chart and make it render all data after and before filter 
 22 - fix system info bug
 23 - make stream data run only one time 
