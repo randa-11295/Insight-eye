@@ -21,25 +21,23 @@ import UpdateStreams from "../Pages/Stream/UpdateStreams";
 import Search from "../Pages/Search";
 import Logs from "../Pages/Logs";
 import Predictions from "../Pages/Predictions";
+import Test from "../Pages/Test";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
 import { useEffect } from "react";
 import ResetPassword from "../Components/Auth/ResetPassword";
 const AppRouter = () => {
-  const [authRecoil , setAuthRecoil] = useRecoilState(authState);
+  const [authRecoil, setAuthRecoil] = useRecoilState(authState);
 
-useEffect(() => {
+  useEffect(() => {
     if (localStorage?.token && !authRecoil?.token) {
       setAuthRecoil({
         isAuthenticated: true,
         expire: localStorage.expire,
         token: localStorage.token,
-      })
+      });
     }
-
-  }, [authRecoil?.token, setAuthRecoil])
-  
-
+  }, [authRecoil?.token, setAuthRecoil]);
 
   return (
     <Router>
@@ -52,6 +50,7 @@ useEffect(() => {
               <Route path="/contact" element={<Contact />} />
               <Route path="/otp" element={<OTP />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/test" element={<Test />} />
               <Route path="/" element={<Navigate to="/login" />} />
             </Route>
           </>
@@ -63,7 +62,10 @@ useEffect(() => {
               <Route path="/streams" element={<Streams />} />
               <Route path="/streams/add-stream" element={<AddStream />} />
               <Route path="/streams/show-streams" element={<ShowStreams />} />
-              <Route path="/streams/update-streams" element={<UpdateStreams />} />
+              <Route
+                path="/streams/update-streams"
+                element={<UpdateStreams />}
+              />
               <Route path="/frames-search" element={<Search />} />
               <Route path="/predictions" element={<Predictions />} />
               <Route path="/setting" element={<p>test </p>} />

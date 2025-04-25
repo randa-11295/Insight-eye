@@ -29,13 +29,13 @@ const InputTextCustom = (props) => {
         variant="h6"
         sx={{ fontSize: ".9rem", fontWeight: 600, textTransform: "capitalize" }}
       >
-        {props.label.replaceAll("_", " ")}:
+        {props.label?.replaceAll("_", " ")}:
       </Typography>
       <TextField
         fullWidth
         placeholder={
-          props.placeholder.replaceAll("_", " ") ||
-          props.label.replaceAll("_", " ")
+          props.placeholder?.replaceAll("_", " ") ||
+          props.label?.replaceAll("_", " ")
         }
         value={props.formik?.values[props.name]}
         onChange={props.formik?.handleChange}

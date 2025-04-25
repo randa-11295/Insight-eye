@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { authState } from "../../Recoil/RecoilState";
+import { authState } from "../../../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
-import { baseURL, BASE64_IMAGE_PREFIX } from "../../utils/StaticVariables";
+import { baseURL, BASE64_IMAGE_PREFIX } from "../../../utils/StaticVariables";
 import {
   Card,
   CardContent,
@@ -15,12 +15,12 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import DesBtn from "../Reusable/DesBtn";
+import DesBtn from "../../Reusable/DesBtn";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
-import useFetchStreams from "../../hooks/useFetchStreams";
-import noImage from "../../Images/no-image.jpeg";
+import useFetchStreams from "../../../hooks/useFetchStreams";
+import noImage from "../../../Images/no-image.jpeg";
 
 const WebSocketComponent = ({ data }) => {
   const [ws, setWs] = useState(null);

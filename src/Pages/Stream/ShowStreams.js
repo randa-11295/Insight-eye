@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import StreamCards from "../../Components/Cards/StreamCards";
+import StreamCards from "../../Components/Auth/Stream/StreamCards";
 import { selectedStreamState } from "../../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";

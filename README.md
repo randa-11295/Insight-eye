@@ -80,18 +80,18 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 3- handel validations 
 4- update responsive in tablet 
 5- clean code 
-6- add forget password 
+6- add forget password                  --------------------- maybe
 7- handle refresh token 
 8- fix search bugs 
 9- system information error
 10 -fix chart at search frames
 11 -handle date filtration on  predictions    --------- add limit to date filter
 13- be sure from stop stream               ------ maybe
-14- handle errors in login 
+14- handle errors in login                ---------------- done
 15- add loader t  o log and no data and errors   ------ done
 16- make loader 5  length  ----------------------------------------  done
 17 - fix loading in get stream               -----  maybe
-18 - handle errors
+18 - handle errors                      ---------------------- done
 19- update frames name instead of id          --------------- done 
 20- remove select from search table           -------------- done 
 21- fix search chart and make it render all data after and before filter 
@@ -103,3 +103,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 27- handel selected nav in sup pages
 28 -pop up stop stream and log out 
 29 - window.location.reload(); remove this way from auth
+30 - fix- update stream
