@@ -20,19 +20,19 @@ import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import useFetchStreams from "../../hooks/useFetchStreams";
+import noImage from "../../Images/no-image.jpeg";
 
 const WebSocketComponent = ({ data }) => {
-  const [messages, setMessages] = useState(null);
   const [ws, setWs] = useState(null);
   const [authRecoil] = useRecoilState(authState);
   const [openPopup, setOpenPopup] = useState(false);
-  const [streaming, setStreaming] = useState(false); // ✅ Stream controlled by state
-  const { refetchStreams } = useFetchStreams(); // ✅ Destructure the hook
+  const [streaming, setStreaming] = useState(false);
+  const { refetchStreams } = useFetchStreams();
+  const [imgSrc, setImgSrc] = useState(noImage);
 
   useEffect(() => {
-    console.log(BASE64_IMAGE_PREFIX + data.static_base64)
     if (data.static_base64) {
-      setMessages({ frame: data.static_base64 });
+      setImgSrc(BASE64_IMAGE_PREFIX + data.static_base64);
     }
     if (data.is_streaming === true) {
       startStream();
@@ -52,13 +52,21 @@ const WebSocketComponent = ({ data }) => {
     socket.onmessage = (event) => {
       try {
         const messageObj = JSON.parse(event.data);
-        setMessages(messageObj);
+        if (messageObj?.frame) {
+          setImgSrc(BASE64_IMAGE_PREFIX + messageObj.frame);
+        } else {
+          setImgSrc(noImage);
+        }
       } catch (err) {
-        console.log("Error parsing JSON:", err);
+        console.error("Error parsing JSON:", err);
+        setImgSrc(noImage);
       }
     };
 
-    socket.onerror = (err) => console.error("WebSocket Error:", err);
+    socket.onerror = (err) => {
+      console.error("WebSocket Error:", err);
+      setImgSrc(noImage);
+    };
 
     socket.onclose = () => {
       console.log("WebSocket Disconnected");
@@ -72,22 +80,19 @@ const WebSocketComponent = ({ data }) => {
     if (ws) ws.close();
     setWs(null);
     setStreaming(false);
-  
+
     try {
       await axios.post(
         `${baseURL}stop_stream/${data.id}`,
         {},
         { headers: { Authorization: `Bearer ${authRecoil.token}` } }
       );
-      
-      // ✅ Run only if POST succeeded
       refetchStreams();
     } catch (err) {
       console.error("Failed to stop stream:", err);
     }
   };
-  
-  // ✅ Clean up WebSocket on unmount
+
   useEffect(() => {
     return () => {
       if (ws) {
@@ -102,17 +107,14 @@ const WebSocketComponent = ({ data }) => {
 
   return (
     <>
-      <Card className={{hight : "100%"}}>
+      <Card sx={{ height: "100%" }}>
         <CardMedia
           component="img"
           height="200"
-          image={
-            messages?.frame
-              ? BASE64_IMAGE_PREFIX + messages.frame
-              : "/path/to/dump-image.jpg"
-          }
-          alt="Video Stream"
-          sx={{ objectFit: "cover"  }}
+          image={imgSrc}
+          onError={() => setImgSrc(noImage)}
+          alt={`Live video from ${data.name}`}
+          sx={{ objectFit: "cover" }}
         />
 
         <CardContent
@@ -122,20 +124,11 @@ const WebSocketComponent = ({ data }) => {
             alignItems: "center",
           }}
         >
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ flexGrow: 1 }}
-          >
+          <Typography variant="body2" color="text.secondary" sx={{ flexGrow: 1 }}>
             Live video feed from <b>{data.name}</b> Camera
           </Typography>
 
-          <DesBtn
-            text="Open Full Screen"
-            noBoarder
-            handle={openFullScreen}
-            disabled={!messages}
-          >
+          <DesBtn text="Open Full Screen" noBoarder handle={openFullScreen} disabled={!imgSrc}>
             <FullscreenIcon />
           </DesBtn>
 
@@ -151,24 +144,16 @@ const WebSocketComponent = ({ data }) => {
         </CardContent>
       </Card>
 
-      <Dialog
-        open={openPopup}
-        onClose={closeFullScreen}
-        fullWidth
-        maxWidth="md"
-      >
+      <Dialog open={openPopup} onClose={closeFullScreen} fullWidth maxWidth="md">
         <DialogTitle>Full Screen {data.name} Video</DialogTitle>
         <DialogContent>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <CardMedia
               component="img"
               height="400"
-              image={
-                messages?.frame
-                  ? BASE64_IMAGE_PREFIX + messages.frame
-                  : "/path/to/dump-image.jpg"
-              }
-              alt="Video Stream"
+              image={imgSrc}
+              onError={() => setImgSrc(noImage)}
+              alt={`Fullscreen video from ${data.name}`}
               sx={{ objectFit: "cover" }}
             />
           </Box>
