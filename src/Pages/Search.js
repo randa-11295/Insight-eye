@@ -11,8 +11,9 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DesBtn from "../Components/Reusable/DesBtn";
 import PrintBtn from "../Components/Reusable/PrintBtn";
 import { Stack, Card, Pagination, Box, Typography } from "@mui/material";
-import { useSetRecoilState , useRecoilValue} from "recoil";
-import { popupState, snackAlertState , authState } from "../Recoil/RecoilState";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { popupState, authState } from "../Recoil/RecoilState";
+import { useSnack } from "../hooks/useSnack";
 import {
   dataRenderTypeInSearchArr,
   searchFramesColumns,
@@ -21,7 +22,6 @@ import {
 
 const Search = () => {
   const setPopup = useSetRecoilState(popupState);
-  const setSnackAlert = useSetRecoilState(snackAlertState);
   const { token } = useRecoilValue(authState);
   const [selectedShowMethod, setSelectedShowMethod] = useState("cards");
   const [searchData, setSearchData] = useState([]);
@@ -32,6 +32,7 @@ const Search = () => {
   const [total, setTotal] = useState(0);
   const [numOfPages, setNumOfPages] = useState(0);
   const childRef = useRef(null);
+  const { showError } = useSnack();
 
   const handleToggleChange = (event, newValue) => {
     if (newValue !== null) setSelectedShowMethod(newValue);
@@ -74,12 +75,6 @@ const Search = () => {
 
   const changePageHandle = (event, newPage) => setPage(newPage);
 
-  const showError = () =>
-    setSnackAlert({
-      open: true,
-      message: "Something went wrong!",
-      severity: "error",
-    });
 
   useEffect(() => {
     setLoading(true);
@@ -104,9 +99,9 @@ const Search = () => {
         setNumOfPages(response.data.num_of_pages);
         setTotal(response.data.total_count);
       })
-      .catch(() => {
+      .catch((error) => {
         setSearchData([]);
-        showError();
+        showError(error.message);
       })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
