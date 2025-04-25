@@ -27,6 +27,7 @@ export default function Logs() {
         showError(err.response?.data?.message || err.message);
       })
       .finally(() => setLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const formatDate = iso => new Date(iso).toLocaleDateString('en-GB');

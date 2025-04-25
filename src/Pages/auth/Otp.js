@@ -2,32 +2,18 @@ import { useState } from "react";
 import SendOTP from "../../Components/Auth/otp/SendOTP";
 import VerifyOTP from "../../Components/Auth/otp/VerifyOTP";
 import { useFormik } from "formik";
-import { snackAlertState } from "../../Recoil/RecoilState";
-import { useSetRecoilState } from "recoil";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import * as Yup from "yup";
+import { useSnack } from "../../hooks/useSnack";
 
 const OTP = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const setSnackAlert = useSetRecoilState(snackAlertState);
+  const { showError  } = useSnack();
 
-  const showError = () => {
-    setSnackAlert({
-      open: true,
-      message: "some thing wrong",
-      severity: "error",
-    });
-  };
 
-  const showSuccess = () => {
-    setSnackAlert({
-      open: true,
-      message: "OtP Send Successfully ",
-      severity: "error",
-    });
-  };
+ 
 
   const sendOTPFormik = useFormik({
     initialValues: {
@@ -46,11 +32,9 @@ const OTP = () => {
         .then((response) => {
           console.log(response.data.message);
           setOtpSent("verify");
-          showSuccess();
         })
         .catch((error) => {
-          console.log("his error", error);
-          showError();
+          showError(error.message)
         })
         .finally(() => {
           setLoading(false);
@@ -74,10 +58,8 @@ const OTP = () => {
         .then((response) => {
           console.log("done" ,response.data.message);
           setOtpSent("verify");
-          showSuccess();
         })
         .catch((error) => {
-          console.log("his error", error);
           showError();
         })
         .finally(() => {

@@ -19,7 +19,7 @@ import axios from 'axios';
 import { baseURL } from '../../utils/StaticVariables';
 import { useRecoilValue } from 'recoil';
 import { authState } from '../../Recoil/RecoilState';
-
+import { useSnack } from '../../hooks/useSnack';
 // const validationSchema = yup.object({
   
 //   streams: yup.array().of(
@@ -34,9 +34,10 @@ import { authState } from '../../Recoil/RecoilState';
 
 export default function UpdateStreams({
   loading = false,
-  onSubmit,
   onBack
 }) {
+
+  const { showError  , showSuccess} = useSnack();
 
   const selectedData = useRecoilValue(selectedStreamState);
   const { token } = useRecoilValue(authState);
@@ -59,11 +60,12 @@ export default function UpdateStreams({
         .then(response => {
             formik.handleReset()
             // setLoading(false);
-            // showSuccess()
+            showSuccess("your stream updated successfully")
         })
         .catch(error => {
             // setLoading(false);
-            // showError()
+            showError(error.message)
+
         });
 
       
