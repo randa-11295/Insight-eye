@@ -15,19 +15,13 @@ const InputTextCustom = (props) => {
     Boolean(props.formik?.errors[props.name]);
 
   const textHelp =
-    (props.formik?.touched[props.name] && props.formik.errors[props.name])?.replace(".", "_") ||
-    " ";
+    (
+      props.formik?.touched[props.name] && props.formik.errors[props.name]
+    )?.replace(".", "_") || " ";
 
   const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
   const isPassword = props.type === "password";
-
-  const styleInput = {
-    my: 1,
-    "& .MuiOutlinedInput-root": props.phone && {
-      p: "0",
-    },
-  };
 
   return (
     <div>
@@ -35,11 +29,14 @@ const InputTextCustom = (props) => {
         variant="h6"
         sx={{ fontSize: ".9rem", fontWeight: 600, textTransform: "capitalize" }}
       >
-        {props.label}:
+        {props.label.replaceAll("_", " ")}:
       </Typography>
       <TextField
         fullWidth
-        placeholder={props.placeholder || props.label}
+        placeholder={
+          props.placeholder.replaceAll("_", " ") ||
+          props.label.replaceAll("_", " ")
+        }
         value={props.formik?.values[props.name]}
         onChange={props.formik?.handleChange}
         onBlur={props.formik?.handleBlur}
@@ -47,7 +44,6 @@ const InputTextCustom = (props) => {
         helperText={textHelp}
         name={props.name}
         type={isPassword && !showPassword ? "password" : "text"}
-        sx={styleInput}
         multiline={props.multi || false}
         minRows={props.multi ? 6 : undefined}
         InputProps={{

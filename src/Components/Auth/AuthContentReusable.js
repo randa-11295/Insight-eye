@@ -43,7 +43,13 @@ const AuthContentReusable = ({
             key={fieldName}
             label={fieldName}
             placeholder={`Enter your ${fieldName}`}
-            type={fieldName === "password" ? "password" : "text"}
+            type={
+              fieldName === "password" ||
+              fieldName === "new_password" ||
+              fieldName === "conform_password"
+                ? "password"
+                : "text"
+            }
             formik={formik}
             name={fieldName}
             value={formik.values[fieldName]}
@@ -55,13 +61,13 @@ const AuthContentReusable = ({
           submit
           fullWidth
           text={btnText}
-          handle={ () => formik?.handleSubmit()}
+          handle={() => formik?.handleSubmit()}
           loading={loading}
         />
 
         {contentRoute && (
           <Link
-          to={contentRoute.route}
+            to={contentRoute.route}
             component={RouterLink}
             underline="hover"
             sx={{
