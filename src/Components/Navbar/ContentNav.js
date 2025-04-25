@@ -15,12 +15,13 @@ import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
-
+import { useSnack } from "../../hooks/useSnack";
 const ContentNav = (props) => {
   
   const navigate = useNavigate();
   const location = useLocation();
   const setAuthRecoil = useSetRecoilState(authState);
+  const { showError  , showSuccess} = useSnack();
 
   const handelLogout = () => {
     localStorage.removeItem("token")
@@ -29,11 +30,10 @@ const ContentNav = (props) => {
     setAuthRecoil(null)
     axios.post(baseURL,"logout")
         .then( ()=> {
-          console.log("res logout")
+          showSuccess("you log out successfully")
         })
-        .catch(() => {
-          console.log("error logout")
-          // showError();
+        .catch((error) => {
+          showError(error.message)
         })
   }
 

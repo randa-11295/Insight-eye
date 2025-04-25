@@ -1,6 +1,5 @@
 import { useFormik } from "formik";
 import { useState } from "react";
-import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
 import AuthContentReusable from "../../Components/Auth/AuthContentReusable";
