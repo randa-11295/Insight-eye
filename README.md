@@ -101,8 +101,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 25 - update and clean alerts
 26- handle no data stream flow
 27- handel selected nav in sup pages
-
-
-
----------------
-pop up stop stream and log out 
+28 -pop up stop stream and log out 
+29 - window.location.reload(); remove this way from auth

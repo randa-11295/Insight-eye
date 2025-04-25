@@ -53,7 +53,7 @@ function Home() {
         <PopUpReusable />
       </Box>
       }
-      <SnackAlert />
+     
     </div>
   );
 }

@@ -6,19 +6,14 @@ import { authState } from "../../Recoil/RecoilState";
 import AuthContentReusable from "../../Components/Auth/AuthContentReusable";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
+import { useSnack } from "../../hooks/useSnack";
+
 const LogIn = () => {
   const [loading, setLoading] = useState(false);
-  const setSnackAlert = useSetRecoilState(snackAlertState);
   const setAuthRecoil = useSetRecoilState(authState);
+  const { showError  , showSuccess} = useSnack();
 
 
-  const showError = () => {
-    setSnackAlert({
-      open: true,
-      message: "Email or Password is wrong",
-      severity: "error",
-    });
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -41,10 +36,10 @@ const LogIn = () => {
             expire: response.data.expires_at,
           });
           window.location.reload();
+          showSuccess("your login made successfully")
         })
         .catch((error) => {
-          console.log("his error", error);
-          showError();
+          showError(error.message);
         })
         .finally(() => {
           setLoading(false);
