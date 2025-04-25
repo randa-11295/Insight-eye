@@ -6,6 +6,7 @@ import AuthContentReusable from "../../Components/Auth/AuthContentReusable";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import { useSnack } from "../../hooks/useSnack";
+import * as Yup from "yup";
 
 const LogIn = () => {
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,14 @@ const LogIn = () => {
       username: "",
       password: "",
     },
+    validationSchema: Yup.object({
+      username: Yup.string()
+        .required("Username is required")
+        .min(3, "Username must be at least 3 characters"),
+      password: Yup.string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters"),
+    }),
     onSubmit: (values) => {
       setLoading(true);
 

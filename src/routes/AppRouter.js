@@ -10,7 +10,7 @@ import AuthLayout from "../layouts/AuthLayout";
 // Auth Pages
 import Login from "../Pages/auth/LogIn";
 import Contact from "../Pages/auth/Contact";
-import OTP from "../Pages/auth/OTP";
+import OTP from "../Pages/auth/Otp";
 
 // Dashboard Pages
 import Dashboard from "../Pages/Dashboard";

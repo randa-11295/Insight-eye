@@ -12,6 +12,7 @@ import { baseURL } from "../../utils/StaticVariables";
 import { useSnack } from "../../hooks/useSnack";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
+import * as Yup from "yup";
 
 const AddStream = () => {
   const { token } = useRecoilValue(authState);
@@ -25,6 +26,17 @@ const AddStream = () => {
       path: "",
       type: "Video File",
     },
+    validationSchema: Yup.object({
+      name: Yup.string()
+        .required("Name is required")
+        .min(2, "Name must be at least 2 characters"),
+      path: Yup.string()
+        .required("Path is required")
+        .url("Path must be a valid URL"),
+      type: Yup.string()
+        .oneOf(["Video File", "Audio File", "Image File"], "Invalid type") // You can customize allowed types
+        .required("Type is required"),
+    }),
     onSubmit: (values) => {
       setLoading(true);
       axios
