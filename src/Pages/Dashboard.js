@@ -24,7 +24,7 @@ const Dashboard = () => {
   // Local states for personal and system info
   const [personalInfo, setPersonalInfo] = useState([]);
   const [systemInfo, setSystemInfo] = useState([]);
-  const [newFormatOfStreamData, setNewFormatOfStreamData] = useState({});
+  const [newFormatOfStreamData, setNewFormatOfStreamData] = useState([]);
 
   // Combined loading and error states for these two
   const [loading, setLoading] = useState({ info: true, system: true });
@@ -49,11 +49,10 @@ const Dashboard = () => {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
-        setPersonalInfo(convertToObjArray(infoRes.data));
-        setSystemInfo(convertToObjArray(sysRes.data?.[0] || {}));
+        setPersonalInfo(convertToObjArray(infoRes?.data));
+        setSystemInfo(convertToObjArray(sysRes?.data?.[0] || {}));
         setError({ info: null, system: null });
       } catch (err) {
-        console.error("Error fetching user/system info", err);
         setError({
           info: "Unable to load personal info.",
           system: "Unable to load system info.",
@@ -66,8 +65,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     const res = streamData?.map((el) => ({
-      title: el.name,
-      val: el.status === "inactive" ? "Off" : "On",
+      title: el?.name,
+      val: el?.status === "inactive" ? "Off" : "On",
     }));
     setNewFormatOfStreamData(res);
   }, [streamData]);
@@ -82,8 +81,8 @@ const Dashboard = () => {
       <DashboardCards
         title="Personal Info"
         data={personalInfo}
-        loading={loading.info}
-        error={error.info}
+        loading={loading?.info}
+        error={error?.info}
       />
 
       <DashboardCards
@@ -97,8 +96,8 @@ const Dashboard = () => {
         title="System Information"
         data={systemInfo}
         fullWidth
-        loading={loading.system}
-        error={error.system}
+        loading={loading?.system}
+        error={error?.system}
       />
     </Stack>
   );
