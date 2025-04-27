@@ -11,6 +11,8 @@ const getIcon = (IconComponent) =>  (
   <IconComponent sx={{ color: "inherit", marginLeft: "auto" }} />
 );
 
+export const streamTypesArr =['rtsp', 'http', 'local', 'other'] 
+
 export const navbarContentArr = [
   { text: "Dashboard", url: "/", icon: getIcon(DashboardOutlinedIcon) },
   { text: "Streams", url: "/streams", icon: getIcon(LiveTvOutlinedIcon) },

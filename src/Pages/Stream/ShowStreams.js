@@ -10,7 +10,7 @@ const ShowStream = () => {
     <>
       <ParamStream />
       <Grid container spacing={3} mt={4}>
-        {selectedData.map((el) => (
+        {selectedData?.map((el) => (
           <Grid item key={el.id} xs={12} sm={6} lg={4} my={5}>
             <StreamCards data={el} />
           </Grid>

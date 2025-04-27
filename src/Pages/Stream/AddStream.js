@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Stack } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -13,26 +13,29 @@ import { useSnack } from "../../hooks/useSnack";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
 import * as Yup from "yup";
+import { streamTypesArr } from "../../utils/StaticVariables";
 
 const AddStream = () => {
   const { token } = useRecoilValue(authState);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { showError  , showSuccess} = useSnack();
+  const { showError, showSuccess } = useSnack();
+
+  useEffect(() => {
+    console.log(token);
+  }, [token]);
 
   const formik = useFormik({
     initialValues: {
       name: "",
       path: "",
-      type: "Video File",
+      type: "rtsp",
     },
     validationSchema: Yup.object({
       name: Yup.string()
         .required("Name is required")
         .min(2, "Name must be at least 2 characters"),
-      path: Yup.string()
-        .required("Path is required")
-        .url("Path must be a valid URL"),
+      path: Yup.string().required("Path is required"),
       type: Yup.string()
         .oneOf(["Video File", "Audio File", "Image File"], "Invalid type") // You can customize allowed types
         .required("Type is required"),
@@ -48,14 +51,11 @@ const AddStream = () => {
           showSuccess("Your new stream added Successful");
         })
         .catch((error) => {
-          showError(error.message)
-
+          showError(error.message);
         })
         .finally(() => setLoading(false));
     },
   });
-
-
 
   return (
     <Holder title="add stream">
@@ -74,7 +74,7 @@ const AddStream = () => {
         />
         <SelectCustom
           formik={formik}
-          arr={["Video File", "RTSP Stream", "Webcam"]}
+          arr={streamTypesArr}
           name="type"
           label="type"
         />

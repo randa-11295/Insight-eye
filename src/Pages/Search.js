@@ -41,7 +41,7 @@ const Search = () => {
   useEffect(() => {
     if (!searchData.length) return;
 
-    const chartDataFormat = searchData.map((el) => ({
+    const chartDataFormat = searchData?.map((el) => ({
       camera_id: el.metadata?.name,
       date: el.metadata?.date || 0,
       time: el.metadata?.time || 0,

@@ -71,7 +71,7 @@ const TableReusable = ({ data, columns, loading , selected }) => {
         {/* Table Body */}
         <TableBody>
           {data?.length > 0 ? (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <TableRow
                 key={rowIndex}
                 sx={{
