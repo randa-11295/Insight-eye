@@ -7,7 +7,7 @@ import HighlightedText from "../../Components/Reusable/HighlightedText";
 const DashboardCards = ({ title, data, fullWidth = false, loading, error }) => {
 
 
-   return  <Stack sx={{ flex: fullWidth ? "1 1 100%" : "1 1 45%" }}>
+   return  <Stack sx={{ flex: (fullWidth ? "1 1 100%" : "1 1 45%") ,  }}>
        <Holder title={title}>
          {loading ? (
            <Stack justifyContent="center" alignItems="center" minHeight={80}>
@@ -21,6 +21,7 @@ const DashboardCards = ({ title, data, fullWidth = false, loading, error }) => {
            <Stack
              gap={2}
              direction={fullWidth ? "row" : "column"}
+             flexWrap={"wrap"}
              justifyContent={fullWidth ? "space-between" : "flex-start"}
            >
              {data?.map((item, idx) => (
