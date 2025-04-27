@@ -104,3 +104,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 28 -pop up stop stream and log out 
 29 - window.location.reload(); remove this way from auth
 30 - fix- update stream
+31- fix add stream

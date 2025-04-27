@@ -17,7 +17,6 @@ const ParamStream = () => {
 
   const formik = useFormik({
     initialValues: {
-      frame_delay: 0,
       frame_skip: 0,
       conf: 0.1,
     },
@@ -61,11 +60,10 @@ const ParamStream = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log(data)
-        // formik.setValues({
-        //   frame_delay: data.frame_delay ?? 0,
-        //   frame_skip: data.frame_skip ?? 0,
-        //   conf: data.conf ?? 0.1,
-        // });
+        formik.setValues({
+          frame_skip: data.frame_skip ?? 0,
+          conf: data.conf ?? 0.1,
+        });
       } catch (error) {
         showError(
           error?.response?.data?.message ||
@@ -88,7 +86,7 @@ const ParamStream = () => {
       gap={2}
       onSubmit={formik.handleSubmit}
     >
-      {["frame_delay", "frame_skip", "conf"].map((field) => (
+      {[ "frame_skip", "conf"].map((field) => (
         <InputTextCustom
           key={field}
           label={field.replace("_", " ")}
