@@ -45,7 +45,7 @@ const Dashboard = () => {
           axios.get(`${baseURL}user_info`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get(`${baseURL}param_stream/users`, {
+          axios.get(`${baseURL}param_stream/user`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);

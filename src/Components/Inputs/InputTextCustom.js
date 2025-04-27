@@ -43,7 +43,7 @@ const InputTextCustom = (props) => {
         error={isError}
         helperText={textHelp}
         name={props.name}
-        // size="small"
+        size={props.small ? "small" : "medium"}
         type={isPassword && !showPassword ? "password" : "text"}
         multiline={props.multi || false}
         minRows={props.multi ? 6 : undefined}

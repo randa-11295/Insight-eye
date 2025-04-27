@@ -6,11 +6,14 @@ import InputTextCustom from "../Inputs/InputTextCustom";
 import { Stack } from "@mui/material";
 import { useSnack } from "../../hooks/useSnack";
 import LoadBtn from "../Reusable/LoadBtn";
-
+import { useRecoilValue } from "recoil";
+import { authState } from "../../Recoil/RecoilState";
+import { baseURL } from "../../utils/StaticVariables";
 const ParamStream = () => {
+  const { token } = useRecoilValue(authState);
+
   const [loading, setLoading] = useState(false);
   const { showError, showSuccess } = useSnack();
-  const token = localStorage.getItem("token");
 
   const formik = useFormik({
     initialValues: {
@@ -35,12 +38,14 @@ const ParamStream = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        await axios.put("/param_stream/user", values, {
+        await axios.put(baseURL + "param_stream/users", values, {
           headers: { Authorization: `Bearer ${token}` },
         });
         showSuccess("Stream configuration updated successfully");
       } catch (error) {
-        showError(error?.response?.data?.message || error.message || "Update failed");
+        showError(
+          error?.response?.data?.message || error.message || "Update failed"
+        );
       } finally {
         setLoading(false);
       }
@@ -48,19 +53,25 @@ const ParamStream = () => {
   });
 
   useEffect(() => {
+    if (!token) return;
+
     const fetchParams = async () => {
       try {
-        const { data } = await axios.get("/param_stream/user", {
+        const { data } = await axios.get(baseURL + "param_stream/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        formik.setValues({
-          frame_delay: data.frame_delay ?? 0,
-          frame_skip: data.frame_skip ?? 0,
-          conf: data.conf ?? 0.1,
-        });
-        showSuccess("Stream configuration fetched successfully");
+        console.log(data)
+        // formik.setValues({
+        //   frame_delay: data.frame_delay ?? 0,
+        //   frame_skip: data.frame_skip ?? 0,
+        //   conf: data.conf ?? 0.1,
+        // });
       } catch (error) {
-        showError(error?.response?.data?.message || error.message || "Failed to fetch config");
+        showError(
+          error?.response?.data?.message ||
+            error.message ||
+            "Failed to fetch config"
+        );
       }
     };
 
@@ -83,6 +94,7 @@ const ParamStream = () => {
           label={field.replace("_", " ")}
           name={field}
           formik={formik}
+          small={true}
         />
       ))}
 
