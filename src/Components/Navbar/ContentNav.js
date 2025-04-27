@@ -16,12 +16,25 @@ import { authState } from "../../Recoil/RecoilState";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import { useSnack } from "../../hooks/useSnack";
+import { popupState } from "../../Recoil/RecoilState";
+
 const ContentNav = (props) => {
   
   const navigate = useNavigate();
   const location = useLocation();
   const setAuthRecoil = useSetRecoilState(authState);
   const { showError  , showSuccess} = useSnack();
+
+   const setPopup = useSetRecoilState(popupState);
+
+   const openPopup = () => {
+    setPopup({
+      isOpen: true,
+      title: "Log out",
+      content: "Are you sure you want to Log out ",
+      sendReq: handelLogout,
+    });
+  };
 
   const handelLogout = () => {
     localStorage.removeItem("token")
@@ -38,7 +51,7 @@ const ContentNav = (props) => {
   }
 
   const changeRouteHandel = (url) => {
-    url ? navigate(url) : handelLogout()
+    url ? navigate(url) : openPopup()
   }
 
   const listStyle = (url, path) => ({

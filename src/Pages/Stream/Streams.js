@@ -18,7 +18,6 @@ import { useSnack } from "../../hooks/useSnack";
 
 const Streams = () => {
   const { data, loading } = useRecoilValue(streamState);
-  const setStream = useSetRecoilState(streamState);
   const [selectedData, setSelectedStream] = useRecoilState(selectedStreamState);
   const setPopup = useSetRecoilState(popupState);
   const navigate = useNavigate();
@@ -68,7 +67,7 @@ const Streams = () => {
     setPopup({
       isOpen: true,
       title: "Remove Stream",
-      content: "Are you sure?",
+      content: "Are you sure you want to remove those camera streams?",
       sendReq: handelDeleteReqFromApi,
     });
   };
