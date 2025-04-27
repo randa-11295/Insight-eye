@@ -49,6 +49,7 @@ const Dashboard = () => {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
+        console.log("infoRes", infoRes.data.timestamp_range); //! important to update save data
         setPersonalInfo(convertToObjArray(infoRes?.data));
         setSystemInfo(convertToObjArray(sysRes?.data?.[0] || {}));
         setError({ info: null, system: null });
