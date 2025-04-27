@@ -14,6 +14,7 @@ import { baseURL, streamColumns } from "../../utils/StaticVariables";
 import useFetchStreams from "../../hooks/useFetchStreams"; // ✅ use your hook
 import axios from "axios";
 import { authState } from "../../Recoil/RecoilState";
+import { useSnack } from "../../hooks/useSnack";
 
 const Streams = () => {
   const { data, loading } = useRecoilValue(streamState);
@@ -23,6 +24,7 @@ const Streams = () => {
   const navigate = useNavigate();
   const { refetchStreams } = useFetchStreams(); // Destructure the hook
   const { token } = useRecoilValue(authState);
+  const { showError, showSuccess } = useSnack();
   //  Refetch if there's no data loaded
   useEffect(() => {
     if (data === null) {
@@ -45,8 +47,6 @@ const Streams = () => {
   // ⬇ Delete selected streams
   const handelDeleteReqFromApi = async () => {
     const selectedIDs = selectedData?.map((el) => el.id);
-    setStream((prev) => ({ ...prev, loading: true }));
-
     try {
       await axios.delete(`${baseURL}source`, {
         headers: {
@@ -58,10 +58,9 @@ const Streams = () => {
       });
       setSelectedStream([]);
       refetchStreams(); //  Refresh list after deletion
+      showSuccess("Stream deleted successfully");
     } catch (error) {
-      console.error("Delete Error:", error);
-    } finally {
-      setStream((prev) => ({ ...prev, loading: false }));
+      showError("Delete failed " + error.message);
     }
   };
 
