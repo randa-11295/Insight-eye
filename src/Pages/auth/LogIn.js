@@ -59,7 +59,7 @@ const LogIn = () => {
     <AuthContentReusable
       formik={formik}
       title="Login"
-      btnText={"Send Massage"}
+      btnText={"Login"}
       des="login to your account  to access all features in INSIGHT EYE"
       contentRoute={{ linkText: " Forget your password ?", route: "/otp" }}
       loading={loading}
