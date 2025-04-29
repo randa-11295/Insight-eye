@@ -29,7 +29,7 @@ const AddStream = () => {
     initialValues: {
       name: "",
       path: "",
-      type: "rtsp",
+      type: "",
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -37,10 +37,11 @@ const AddStream = () => {
         .min(2, "Name must be at least 2 characters"),
       path: Yup.string().required("Path is required"),
       type: Yup.string()
-        .oneOf(["Video File", "Audio File", "Image File"], "Invalid type") // You can customize allowed types
+        .oneOf(streamTypesArr, "Invalid type") // You can customize allowed types
         .required("Type is required"),
     }),
     onSubmit: (values) => {
+      console.log("values");
       setLoading(true);
       axios
         .post(`${baseURL}source`, values, {
@@ -59,7 +60,7 @@ const AddStream = () => {
 
   return (
     <Holder title="add stream">
-      <Box component="form">
+      <Box component="form" onSubmit={formik.handleSubmit} noValidate>
         <InputTextCustom
           formik={formik}
           name="name"
@@ -97,7 +98,7 @@ const AddStream = () => {
             <CustomBtn isLined handle={formik.handleReset}>
               Clear
             </CustomBtn>
-            <LoadBtn loading={loading} handle={formik.handleSubmit} />
+            <LoadBtn loading={loading} />
           </Stack>
         </Stack>
       </Box>
