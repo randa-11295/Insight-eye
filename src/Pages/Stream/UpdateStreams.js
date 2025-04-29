@@ -13,31 +13,31 @@ import {
   FormHelperText,      
 } from '@mui/material';
 import { useFormik } from 'formik';
-// import * as yup from 'yup';
+import * as yup from 'yup';
 import { selectedStreamState } from "../../Recoil/RecoilState"
 import axios from 'axios';
 import { baseURL } from '../../utils/StaticVariables';
 import { useRecoilValue } from 'recoil';
 import { authState } from '../../Recoil/RecoilState';
-import { useSnack } from '../../hooks/useSnack';
-// const validationSchema = yup.object({
-  
-//   streams: yup.array().of(
-//     yup.object({
-//       id: yup.string().required(),
-//       name: yup.string().required('Name is required'),
-//       path: yup.string().required('Source path is required'),
-//       type: yup.string().required('Type is required')
-//     })
-//   )
-// });
 
 export default function UpdateStreams({
+  // const validationSchema = yup.object({
+    
+  //   streams: yup.array().of(
+  //     yup.object({
+  //       id: yup.string().required(),
+  //       name: yup.string().required('Name is required'),
+  //       path: yup.string().required('Source path is required'),
+  //       type: yup.string().required('Type is required')
+  //     })
+  //   )
+  // });
+
   loading = false,
   onBack
 }) {
 
-  const { showError  , showSuccess} = useSnack();
+  // const { showError  , showSuccess} = useSnack();
 
   const selectedData = useRecoilValue(selectedStreamState);
   const { token } = useRecoilValue(authState);
@@ -46,7 +46,6 @@ export default function UpdateStreams({
       streams: selectedData
     },
     // validationSchema,
-    // enableReinitialize: true,
     onSubmit: (values) => {
 
       axios.put(
@@ -60,11 +59,11 @@ export default function UpdateStreams({
         .then(response => {
             formik.handleReset()
             // setLoading(false);
-            showSuccess("your stream updated successfully")
+            // showSuccess("your stream updated successfully")
         })
         .catch(error => {
             // setLoading(false);
-            showError(error.message)
+            // showError(error.message)
 
         });
 

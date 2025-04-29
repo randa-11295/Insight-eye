@@ -7,6 +7,7 @@ export default function SnackAlert() {
   const [snackState, setSnackState] = useRecoilState(snackAlertState);
 
   useEffect(() => {
+    console.log("snackState", snackState);
     if (snackState.open) {
       setTimeout(() => {
         handleClose();
@@ -23,6 +24,8 @@ export default function SnackAlert() {
     <Snackbar
       open={snackState.open}
       autoHideDuration={5000}
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      color="primary.main"
       sx={{ width: { md: "300px" } }}
       onClose={handleClose}
       message={snackState.message || "Everything is okay"}

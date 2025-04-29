@@ -5,15 +5,12 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import * as Yup from "yup";
-import { useSnack } from "../../hooks/useSnack";
+import { useSnackbar } from "notistack";
 
 const OTP = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { showError  } = useSnack();
-
-
- 
+  const { enqueueSnackbar } = useSnackbar();
 
   const sendOTPFormik = useFormik({
     initialValues: {
@@ -30,11 +27,15 @@ const OTP = () => {
       axios
         .post(baseURL + "otp/send-otp", { email: values.email, length: 6 })
         .then((response) => {
-          console.log(response.data.message);
           setOtpSent("verify");
         })
         .catch((error) => {
-          showError(error.message)
+          enqueueSnackbar("Your new stream added Successful", {
+            variant: "error",
+          });
+          enqueueSnackbar(error.message, {
+            variant: "error",
+          });
         })
         .finally(() => {
           setLoading(false);
@@ -56,11 +57,13 @@ const OTP = () => {
           expiration: "1000",
         })
         .then((response) => {
-          console.log("done" ,response.data.message);
+          console.log("done", response.data.message);
           setOtpSent("verify");
         })
         .catch((error) => {
-          showError();
+          enqueueSnackbar("Your new stream added Successful", {
+            variant: "error",
+          });
         })
         .finally(() => {
           setLoading(false);

@@ -9,17 +9,16 @@ import LoadBtn from "../../Components/Reusable/LoadBtn";
 import InputTextCustom from "../../Components/Inputs/InputTextCustom";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
-import { useSnack } from "../../hooks/useSnack";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
 import * as Yup from "yup";
 import { streamTypesArr } from "../../utils/StaticVariables";
-
+import { useSnackbar } from "notistack";
 const AddStream = () => {
   const { token } = useRecoilValue(authState);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { showError, showSuccess } = useSnack();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     console.log(token);
@@ -49,10 +48,12 @@ const AddStream = () => {
         })
         .then(() => {
           formik.handleReset();
-          showSuccess("Your new stream added Successful");
+          enqueueSnackbar("Your new stream added Successful", {
+            variant: "success",
+          });
         })
         .catch((error) => {
-          showError(error.message);
+          enqueueSnackbar(error.message, { variant: "error" });
         })
         .finally(() => setLoading(false));
     },

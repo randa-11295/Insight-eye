@@ -4,12 +4,12 @@ import * as Yup from "yup";
 import { baseURL } from "../../utils/StaticVariables";
 import { useState } from "react";
 import AuthContentReusable from "../../Components/Auth/AuthContentReusable";
-import { useSnack } from "../../hooks/useSnack";
+import { useSnackbar } from "notistack";
 
 import axios from "axios";
 const Contact = () => {
   const [loading, setLoading] = useState(false);
-  const { showError, showSuccess } = useSnack();
+  const { enqueueSnackbar } = useSnackbar();
 
   const formik = useFormik({
     initialValues: {
@@ -26,21 +26,22 @@ const Contact = () => {
         .required("Message is required"),
     }),
     onSubmit: (values, { resetForm }) => {
-      console.log("Form Data:", values);
-
       setLoading(true);
-
       axios
         .post(baseURL + "contact", {
           ...values,
         })
         .then(() => {
           formik.handleReset();
-          showSuccess("your massage send successfully");
+          enqueueSnackbar("your massage send successfully", {
+            variant: "success",
+          });
           resetForm();
         })
         .catch((error) => {
-          showError(error.message);
+          enqueueSnackbar(error.message, {
+            variant: "error",
+          });
         })
         .finally(() => setLoading(false));
     },

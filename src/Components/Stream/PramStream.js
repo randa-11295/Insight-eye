@@ -4,17 +4,16 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import InputTextCustom from "../Inputs/InputTextCustom";
 import { Stack } from "@mui/material";
-import { useSnack } from "../../hooks/useSnack";
 import LoadBtn from "../Reusable/LoadBtn";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
 import { baseURL } from "../../utils/StaticVariables";
+import { useSnackbar } from "notistack";
 const ParamStream = () => {
   const { token } = useRecoilValue(authState);
 
   const [loading, setLoading] = useState(false);
-  const { showError, showSuccess } = useSnack();
-
+const { enqueueSnackbar } = useSnackbar();
   const formik = useFormik({
     initialValues: {
       frame_skip: 0,
@@ -40,10 +39,13 @@ const ParamStream = () => {
         await axios.put(baseURL + "param_stream/users", values, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        showSuccess("Stream configuration updated successfully");
+        enqueueSnackbar("Stream configuration updated successfully", {
+          variant: "success",
+        }) 
       } catch (error) {
-        showError(
-          error?.response?.data?.message || error.message || "Update failed"
+        enqueueSnackbar(
+          error?.response?.data?.message || error.message || "Update failed",
+          { variant: "error" }
         );
       } finally {
         setLoading(false);
@@ -59,24 +61,25 @@ const ParamStream = () => {
         const { data } = await axios.get(baseURL + "param_stream/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log(data)
         formik.setValues({
           frame_skip: data.frame_skip ?? 0,
           conf: data.conf ?? 0.1,
         });
       } catch (error) {
-        showError(
-          error?.response?.data?.message ||
-            error.message ||
-            "Failed to fetch config"
-        );
+    
+        enqueueSnackbar( error?.response?.data?.message ||
+          error.message ||
+          "Failed to fetch config"
+      , {
+          variant: "error",
+        }) 
       }
     };
 
     if (token) {
       fetchParams();
-    }
-  }, [token, showError, showSuccess, formik]);
+    };
+  }, [token, formik, enqueueSnackbar]);
 
   return (
     <Stack

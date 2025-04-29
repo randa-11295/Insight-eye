@@ -11,10 +11,10 @@ import {
 } from "../../Recoil/RecoilState";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { baseURL, streamColumns } from "../../utils/StaticVariables";
-import useFetchStreams from "../../hooks/useFetchStreams"; // ✅ use your hook
+import useFetchStreams from "../../hooks/useFetchStreams";
 import axios from "axios";
 import { authState } from "../../Recoil/RecoilState";
-import { useSnack } from "../../hooks/useSnack";
+import { useSnackbar } from "notistack";
 
 const Streams = () => {
   const { data, loading } = useRecoilValue(streamState);
@@ -23,8 +23,8 @@ const Streams = () => {
   const navigate = useNavigate();
   const { refetchStreams } = useFetchStreams(); // Destructure the hook
   const { token } = useRecoilValue(authState);
-  const { showError, showSuccess } = useSnack();
-  //  Refetch if there's no data loaded
+ const { enqueueSnackbar } = useSnackbar();
+
   useEffect(() => {
     if (data === null) {
       refetchStreams();
@@ -57,9 +57,13 @@ const Streams = () => {
       });
       setSelectedStream([]);
       refetchStreams(); //  Refresh list after deletion
-      showSuccess("Stream deleted successfully");
+      enqueueSnackbar("Stream deleted successfully", {
+        variant: "success",
+      });      
     } catch (error) {
-      showError("Delete failed " + error.message);
+      enqueueSnackbar("Delete failed " + error.message, {
+        variant: "error",
+      });
     }
   };
 

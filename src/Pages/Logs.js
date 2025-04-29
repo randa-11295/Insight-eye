@@ -4,14 +4,14 @@ import axios from 'axios';
 import { baseURL } from '../utils/StaticVariables';
 import { useRecoilValue } from 'recoil';
 import { authState } from '../Recoil/RecoilState';
-import { useSnack } from '../hooks/useSnack';
+import { useSnackbar } from 'notistack';
 
 export default function Logs() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { token } = useRecoilValue(authState);
-  const { showError  , } = useSnack();
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     setLoading(true);
    
@@ -24,7 +24,9 @@ export default function Logs() {
       .then(res => setLogs(res.data.logs || []))
       .catch(err => {
         setError(err.response?.data?.message || err.message);
-        showError(err.response?.data?.message || err.message);
+        enqueueSnackbar(error.massage, {
+          variant: "error",
+        }) 
       })
       .finally(() => setLoading(false));
   // eslint-disable-next-line react-hooks/exhaustive-deps

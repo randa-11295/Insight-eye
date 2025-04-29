@@ -15,17 +15,16 @@ import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
-import { useSnack } from "../../hooks/useSnack";
 import { popupState } from "../../Recoil/RecoilState";
+import { useSnackbar } from "notistack";
 
 const ContentNav = (props) => {
   
   const navigate = useNavigate();
   const location = useLocation();
   const setAuthRecoil = useSetRecoilState(authState);
-  const { showError  , showSuccess} = useSnack();
-
    const setPopup = useSetRecoilState(popupState);
+const { enqueueSnackbar } = useSnackbar();   
 
    const openPopup = () => {
     setPopup({
@@ -43,10 +42,14 @@ const ContentNav = (props) => {
     setAuthRecoil(null)
     axios.post(baseURL,"logout")
         .then( ()=> {
-          showSuccess("you log out successfully")
+          enqueueSnackbar("you log out successfully", {
+            variant: "success",
+          }) 
         })
         .catch((error) => {
-          showError(error.message)
+          enqueueSnackbar(error.massage, {
+            variant: "error",
+          }) 
         })
   }
 

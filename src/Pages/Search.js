@@ -13,7 +13,8 @@ import PrintBtn from "../Components/Reusable/PrintBtn";
 import { Stack, Card, Pagination, Box, Typography } from "@mui/material";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { popupState, authState } from "../Recoil/RecoilState";
-import { useSnack } from "../hooks/useSnack";
+import { useSnackbar } from "notistack";
+
 import {
   dataRenderTypeInSearchArr,
   searchFramesColumns,
@@ -32,7 +33,7 @@ const Search = () => {
   const [total, setTotal] = useState(0);
   const [numOfPages, setNumOfPages] = useState(0);
   const childRef = useRef(null);
-  const { showError } = useSnack();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleToggleChange = (event, newValue) => {
     if (newValue !== null) setSelectedShowMethod(newValue);
@@ -75,7 +76,6 @@ const Search = () => {
 
   const changePageHandle = (event, newPage) => setPage(newPage);
 
-
   useEffect(() => {
     setLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -101,7 +101,9 @@ const Search = () => {
       })
       .catch((error) => {
         setSearchData([]);
-        showError(error.message);
+        enqueueSnackbar(error.massage, {
+          variant: "error",
+        });
       })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
