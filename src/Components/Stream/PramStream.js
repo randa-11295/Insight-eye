@@ -85,6 +85,7 @@ const ParamStream = () => {
       alignItems={{ md: "center" }}
       gap={2}
       onSubmit={formik.handleSubmit}
+      noValidate
     >
       {[ "frame_skip", "conf"].map((field) => (
         <InputTextCustom
@@ -96,7 +97,7 @@ const ParamStream = () => {
         />
       ))}
 
-      <LoadBtn loading={loading} text="Send" handle={formik.handleSubmit} />
+      <LoadBtn loading={loading} text="Send"  />
     </Stack>
   );
 };

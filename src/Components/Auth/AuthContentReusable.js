@@ -37,7 +37,7 @@ const AuthContentReusable = ({
         </Typography>
       </Box>
 
-      <Box component="form" onSubmit={formik.handleSubmit}>
+      <Box component="form" onSubmit={formik.handleSubmit} noValidate>
         {Object.keys(formik.initialValues).map((fieldName) => (
           <InputTextCustom
             key={fieldName}
@@ -61,7 +61,6 @@ const AuthContentReusable = ({
           submit
           fullWidth
           text={btnText}
-          handle={() => formik?.handleSubmit()}
           loading={loading}
         />
 
