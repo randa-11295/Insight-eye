@@ -6,15 +6,10 @@ import AuthContentReusable from "../../Components/Auth/AuthContentReusable";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import * as Yup from "yup";
-import { useSnackbar } from "notistack";
-
 
 const LogIn = () => {
   const [loading, setLoading] = useState(false);
   const setAuthRecoil = useSetRecoilState(authState);
-  const { enqueueSnackbar } = useSnackbar();
-
-
 
   const formik = useFormik({
     initialValues: {
@@ -45,12 +40,9 @@ const LogIn = () => {
             expire: response.data.expires_at,
           });
           window.location.reload();
-       
         })
         .catch((error) => {
-           enqueueSnackbar(error.message, {
-            variant: "error",
-          });
+          console.error("Login error:", error);
         })
         .finally(() => {
           setLoading(false);
@@ -72,7 +64,6 @@ const LogIn = () => {
         route: "/contact",
       }}
     />
-   
   );
 };
 
