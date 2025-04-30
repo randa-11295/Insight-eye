@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   TextField,
   Typography,
   IconButton,
   InputAdornment,
+  Box
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
@@ -24,7 +25,7 @@ const InputTextCustom = (props) => {
   const isPassword = props.type === "password";
 
   return (
-    <div>
+    <Box sx={{flexGrow: 1, }}>
       <Typography
         variant="h6"
         sx={{ fontSize: ".9rem", fontWeight: 600, textTransform: "capitalize" }}
@@ -57,7 +58,7 @@ const InputTextCustom = (props) => {
           ),
         }}
       />
-    </div>
+    </Box>
   );
 };
 

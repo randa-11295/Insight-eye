@@ -21,7 +21,6 @@ const ParamStream = () => {
       const { data } = await axios.get(baseURL + "param_stream/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("frame data", data);
       formik.setValues({
         frame_skip: data[0]?.frame_skip ?? 0,
         conf: data[0]?.conf ?? 0.1,
@@ -86,8 +85,8 @@ const ParamStream = () => {
   return (
     <Stack
       component="form"
-      direction={{ md: "row" }}
-      alignItems={{ md: "center" }}
+      direction={"row"}
+      alignItems={"center"}
       gap={2}
       onSubmit={formik.handleSubmit}
       noValidate
