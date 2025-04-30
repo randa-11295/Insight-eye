@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { authState } from "../../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
@@ -31,6 +31,7 @@ const WebSocketComponent = ({ data }) => {
   const [imgSrc, setImgSrc] = useState(noImage);
 
   useEffect(() => {
+    console.log("WebSocketComponent data:", data);
     if (data.static_base64) {
       setImgSrc(BASE64_IMAGE_PREFIX + data.static_base64);
     }
@@ -39,13 +40,12 @@ const WebSocketComponent = ({ data }) => {
     }
   }, [data]);
 
-  const startStream = () => {
+  const startStream = useCallback(() => {
     const token = authRecoil.token;
     const streamUrl = `wss://16.170.216.227/stream?stream_id=${data.id}&token=${token}`;
     const socket = new WebSocket(streamUrl);
 
     socket.onopen = () => {
-      console.log("WebSocket Connected");
       setStreaming(true);
     };
 
@@ -74,7 +74,7 @@ const WebSocketComponent = ({ data }) => {
     };
 
     setWs(socket);
-  };
+  }, [authRecoil.token, data.id]);
 
   const stopStream = async () => {
     if (ws) ws.close();
