@@ -1,4 +1,4 @@
-import { IconButton, Toolbar, Typography, Stack } from "@mui/material";
+import { IconButton, Toolbar, Typography, Stack, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -22,42 +22,54 @@ const TopNav = (props) => {
     <Toolbar
       sx={(theme) => ({
         position: "fixed",
-        width: { xs: "90%", md: `calc(97% - ${drawerWidth}px)`,  },
+        left: { md: `${drawerWidth}px`, xs: 0 }, // shift right on large screens
+        width: { md: `calc(100% - ${drawerWidth}px)`, xs: "100%" }, // full width on xs, reduced on md+
         zIndex: 10,
         top: 0,
         backgroundColor: theme.palette.background.default, // ← same as your page
-        borderBottom: `5px solid ${theme.palette.secondary.main}`,
       })}
     >
-      <IconButton
-        aria-label="open drawer"
-        edge="start"
-        onClick={props.openHandel}
-        sx={{ display: { md: "none" } }}
+      <Box
+        sx={(theme) => ({
+          display: {
+            xs: "flex",
+            width: "100%",
+            borderBottom: `5px solid ${theme.palette.secondary.main}`,
+          },
+        })}
       >
-        <MenuIcon />
-      </IconButton>
-      <Stack
-        alignItems="center"
-        justifyContent="space-between"
-        direction="row"
-        sx={{ flexGrow: 1 }}
-      >
-        <Typography
-          variant="h6"
-          sx={{
-            flexGrow: 1,
-            textTransform: "capitalize",
-            fontSize: { xs: "1.5rem", md: "2rem ", lg: "3rem" },
-          }}
-          component="h6"
+        <IconButton
+          aria-label="open drawer"
+          edge="start"
+          onClick={props.openHandel}
+          sx={{ display: { md: "none" } }}
         >
-          {route}
-        </Typography>
-        <DesBtn text="Notifications" noBoarder>
-          <NotificationsIcon sx={{ fontSize: { md: "2rem", lg: "2.5rem" } }} />
-        </DesBtn>
-      </Stack>
+          <MenuIcon />
+        </IconButton>
+        <Stack
+          alignItems="center"
+          justifyContent="space-between"
+          direction="row"
+          sx={{ flexGrow: 1 }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              flexGrow: 1,
+              textTransform: "capitalize",
+              fontSize: { xs: "1.5rem", md: "2rem ", lg: "3rem" },
+            }}
+            component="h6"
+          >
+            {route}
+          </Typography>
+          <DesBtn text="Notifications" noBoarder>
+            <NotificationsIcon
+              sx={{ fontSize: { md: "2rem", lg: "2.5rem" } }}
+            />
+          </DesBtn>
+        </Stack>
+      </Box>
     </Toolbar>
   );
 };
