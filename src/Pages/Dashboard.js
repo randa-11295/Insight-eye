@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react";
 import { Stack } from "@mui/material";
-import { useRecoilValue } from "recoil";
-import { authState, streamState } from "../Recoil/RecoilState";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { authState, streamState, isActiveUserState } from "../Recoil/RecoilState";
 import useFetchStreams from "../hooks/useFetchStreams";
 import axios from "axios";
 import { convertToObjArray } from "../utils/helpers";
 import { baseURL } from "../utils/StaticVariables";
 import DashboardCards from "../Components/Cards/DashboardCards";
-import { useSetRecoilState } from "recoil";
-import { isActiveUserState } from "../Recoil/RecoilState";
 
 const Dashboard = () => {
   const setIsActiveUser = useSetRecoilState(isActiveUserState);
-
-  // Authentication token
   const { token } = useRecoilValue(authState);
-  // Stream atom state and fetch function
   const streamAtom = useRecoilValue(streamState);
   const {
     data: streamData,
@@ -24,50 +19,63 @@ const Dashboard = () => {
   } = streamAtom;
   const { refetchStreams } = useFetchStreams();
 
-  // Local states for personal and system info
   const [personalInfo, setPersonalInfo] = useState([]);
   const [systemInfo, setSystemInfo] = useState([]);
   const [newFormatOfStreamData, setNewFormatOfStreamData] = useState([]);
 
-  // Combined loading and error states for these two
   const [loading, setLoading] = useState({ info: true, system: true });
   const [error, setError] = useState({ info: null, system: null });
 
-  // On mount or token change, fetch all data
+  // Refetch stream data and call APIs separately
   useEffect(() => {
     if (!token) return;
 
-    // Refetch streams via Recoil hook
+    // Fetch stream data (via Recoil custom hook)
     refetchStreams();
 
-    // Fetch user and system info in parallel
-    (async () => {
-      setLoading({ info: true, system: true });
+    // Fetch personal user info
+    const fetchUserInfo = async () => {
+      setLoading((prev) => ({ ...prev, info: true }));
       try {
-        const [infoRes, sysRes] = await Promise.all([
-          axios.get(`${baseURL}user_info`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get(`${baseURL}param_stream/user`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-        console.log("infoRes", infoRes.data.timestamp_range); //! important to update save data
-        setPersonalInfo(convertToObjArray(infoRes?.data));
-        setIsActiveUser(infoRes?.data.is_active);
-        setSystemInfo(convertToObjArray(sysRes?.data || {}));
-        setError({ info: null, system: null });
-      } catch (err) {
-        setError({
-          info: "Unable to load personal info.",
-          system: "Unable to load system info.",
+        const res = await axios.get(`${baseURL}user_info`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
+        console.log("infoRes", res.data.timestamp_range); // Log timestamp for tracking
+        setPersonalInfo(convertToObjArray(res?.data));
+        setIsActiveUser(res?.data.is_active);
+        setError((prev) => ({ ...prev, info: null }));
+      } catch (err) {
+        setError((prev) => ({ ...prev, info: "Unable to load personal info." }));
       } finally {
-        setLoading({ info: false, system: false });
+        setLoading((prev) => ({ ...prev, info: false }));
       }
-    })();
-  }, [token, refetchStreams]);
+    };
 
+    // Fetch system info
+    const fetchSystemInfo = async () => {
+      setLoading((prev) => ({ ...prev, system: true }));
+      try {
+        const res = await axios.get(`${baseURL}param_stream/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setSystemInfo(convertToObjArray(res?.data || {}));
+        setError((prev) => ({ ...prev, system: null }));
+      } catch (err) {
+        setError((prev) => ({
+          ...prev,
+          system: "Unable to load system info.",
+        }));
+      } finally {
+        setLoading((prev) => ({ ...prev, system: false }));
+      }
+    };
+
+    // Run both separately
+    fetchUserInfo();
+    fetchSystemInfo();
+  }, [token, refetchStreams, setIsActiveUser]);
+
+  // Transform stream data into card-friendly format
   useEffect(() => {
     const res = streamData?.map((el) => ({
       title: el?.name,
@@ -86,8 +94,8 @@ const Dashboard = () => {
       <DashboardCards
         title="Personal Info"
         data={personalInfo}
-        loading={loading?.info}
-        error={error?.info}
+        loading={loading.info}
+        error={error.info}
       />
 
       <DashboardCards
@@ -101,8 +109,8 @@ const Dashboard = () => {
         title="System Information"
         data={systemInfo}
         fullWidth
-        loading={loading?.system}
-        error={error?.system}
+        loading={loading.system}
+        error={error.system}
       />
     </Stack>
   );
