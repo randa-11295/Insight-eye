@@ -78,30 +78,30 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 1- handel error and ui in stream          --------------- done
 2- change all request from api to axios  ------------------ done
 3- handel validations                    ----------------- done
-4- update responsive in tablet 
+4- update responsive in tablet          ------------ done 
 5- clean code 
 6- add forget password                  --------------------- maybe
 7- handle refresh token 
 8- fix search bugs 
-9- system information error
+9- system information error              ----------------- done
 10 -fix chart at search frames
 11 -handle date filtration on  predictions    --------- add limit to date filter
-13- be sure from stop stream               ------ maybe
+13- be sure from stop stream               ------ done
 14- handle errors in login                ---------------- done
 15- add loader t  o log and no data and errors   ------ done
 16- make loader 5  length  ----------------------------------------  done
-17 - fix loading in get stream               -----  maybe
+17 - fix loading in get stream               -----  done
 18 - handle errors                      ---------------------- done
 19- update frames name instead of id          --------------- done 
 20- remove select from search table           -------------- done 
 21- fix search chart and make it render all data after and before filter 
-22 - fix system info bug         
+22 - fix system info bug         ------------------------ done
 23 - make stream data run only one time 
 24 - fix api call towies  in prediction  
 25 - update and clean alerts            --------------------- done 
 26- handle no data stream flow
-27- handel selected nav in sup pages
-28 -pop up stop stream and log out 
+27- handel selected nav in sup pages           ------------------ done 
+28 -pop up stop stream and log out           ------------------ done 
 29 - window.location.reload(); remove this way from auth
 30 - fix- update stream
-31- fix add stream
+31- fix add stream                   ------------------ done 
