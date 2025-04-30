@@ -7,8 +7,11 @@ import { Stack } from "@mui/system";
 import SelectCustom from "../Inputs/SelectCustom";
 import { filterResultState } from "../../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
+import { streamState } from "../../Recoil/RecoilState"; 
+import { useRecoilValue } from "recoil"; 
 
 const FilterSearch = forwardRef((props, ref) => {
+    const { data: cameraOptions, loading, error } = useRecoilValue(streamState); // ✅ use streamState
 
     const [formState, setFormState] = useRecoilState(filterResultState);
 
