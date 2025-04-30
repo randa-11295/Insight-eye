@@ -24,7 +24,7 @@ import Predictions from "../Pages/Predictions";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
 import { useEffect } from "react";
-import ResetPassword from "../Components/Auth/ResetPassword";
+
 const AppRouter = () => {
   const [authRecoil, setAuthRecoil] = useRecoilState(authState);
 
@@ -48,7 +48,6 @@ const AppRouter = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/otp" element={<OTP />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/" element={<Navigate to="/login" />} />
             </Route>
           </>

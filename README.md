@@ -79,8 +79,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 2- change all request from api to axios  ------------------ done
 3- handel validations                    ----------------- done
 4- update responsive in tablet          ------------ done 
-5- clean code 
-6- add forget password                  --------------------- maybe
+5- clean code                         ----------------------- done 
+6- add forget password                  ---------------------  done 
 7- handle refresh token 
 8- fix search bugs 
 9- system information error              ----------------- done
