@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -13,17 +14,36 @@ const ParamStream = () => {
   const { token } = useRecoilValue(authState);
 
   const [loading, setLoading] = useState(false);
-const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const fetchParams = async () => {
+    try {
+      const { data } = await axios.get(baseURL + "param_stream/users", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log("frame data", data);
+      formik.setValues({
+        frame_skip: data[0]?.frame_skip ?? 0,
+        conf: data[0]?.conf ?? 0.1,
+      });
+    } catch (error) {
+      enqueueSnackbar(
+        error?.response?.data?.message ||
+          error.message ||
+          "Failed to fetch config",
+        {
+          variant: "error",
+        }
+      );
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       frame_skip: 0,
       conf: 0.1,
     },
     validationSchema: Yup.object({
-      frame_delay: Yup.number()
-        .min(0, "Minimum 0")
-        .max(10, "Maximum 10")
-        .required("Frame Delay is required"),
       frame_skip: Yup.number()
         .min(0, "Minimum 0")
         .max(10, "Maximum 10")
@@ -34,14 +54,16 @@ const { enqueueSnackbar } = useSnackbar();
         .required("Confidence is required"),
     }),
     onSubmit: async (values) => {
+      console.log("values", values);
       setLoading(true);
+
       try {
-        await axios.put(baseURL + "param_stream/users", values, {
+        await axios.put(baseURL + "param_stream/user", values, {
           headers: { Authorization: `Bearer ${token}` },
         });
         enqueueSnackbar("Stream configuration updated successfully", {
           variant: "success",
-        }) 
+        });
       } catch (error) {
         enqueueSnackbar(
           error?.response?.data?.message || error.message || "Update failed",
@@ -56,30 +78,10 @@ const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     if (!token) return;
 
-    const fetchParams = async () => {
-      try {
-        const { data } = await axios.get(baseURL + "param_stream/users", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        formik.setValues({
-          frame_skip: data.frame_skip ?? 0,
-          conf: data.conf ?? 0.1,
-        });
-      } catch (error) {
-    
-        enqueueSnackbar( error?.response?.data?.message ||
-          error.message ||
-          "Failed to fetch config"
-      , {
-          variant: "error",
-        }) 
-      }
-    };
-
     if (token) {
       fetchParams();
-    };
-  }, [token, formik, enqueueSnackbar]);
+    }
+  }, [token]);
 
   return (
     <Stack
@@ -90,7 +92,7 @@ const { enqueueSnackbar } = useSnackbar();
       onSubmit={formik.handleSubmit}
       noValidate
     >
-      {[ "frame_skip", "conf"].map((field) => (
+      {["frame_skip", "conf"].map((field) => (
         <InputTextCustom
           key={field}
           label={field.replace("_", " ")}
@@ -100,7 +102,7 @@ const { enqueueSnackbar } = useSnackbar();
         />
       ))}
 
-      <LoadBtn loading={loading} text="Send"  />
+      <LoadBtn loading={loading} text="Send" />
     </Stack>
   );
 };
