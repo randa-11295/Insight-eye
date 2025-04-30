@@ -65,7 +65,7 @@ const AppRouter = () => {
               />
               <Route path="/frames-search" element={<Search />} />
               <Route path="/predictions" element={<Predictions />} />
-              <Route path="/change-password" element={<ChangePassword />} />
+              <Route path="/Setting" element={<ChangePassword />} />
               <Route path="/logs" element={<Logs />} />
             </Route>
           </>

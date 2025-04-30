@@ -56,7 +56,7 @@ const LogIn = () => {
           window.location.reload();
         })
         .catch((error) => {
-          enqueueSnackbar(error.message, {
+          enqueueSnackbar(error?.message || "some thing want wrong", {
             variant: "error",
           });
         })

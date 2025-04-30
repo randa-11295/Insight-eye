@@ -34,7 +34,7 @@ const OTP = () => {
           });
         })
         .catch((error) => {
-          enqueueSnackbar(error.message, {
+          enqueueSnackbar(error?.message || "some thing want wrong", {
             variant: "error",
           });
         })
@@ -64,7 +64,7 @@ const OTP = () => {
           });
         })
         .catch((error) => {
-          enqueueSnackbar(error.message, {
+          enqueueSnackbar(error?.message || "some thing want wrong", {
             variant: "error",
           });
         })

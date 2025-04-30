@@ -1,15 +1,19 @@
-import  { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Card, Button, Stack, CircularProgress } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useSnackbar } from "notistack";
 import InputTextCustom from "../Components/Inputs/InputTextCustom"; // Adjust path as needed
 import { baseURL } from "../utils/StaticVariables"; // Your API base URL
 import LoadBtn from "../Components/Reusable/LoadBtn";
+import Holder from "../Components/HOC/Holder";
+import { useRecoilValue } from "recoil";
+import { authState } from "../Recoil/RecoilState"; // Adjust path as needed
 const ChangePassword = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
+  const { token } = useRecoilValue(authState);
 
   const formik = useFormik({
     initialValues: {
@@ -31,7 +35,9 @@ const ChangePassword = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await axios.put(`${baseURL}update-password`, values);
+        const response = await axios.put(`${baseURL}update-password`, values, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         enqueueSnackbar(
           response.data.message || "Password updated successfully",
           {
@@ -51,36 +57,30 @@ const ChangePassword = () => {
   });
 
   return (
- 
-      <Card 
-        component="form"
-        onSubmit={formik.handleSubmit}
-        sx={{ width: "100%"  , padding : 2, mt: 6 }}
-      >
-        <Stack spacing={1}>
-          <InputTextCustom label="Username" name="username" formik={formik} />
-          <InputTextCustom
-            label="Current Password"
-            name="current_password"
-            type="password"
-            formik={formik}
-          />
-          <InputTextCustom
-            label="New Password"
-            name="new_password"
-            type="password"
-            formik={formik}
-          />
-          <InputTextCustom
-            label="Confirm Password"
-            name="confirm_password"
-            type="password"
-            formik={formik}
-          />
-          <LoadBtn loading={loading}/>
-      
-        </Stack>
-      </Card>
+    <Holder title={"Change Password"}>
+      <Stack spacing={1} component="form" onSubmit={formik.handleSubmit}>
+        <InputTextCustom label="Username" name="username" formik={formik} />
+        <InputTextCustom
+          label="Current Password"
+          name="current_password"
+          type="password"
+          formik={formik}
+        />
+        <InputTextCustom
+          label="New Password"
+          name="new_password"
+          type="password"
+          formik={formik}
+        />
+        <InputTextCustom
+          label="Confirm Password"
+          name="confirm_password"
+          type="password"
+          formik={formik}
+        />
+        <LoadBtn loading={loading} />
+      </Stack>
+    </Holder>
   );
 };
 

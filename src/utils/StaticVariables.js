@@ -20,7 +20,7 @@ export const navbarContentArr = [
   { text: "Frames Search", url: "/frames-search", icon: getIcon(SearchOutlinedIcon) },
   { text: "Predictions", url: "/predictions", icon: getIcon(LightbulbOutlinedIcon) },
   { text: "Logs", url: "/logs", icon:  getIcon(EditNoteOutlinedIcon) },
-  { text: "Change Password", url: "/change-password", icon: getIcon(SettingsOutlinedIcon) },
+  { text: "Setting", url: "/setting", icon: getIcon(SettingsOutlinedIcon) },
   { text: "Log out", url: false, icon: getIcon(LogoutOutlinedIcon) },
 ];
 
@@ -47,8 +47,8 @@ export const dataRenderTypeInSearchArr = [
 
 
 const generateUniqueColor = (index) => {
-  const hue = (index * 137) % 360; // Use golden angle for unique hues
-  return `hsl(${hue}, 85%, 55%)`; // High saturation and medium brightness for vibrancy
+  const hue = (index * 137) % 360; 
+  return `hsl(${hue}, 85%, 55%)`; 
 };
 export const chartColors = ["rgb(75, 192, 192)", "rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 206, 86)", ...Array.from({ length: 10 }, (_, i) => generateUniqueColor(i))];
 

@@ -44,7 +44,7 @@ const ResetPassword = ({ email }) => {
           navigate("/login");
         })
         .catch((error) => {
-          enqueueSnackbar(error.message, {
+          enqueueSnackbar(error?.message || "some thing want wrong", {
             variant: "error",
           });
         })

@@ -28,7 +28,7 @@ const ParamStream = () => {
     } catch (error) {
       enqueueSnackbar(
         error?.response?.data?.message ||
-          error.message ||
+          error?.message ||
           "Failed to fetch config",
         {
           variant: "error",
@@ -65,7 +65,7 @@ const ParamStream = () => {
         });
       } catch (error) {
         enqueueSnackbar(
-          error?.response?.data?.message || error.message || "Update failed",
+          error?.response?.data?.message || error?.message || "Update failed",
           { variant: "error" }
         );
       } finally {

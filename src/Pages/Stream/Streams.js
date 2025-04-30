@@ -61,7 +61,7 @@ const Streams = () => {
         variant: "success",
       });      
     } catch (error) {
-      enqueueSnackbar("Delete failed " + error.message, {
+      enqueueSnackbar("Delete failed " + error?.message, {
         variant: "error",
       });
     }

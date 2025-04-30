@@ -53,7 +53,7 @@ const AddStream = () => {
           });
         })
         .catch((error) => {
-          enqueueSnackbar(error.message, { variant: "error" });
+          enqueueSnackbar(error?.message || "some thing want wrong", { variant: "error" });
         })
         .finally(() => setLoading(false));
     },
