@@ -11,6 +11,7 @@ const getIcon = (IconComponent) =>  (
   <IconComponent sx={{ color: "inherit", marginLeft: "auto" }} />
 );
 
+export const drawerWidth = 280; 
 export const streamTypesArr =['rtsp', 'http', 'local', 'other'] 
 
 export const navbarContentArr = [

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import DesBtn from "../Reusable/DesBtn";
+import { drawerWidth } from "../../utils/StaticVariables";
 const TopNav = (props) => {
   let location = useLocation();
   const [route, setRoute] = useState("");
@@ -18,15 +19,15 @@ const TopNav = (props) => {
   }, [location.pathname]);
 
   return (
-    <Toolbar 
-    sx={theme => ({
-      position: 'fixed',
-      width: '100%',
-      zIndex : 10 ,
-      top: 0,
-      backgroundColor: theme.palette.background.default,  // ← same as your page
-      borderBottom: `5px solid ${theme.palette.secondary.main}`,
-    })}
+    <Toolbar
+      sx={(theme) => ({
+        position: "fixed",
+        width: { xs: "90%", md: `calc(97% - ${drawerWidth}px)`,  },
+        zIndex: 10,
+        top: 0,
+        backgroundColor: theme.palette.background.default, // ← same as your page
+        borderBottom: `5px solid ${theme.palette.secondary.main}`,
+      })}
     >
       <IconButton
         aria-label="open drawer"

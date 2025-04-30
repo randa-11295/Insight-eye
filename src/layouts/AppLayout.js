@@ -8,7 +8,7 @@ import PopUpReusable from "../Components/PopUp/PopUpReusable";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
 import SubscriptionWarningCard from "../Components/Cards/SubscriptionWarningCard";
-const drawerWidth = 280;
+import { drawerWidth } from "../utils/StaticVariables";
 
 const AppLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -35,7 +35,7 @@ const AppLayout = () => {
         mobileOpen={mobileOpen}
         drawerWidth={drawerWidth}
       />
-      <Box component="main" sx={{ flexGrow: 1, p: 3, width: "100vw" }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, width: "100vw", position: "relative" }}>
         <TopNav openHandel={() => setMobileOpen(!mobileOpen)} />
         <Toolbar />
         <SubscriptionWarningCard />
