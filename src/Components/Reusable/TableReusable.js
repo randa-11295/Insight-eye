@@ -39,7 +39,7 @@ const TableReusable = ({ data, columns, loading , selected }) => {
         backgroundColor: theme.palette.background.paper,
         border: `1px solid ${theme.palette.divider}`,
         borderRadius: "4px",
-        overflow: "hidden",
+        overflow: "auto",
       }}
     >
       <Table sx={{ minWidth: 500 }}>

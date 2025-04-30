@@ -120,7 +120,7 @@ const Search = () => {
           alignItems="center"
         >
           <Typography variant="body1" color="textPrimary">
-            Avertible Recoded Frames : <strong> {total || 0}</strong>
+            Available Recoded Frames : <strong> {total || 0}</strong>
           </Typography>
           <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
             <ReusableToggleBtns
