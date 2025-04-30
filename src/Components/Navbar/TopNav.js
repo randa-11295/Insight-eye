@@ -18,7 +18,7 @@ const TopNav = (props) => {
   }, [location.pathname]);
 
   return (
-    <Toolbar shadow
+    <Toolbar 
     sx={theme => ({
       position: 'fixed',
       width: '100%',

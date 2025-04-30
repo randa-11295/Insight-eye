@@ -76,7 +76,7 @@ const Dashboard = () => {
 
   return (
     <Stack
-      direction="row"
+      direction={{lg :"row"}}
       flexWrap="wrap"
       gap={4}
       justifyContent="space-between"
