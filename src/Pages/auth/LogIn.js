@@ -6,18 +6,20 @@ import AuthContentReusable from "../../Components/Auth/AuthContentReusable";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import * as Yup from "yup";
-
+import { useSnackbar } from "notistack";
 const LogIn = () => {
   const [loading, setLoading] = useState(false);
   const setAuthRecoil = useSetRecoilState(authState);
-
+  const { enqueueSnackbar } = useSnackbar();
   const formik = useFormik({
     initialValues: {
       "user name / email": "",
       password: "",
     },
     validationSchema: Yup.object({
-      "user name / email": Yup.string().required("Username or Email is required"),
+      "user name / email": Yup.string().required(
+        "Username or Email is required"
+      ),
       password: Yup.string()
         .required("Password is required")
         .min(8, "Password must be at least 8 characters"),
@@ -52,7 +54,9 @@ const LogIn = () => {
           window.location.reload();
         })
         .catch((error) => {
-          console.error("Login error:", error);
+          enqueueSnackbar(error.message, {
+            variant: "error",
+          });
         })
         .finally(() => {
           setLoading(false);
