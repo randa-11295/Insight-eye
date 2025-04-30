@@ -13,22 +13,32 @@ const LogIn = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      "user name / email": "",
       password: "",
     },
     validationSchema: Yup.object({
-      username: Yup.string()
-        .required("Username is required")
-        .min(3, "Username must be at least 3 characters"),
+      "user name / email": Yup.string().required("Username or Email is required"),
       password: Yup.string()
         .required("Password is required")
-        .min(6, "Password must be at least 6 characters"),
+        .min(8, "Password must be at least 8 characters"),
     }),
     onSubmit: (values) => {
       setLoading(true);
 
+      // Regular expression to validate email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const inputValue = values["user name / email"];
+
+      // Dynamically choose either 'email' or 'username'
+      const payload = {
+        password: values.password,
+        ...(emailRegex.test(inputValue)
+          ? { email: inputValue }
+          : { username: inputValue }),
+      };
+
       axios
-        .post(baseURL + "login", values)
+        .post(baseURL + "login", payload)
         .then((response) => {
           localStorage.setItem("token", response.data.access_token);
           localStorage.setItem("refresh_token", response.data.refresh_token);
@@ -55,12 +65,12 @@ const LogIn = () => {
       formik={formik}
       title="Login"
       btnText={"Login"}
-      des="login to your account  to access all features in INSIGHT EYE"
-      contentRoute={{ linkText: " Forget your password ?", route: "/otp" }}
+      des="Login to your account to access all features in INSIGHT EYE"
+      contentRoute={{ linkText: "Forget your password?", route: "/otp" }}
       loading={loading}
       footerRoute={{
-        title: "  New user ?",
-        linkText: " Contact us",
+        title: "New user?",
+        linkText: "Contact us",
         route: "/contact",
       }}
     />
