@@ -10,6 +10,7 @@ import DesBtn from "../Components/Reusable/DesBtn";
 import axios from "axios";
 import { baseURL } from "../utils/StaticVariables";
 import { convertKeysToKebabCase } from "../utils/helpers";
+
 const Predictions = () => {
   const { refetchStreams } = useFetchStreams();
   const { data: streams, loading, error } = useRecoilValue(streamState);

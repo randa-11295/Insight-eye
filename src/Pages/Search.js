@@ -14,6 +14,7 @@ import { Stack, Card, Pagination, Box, Typography } from "@mui/material";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { popupState, authState } from "../Recoil/RecoilState";
 import { useSnackbar } from "notistack";
+import PredictionFilter from "../Components/Prediction/PredictionFilter";
 
 import {
   dataRenderTypeInSearchArr,
@@ -64,10 +65,16 @@ const Search = () => {
       isOpen: true,
       title: "Select Date and Time Range",
       content: (
-        <FilterSearch
+        // <FilterSearch
+        //   ref={childRef}
+        //   changeFilterHandle={setFilter}
+        //   total={total}
+        // />
+
+        <PredictionFilter
+          filter={filter}
           ref={childRef}
           changeFilterHandle={setFilter}
-          total={total}
         />
       ),
       sendReq: handleClick,
@@ -79,11 +86,12 @@ const Search = () => {
   useEffect(() => {
     setLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
+    console.log("Filter", filter);
     axios
       .get(baseURL + "search_results", {
         params: {
           page,
-          per_page: filter.limit,
+          per_page: "12",
           end_time: filter.endTime,
           start_time: filter.startTime,
           start_date: filter.startDate,
