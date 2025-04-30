@@ -39,8 +39,6 @@ const SideNav = (props) => {
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             width: props.drawerWidth,
-           
-
           },
         }}
         open

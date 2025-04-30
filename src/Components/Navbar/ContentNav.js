@@ -47,7 +47,7 @@ const ContentNav = (props) => {
         });
       })
       .catch((error) => {
-        enqueueSnackbar(error.massage, {
+        enqueueSnackbar(error.massage || "some thing want wrong", {
           variant: "error",
         });
       });
