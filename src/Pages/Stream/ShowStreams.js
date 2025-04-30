@@ -9,9 +9,9 @@ const ShowStream = () => {
   return (
     <>
       <ParamStream />
-      <Grid container spacing={3} mt={4}>
+      <Grid container spacing={2}  >
         {selectedData?.map((el) => (
-          <Grid item key={el.id} xs={12} sm={6} lg={4} my={5}>
+          <Grid item key={el.id} xs={12} sm={6} lg={4} >
             <StreamCards data={el} />
           </Grid>
         ))}
