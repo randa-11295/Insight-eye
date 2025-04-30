@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   TextField,
@@ -10,94 +10,78 @@ import {
   Stack,
   Typography,
   Paper,
-  FormHelperText,      
-} from '@mui/material';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { selectedStreamState } from "../../Recoil/RecoilState"
-import axios from 'axios';
-import { baseURL } from '../../utils/StaticVariables';
-import { useRecoilValue } from 'recoil';
-import { authState } from '../../Recoil/RecoilState';
+  FormHelperText,
+} from "@mui/material";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { selectedStreamState, authState } from "../../Recoil/RecoilState";
+import axios from "axios";
+import { baseURL, streamTypesArr } from "../../utils/StaticVariables";
+import { useRecoilValue } from "recoil";
+import LoadBtn from "../../Components/Reusable/LoadBtn";
 
-export default function UpdateStreams({
-  // const validationSchema = yup.object({
-    
-  //   streams: yup.array().of(
-  //     yup.object({
-  //       id: yup.string().required(),
-  //       name: yup.string().required('Name is required'),
-  //       path: yup.string().required('Source path is required'),
-  //       type: yup.string().required('Type is required')
-  //     })
-  //   )
-  // });
-
-  loading = false,
-  onBack
-}) {
-
-  // const { showError  , showSuccess} = useSnack();
-
+export default function UpdateStreams({ loading = false, onBack }) {
   const selectedData = useRecoilValue(selectedStreamState);
   const { token } = useRecoilValue(authState);
+
+  const validationSchema = yup.object({
+    streams: yup.array().of(
+      yup.object({
+        id: yup.string().required(),
+        name: yup.string().required("Name is required"),
+        path: yup.string().required("Source path is required"),
+        type: yup.string().required("Type is required"),
+      })
+    ),
+  });
+
   const formik = useFormik({
     initialValues: {
-      streams: selectedData
+      streams: selectedData,
     },
-    // validationSchema,
-    onSubmit: (values) => {
-
-      axios.put(
-        `${baseURL}stream`,
-        values.streams,
-        {
+    validationSchema: validationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      console.log("Form values:", values.streams);
+      try {
+        await axios.put(`${baseURL}stream`, values.streams, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
-        .then(response => {
-            formik.handleReset()
-            // setLoading(false);
-            // showSuccess("your stream updated successfully")
-        })
-        .catch(error => {
-            // setLoading(false);
-            // showError(error.message)
-
         });
-
-      
+        resetForm();
+        // Optionally show success notification
+      } catch (error) {
+        // Optionally show error notification
+      }
     },
   });
-
- 
 
   const handleReset = () => {
     formik.resetForm();
   };
 
   return (
-    <Box component="form" onSubmit={formik.handleSubmit} sx={{  mx: 'auto', p: 3 }}>
+    <Box
+      component="form"
+      onSubmit={formik.handleSubmit}
+      sx={{ mx: "auto", p: 3 }}
+      noValidate
+    >
       {formik.values.streams.length > 0 ? (
         formik.values.streams.map((stream, index) => (
-          <Paper
-            key={stream.id}
-            elevation={1}
-            sx={{ mb: 3, p: 3 }}
-          >
+          <Paper key={stream.id || index} elevation={1} sx={{ mb: 3, p: 3 }}>
             <Stack spacing={3}>
               <TextField
                 fullWidth
                 label="Name"
                 name={`streams.${index}.name`}
                 placeholder="Enter Stream Name"
-                value={stream.name}
+                value={formik.values.streams[index]?.name || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={Boolean(
                   formik.touched.streams?.[index]?.name &&
-                  formik.errors.streams?.[index]?.name
+                    formik.errors.streams?.[index]?.name
                 )}
                 helperText={
                   formik.touched.streams?.[index]?.name &&
@@ -110,12 +94,12 @@ export default function UpdateStreams({
                 label="Source"
                 name={`streams.${index}.path`}
                 placeholder="Enter Stream Path"
-                value={stream.path}
+                value={formik.values.streams[index]?.path || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={Boolean(
                   formik.touched.streams?.[index]?.path &&
-                  formik.errors.streams?.[index]?.path
+                    formik.errors.streams?.[index]?.path
                 )}
                 helperText={
                   formik.touched.streams?.[index]?.path &&
@@ -127,18 +111,18 @@ export default function UpdateStreams({
                 fullWidth
                 error={Boolean(
                   formik.touched.streams?.[index]?.type &&
-                  formik.errors.streams?.[index]?.type
+                    formik.errors.streams?.[index]?.type
                 )}
               >
                 <InputLabel>Type</InputLabel>
                 <Select
                   name={`streams.${index}.type`}
-                  value={stream.type}
+                  value={formik.values.streams[index]?.type || ""}
                   label="Type"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {["test", "hi", "here"].map((option) => (
+                  {streamTypesArr.map((option) => (
                     <MenuItem key={option} value={option}>
                       {option}
                     </MenuItem>
@@ -171,11 +155,7 @@ export default function UpdateStreams({
         alignItems="center"
         sx={{ mt: 4 }}
       >
-        <Button
-          variant="outlined"
-          onClick={onBack}
-
-        >
+        <Button variant="outlined" onClick={onBack}>
           Back
         </Button>
 
@@ -183,20 +163,12 @@ export default function UpdateStreams({
           <Button
             variant="outlined"
             onClick={handleReset}
-
             disabled={!formik.dirty}
           >
             Clear
           </Button>
 
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={loading || !formik.dirty || !formik.isValid}
-
-          >
-            Save Changes
-          </Button>
+          <LoadBtn loading={loading} />
         </Stack>
       </Stack>
     </Box>

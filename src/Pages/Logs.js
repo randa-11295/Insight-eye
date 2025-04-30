@@ -16,7 +16,7 @@ export default function Logs() {
     setLoading(true);
    
     axios
-    .get(`${baseURL}auth/logs/me`, {
+    .get(`${baseURL}auth/logs`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
