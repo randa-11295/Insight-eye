@@ -19,8 +19,8 @@ export const navbarContentArr = [
   { text: "Streams", url: "/streams", icon: getIcon(LiveTvOutlinedIcon) },
   { text: "Frames Search", url: "/frames-search", icon: getIcon(SearchOutlinedIcon) },
   { text: "Predictions", url: "/predictions", icon: getIcon(LightbulbOutlinedIcon) },
-  { text: "Logs", url: "/logs", icon: getIcon(EditNoteOutlinedIcon) },
-  { text: "Setting", url: "/setting", icon: getIcon(SettingsOutlinedIcon) },
+  { text: "Logs", url: "/logs", icon:  getIcon(EditNoteOutlinedIcon) },
+  { text: "Change Password", url: "/change-password", icon: getIcon(SettingsOutlinedIcon) },
   { text: "Log out", url: false, icon: getIcon(LogoutOutlinedIcon) },
 ];
 
@@ -54,6 +54,6 @@ export const chartColors = ["rgb(75, 192, 192)", "rgb(255, 99, 132)", "rgb(54, 1
 
 
 export const BASE64_IMAGE_PREFIX = "data:image/jpeg;base64,";
-export const baseURL = "https://16.170.216.227/"
+export const baseURL = "https://16.170.216.227/" // local 8000
 
 

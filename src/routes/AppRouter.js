@@ -24,7 +24,7 @@ import Predictions from "../Pages/Predictions";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
 import { useEffect } from "react";
-
+import ChangePassword from "../Pages/ChangePassword";
 const AppRouter = () => {
   const [authRecoil, setAuthRecoil] = useRecoilState(authState);
 
@@ -65,7 +65,7 @@ const AppRouter = () => {
               />
               <Route path="/frames-search" element={<Search />} />
               <Route path="/predictions" element={<Predictions />} />
-              <Route path="/setting" element={<p>test </p>} />
+              <Route path="/change-password" element={<ChangePassword />} />
               <Route path="/logs" element={<Logs />} />
             </Route>
           </>

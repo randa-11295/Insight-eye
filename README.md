@@ -105,3 +105,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 29 - window.location.reload(); remove this way from auth
 30 - fix- update stream
 31- fix add stream                   ------------------ done 
+
+300 in frame 
+- after get reload in stream 
+- is subscribed  no is active 
+- change no data with no massage 
