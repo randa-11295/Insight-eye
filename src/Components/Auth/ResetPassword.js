@@ -5,13 +5,14 @@ import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import { useSnackbar } from "notistack";
 import * as Yup from "yup";
-const ResetPassword = () => {
+import { useNavigate } from "react-router-dom";
+
+const ResetPassword = ({ email }) => {
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
-  // ✅ Validation schema
   const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email").required("Email is required"),
     new_password: Yup.string()
       .min(6, "Password must be at least 6 characters")
       .required("New password is required"),
@@ -22,26 +23,25 @@ const ResetPassword = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
       new_password: "",
       conform_password: "",
     },
-    validationSchema, // ✅ Apply validation
+    validationSchema,
     onSubmit: (values) => {
       setLoading(true);
 
-      // ✅ Only send necessary fields to API
       const payload = {
-        email: values.email,
+        email: email,
         new_password: values.new_password,
       };
 
       axios
         .put(baseURL + "users/reset_password", payload)
-        .then((response) => {
+        .then(() => {
           enqueueSnackbar("You reset your password successfully", {
             variant: "success",
           });
+          navigate("/login");
         })
         .catch((error) => {
           enqueueSnackbar(error.message, {
@@ -59,7 +59,7 @@ const ResetPassword = () => {
       formik={formik}
       title="Reset Password"
       btnText="Reset"
-      des="Log in to your account to regain full access to all features in INSIGHT EYE."
+      des="Reset your password to access all features in INSIGHT EYE"
       contentRoute={{ linkText: "Back to log in", route: "/login" }}
       loading={loading}
       footerRoute={{

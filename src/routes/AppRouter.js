@@ -21,7 +21,6 @@ import UpdateStreams from "../Pages/Stream/UpdateStreams";
 import Search from "../Pages/Search";
 import Logs from "../Pages/Logs";
 import Predictions from "../Pages/Predictions";
-import Test from "../Pages/Test";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
 import { useEffect } from "react";
@@ -50,7 +49,6 @@ const AppRouter = () => {
               <Route path="/contact" element={<Contact />} />
               <Route path="/otp" element={<OTP />} />
               <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/test" element={<Test />} />
               <Route path="/" element={<Navigate to="/login" />} />
             </Route>
           </>

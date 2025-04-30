@@ -6,15 +6,16 @@ import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
+import ResetPassword from "../../Components/Auth/ResetPassword";
 
 const OTP = () => {
-  const [otpSent, setOtpSent] = useState(false);
+  const [otpSent, setOtpSent] = useState("otp");
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const sendOTPFormik = useFormik({
     initialValues: {
-      email: "randa.mohamed1295@gmail.com",
+      email: "",
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -27,12 +28,12 @@ const OTP = () => {
       axios
         .post(baseURL + "otp/send-otp", { email: values.email, length: 6 })
         .then((response) => {
-          setOtpSent("verify");
+          setOtpSent("send");
+          enqueueSnackbar("Your OTP sended Successful", {
+            variant: "success",
+          });
         })
         .catch((error) => {
-          enqueueSnackbar("Your new stream added Successful", {
-            variant: "error",
-          });
           enqueueSnackbar(error.message, {
             variant: "error",
           });
@@ -57,11 +58,13 @@ const OTP = () => {
           expiration: "1000",
         })
         .then((response) => {
-          console.log("done", response.data.message);
           setOtpSent("verify");
+          enqueueSnackbar("your Otp is valid", {
+            variant: "success",
+          });
         })
         .catch((error) => {
-          enqueueSnackbar("Your new stream added Successful", {
+          enqueueSnackbar(error.message, {
             variant: "error",
           });
         })
@@ -73,13 +76,18 @@ const OTP = () => {
 
   return (
     <>
-      {!otpSent && <SendOTP formik={sendOTPFormik} loading={loading} />}
-      {otpSent === "verify" && (
+      {otpSent === "otp" && (
+        <SendOTP formik={sendOTPFormik} loading={loading} />
+      )}
+      {otpSent === "send" && (
         <VerifyOTP
           loading={loading}
           formik={verifyOTPFormik}
           setOtpSent={setOtpSent}
         />
+      )}
+      {otpSent === "verify" && (
+        <ResetPassword email={sendOTPFormik.values.email} />
       )}
     </>
   );

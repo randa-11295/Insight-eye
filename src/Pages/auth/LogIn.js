@@ -7,7 +7,9 @@ import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import * as Yup from "yup";
 import { useSnackbar } from "notistack";
+
 const LogIn = () => {
+  
   const [loading, setLoading] = useState(false);
   const setAuthRecoil = useSetRecoilState(authState);
   const { enqueueSnackbar } = useSnackbar();
