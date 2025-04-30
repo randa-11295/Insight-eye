@@ -4,7 +4,6 @@ import Toolbar from "@mui/material/Toolbar";
 import TopNav from "../Components/Navbar/TopNav";
 import SideNav from "../Components/Navbar/SideNav";
 import { Outlet, Navigate } from "react-router-dom";
-import SnackAlert from "../Components/PopUp/SnackAlert";
 import PopUpReusable from "../Components/PopUp/PopUpReusable";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
@@ -43,7 +42,6 @@ const AppLayout = () => {
         <Outlet />
         <PopUpReusable />
       </Box>
-      <SnackAlert />
     </Box>
   );
 };

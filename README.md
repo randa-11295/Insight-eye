@@ -74,10 +74,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 <!--   -->
 ## important things to fix 
 
-12- add frames data api            ---------------------------- maybe
+12- add frames data api            ---------------------------- done
 1- handel error and ui in stream          --------------- done
 2- change all request from api to axios  ------------------ done
-3- handel validations                    ----------------- maybe
+3- handel validations                    ----------------- done
 4- update responsive in tablet 
 5- clean code 
 6- add forget password                  --------------------- maybe

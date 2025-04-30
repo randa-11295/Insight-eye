@@ -51,6 +51,8 @@ const Dashboard = () => {
         ]);
         console.log("infoRes", infoRes.data.timestamp_range); //! important to update save data
         setPersonalInfo(convertToObjArray(infoRes?.data));
+        console.log("personalInfo", infoRes?.data);
+        console.log(sysRes?.data?.[0])
         setSystemInfo(convertToObjArray(sysRes?.data?.[0] || {}));
         setError({ info: null, system: null });
       } catch (err) {
