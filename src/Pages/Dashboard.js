@@ -53,7 +53,8 @@ const Dashboard = () => {
         setPersonalInfo(convertToObjArray(infoRes?.data));
         console.log("personalInfo", infoRes?.data);
         console.log(sysRes?.data?.[0])
-        setSystemInfo(convertToObjArray(sysRes?.data?.[0] || {}));
+        setSystemInfo(convertToObjArray(sysRes?.data || {}));
+        console.log("here is  systemInfo", sysRes?.data);
         setError({ info: null, system: null });
       } catch (err) {
         setError({
