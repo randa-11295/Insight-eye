@@ -7,11 +7,14 @@ import axios from "axios";
 import { convertToObjArray } from "../utils/helpers";
 import { baseURL } from "../utils/StaticVariables";
 import DashboardCards from "../Components/Cards/DashboardCards";
+import { useSetRecoilState } from "recoil";
+import { isActiveUserState } from "../Recoil/RecoilState";
 
 const Dashboard = () => {
+  const setIsActiveUser = useSetRecoilState(isActiveUserState);
+
   // Authentication token
   const { token } = useRecoilValue(authState);
-
   // Stream atom state and fetch function
   const streamAtom = useRecoilValue(streamState);
   const {
@@ -51,10 +54,8 @@ const Dashboard = () => {
         ]);
         console.log("infoRes", infoRes.data.timestamp_range); //! important to update save data
         setPersonalInfo(convertToObjArray(infoRes?.data));
-        console.log("personalInfo", infoRes?.data);
-        console.log(sysRes?.data?.[0])
+        setIsActiveUser(infoRes?.data.is_active);
         setSystemInfo(convertToObjArray(sysRes?.data || {}));
-        console.log("here is  systemInfo", sysRes?.data);
         setError({ info: null, system: null });
       } catch (err) {
         setError({
@@ -77,7 +78,7 @@ const Dashboard = () => {
 
   return (
     <Stack
-      direction={{lg :"row"}}
+      direction={{ lg: "row" }}
       flexWrap="wrap"
       gap={4}
       justifyContent="space-between"

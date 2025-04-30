@@ -9,10 +9,12 @@ import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
 import SubscriptionWarningCard from "../Components/Cards/SubscriptionWarningCard";
 import { drawerWidth } from "../utils/StaticVariables";
+import { isActiveUserState } from "../Recoil/RecoilState";
 
 const AppLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authRecoil, setAuthRecoil] = useRecoilState(authState);
+  const [isActiveUserRecoil] = useRecoilState(isActiveUserState);
 
   useEffect(() => {
     if (localStorage?.token && !authRecoil?.token) {
@@ -22,7 +24,7 @@ const AppLayout = () => {
         token: localStorage.token,
       });
     }
-  }, [authRecoil]);
+  }, [authRecoil, setAuthRecoil]);
 
   if (!authRecoil?.token) {
     return <Navigate to="/login" />;
@@ -35,10 +37,13 @@ const AppLayout = () => {
         mobileOpen={mobileOpen}
         drawerWidth={drawerWidth}
       />
-      <Box component="main" sx={{ flexGrow: 1, p: 3, width: "100vw", position: "relative" }}>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, width: "100vw", position: "relative" }}
+      >
         <TopNav openHandel={() => setMobileOpen(!mobileOpen)} />
         <Toolbar />
-        <SubscriptionWarningCard />
+        {!isActiveUserRecoil && <SubscriptionWarningCard />}
         <Outlet />
         <PopUpReusable />
       </Box>

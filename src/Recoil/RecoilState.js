@@ -43,6 +43,12 @@ export const filterResultState = atom({
   },
 });
 
+export const isActiveUserState = atom({
+  key: "isActiveUserState",
+  default: true,
+});
+
+
 
 
 export const authState = atom({

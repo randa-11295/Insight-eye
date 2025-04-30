@@ -18,8 +18,8 @@ export const navbarContentArr = [
   { text: "Dashboard", url: "/", icon: getIcon(DashboardOutlinedIcon) },
   { text: "Streams", url: "/streams", icon: getIcon(LiveTvOutlinedIcon) },
   { text: "Frames Search", url: "/frames-search", icon: getIcon(SearchOutlinedIcon) },
-  { text: "Logs", url: "/logs", icon: getIcon(EditNoteOutlinedIcon) },
   { text: "Predictions", url: "/predictions", icon: getIcon(LightbulbOutlinedIcon) },
+  { text: "Logs", url: "/logs", icon: getIcon(EditNoteOutlinedIcon) },
   { text: "Setting", url: "/setting", icon: getIcon(SettingsOutlinedIcon) },
   { text: "Log out", url: false, icon: getIcon(LogoutOutlinedIcon) },
 ];
