@@ -44,8 +44,7 @@ const ParamStream = () => {
     },
     validationSchema: Yup.object({
       frame_skip: Yup.number()
-        .min(0, "Minimum 0")
-        .max(10, "Maximum 10")
+        .min(0, "Minimum 300")
         .required("Frame Skip is required"),
       conf: Yup.number()
         .min(0.1, "Minimum 0.1")

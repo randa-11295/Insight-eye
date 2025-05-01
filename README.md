@@ -108,5 +108,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 300 in frame 
 - after get reload in stream 
-- is subscribed  no is active 
-- change no data with no massage 
+- is subscribed  no is active          -------------- done 
+- change no data with no massage on error handle 

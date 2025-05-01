@@ -19,9 +19,12 @@ import axios from "axios";
 import { baseURL, streamTypesArr } from "../../utils/StaticVariables";
 import { useRecoilValue } from "recoil";
 import LoadBtn from "../../Components/Reusable/LoadBtn";
+import { useNavigate } from "react-router-dom";
+import CustomBtn from "../../Components/Reusable/CustomBtn";
 
 export default function UpdateStreams({ loading = false, onBack }) {
   const selectedData = useRecoilValue(selectedStreamState);
+  const navigate = useNavigate();
   const { token } = useRecoilValue(authState);
 
   const validationSchema = yup.object({
@@ -155,9 +158,9 @@ export default function UpdateStreams({ loading = false, onBack }) {
         alignItems="center"
         sx={{ mt: 4 }}
       >
-        <Button variant="outlined" onClick={onBack}>
-          Back
-        </Button>
+         <CustomBtn isLined handle={() => navigate("/streams")}>
+                    Back
+                  </CustomBtn>
 
         <Stack direction="row" spacing={2}>
           <Button
