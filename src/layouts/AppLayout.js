@@ -10,12 +10,13 @@ import { authState } from "../Recoil/RecoilState";
 import SubscriptionWarningCard from "../Components/Cards/SubscriptionWarningCard";
 import { drawerWidth } from "../utils/StaticVariables";
 import { isActiveUserState } from "../Recoil/RecoilState";
+import TokenCheck from "../Components/Auth/TokenCheck";
 
 const AppLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authRecoil, setAuthRecoil] = useRecoilState(authState);
   const [isActiveUserRecoil] = useRecoilState(isActiveUserState);
-
+  
   useEffect(() => {
     if (localStorage?.token && !authRecoil?.token) {
       setAuthRecoil({
@@ -32,6 +33,7 @@ const AppLayout = () => {
 
   return (
     <Box sx={{ display: "flex", overflow: "hidden" }}>
+      <TokenCheck />
       <SideNav
         openHandel={() => setMobileOpen(!mobileOpen)}
         mobileOpen={mobileOpen}
