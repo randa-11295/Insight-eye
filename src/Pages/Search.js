@@ -65,11 +65,7 @@ const Search = () => {
       isOpen: true,
       title: "Select Date and Time Range",
       content: (
-        // <FilterSearch
-        //   ref={childRef}
-        //   changeFilterHandle={setFilter}
-        //   total={total}
-        // />
+      
 
         <PredictionFilter
           filter={filter}
@@ -109,7 +105,7 @@ const Search = () => {
       })
       .catch((error) => {
         setSearchData([]);
-        enqueueSnackbar(error.massage, {
+        enqueueSnackbar(error.massage || "some thing want wrong", {
           variant: "error",
         });
       })

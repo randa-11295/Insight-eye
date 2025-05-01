@@ -23,7 +23,6 @@ const Predictions = () => {
 
   // Fetch predictions from API
   const fetchPredictions = async (filterParams) => {
-    console.log("run predictions api ");
     setPredictionLoading(true);
     try {
       const { data } = await axios.get(`${baseURL}prediction_data`, {
@@ -32,7 +31,7 @@ const Predictions = () => {
           Authorization: `Bearer ${localStorage.token}`,
         },
       });
-      setPredictions(data.predictions);
+      setPredictions(data?.predictions);
       console.log("api", data.predictions);
     } catch (err) {
       console.error("Error fetching predictions", err);
@@ -53,8 +52,8 @@ const Predictions = () => {
 
   // Set default camera_id after streams load
   useEffect(() => {
-    if (streams?.length) {
-      const allIds = streams.map((s) => s.id).join(",");
+    if (streams.length <0) {
+      const allIds = streams?.map((s) => s.id).join(",");
       setFilter((prev) => ({ ...prev, camera_id: allIds }));
     }
   }, [streams]);
@@ -129,7 +128,7 @@ const Predictions = () => {
         </Box>
       )}
 
-      {!predictionLoading && predictions.length > 0 && (
+      {!predictionLoading && predictions?.length > 0 && (
         <Grid container spacing={3}>
           {predictions.map((item, index) => (
             <Grid item xs={12} sm={6} key={item.camera_id}>
@@ -139,7 +138,7 @@ const Predictions = () => {
         </Grid>
       )}
 
-      {!predictionLoading && predictions.length === 0 && (
+      {!predictionLoading && predictions?.length === 0 && (
         <Typography textAlign="center" mt={4}>
           No prediction data found.
         </Typography>

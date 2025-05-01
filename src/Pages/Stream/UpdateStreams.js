@@ -56,7 +56,7 @@ export default function UpdateStreams({ loading = false, onBack }) {
       }));
 
       try {
-        await axios.put(`${baseURL}stream`, cleanedData, {
+        await axios.put(`${baseURL}source`, cleanedData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
