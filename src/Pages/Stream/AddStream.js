@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Box, Stack } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -14,21 +14,20 @@ import { authState } from "../../Recoil/RecoilState";
 import * as Yup from "yup";
 import { streamTypesArr } from "../../utils/StaticVariables";
 import { useSnackbar } from "notistack";
+import  useFetchStreams  from "../../hooks/useFetchStreams";
+
 const AddStream = () => {
   const { token } = useRecoilValue(authState);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-
-  useEffect(() => {
-    console.log(token);
-  }, [token]);
+  const { refetchStreams } = useFetchStreams(); 
 
   const formik = useFormik({
     initialValues: {
       name: "",
       path: "",
-      type: "",
+      type: streamTypesArr[0],
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -40,7 +39,6 @@ const AddStream = () => {
         .required("Type is required"),
     }),
     onSubmit: (values) => {
-      console.log("values");
       setLoading(true);
       axios
         .post(`${baseURL}source`, values, {
@@ -48,9 +46,11 @@ const AddStream = () => {
         })
         .then(() => {
           formik.handleReset();
+          refetchStreams();
           enqueueSnackbar("Your new stream added Successful", {
             variant: "success",
           });
+
         })
         .catch((error) => {
           enqueueSnackbar(error?.message || "some thing want wrong", { variant: "error" });

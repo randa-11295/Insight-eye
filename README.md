@@ -106,7 +106,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 30 - fix- update stream
 31- fix add stream                   ------------------ done 
 
-300 in frame 
+300 in frame       ---------------------- done
 - after get reload in stream 
 - is subscribed  no is active          -------------- done 
 - change no data with no massage on error handle 
