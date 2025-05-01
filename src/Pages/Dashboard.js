@@ -42,7 +42,7 @@ const Dashboard = () => {
         });
         console.log("infoRes", res.data.timestamp_range); // Log timestamp for tracking
         setPersonalInfo(convertToObjArray(res?.data));
-        setIsActiveUser(res?.data.is_active);
+        setIsActiveUser(res?.data?.is_subscribed);
         setError((prev) => ({ ...prev, info: null }));
       } catch (err) {
         setError((prev) => ({ ...prev, info: "Unable to load personal info." }));
