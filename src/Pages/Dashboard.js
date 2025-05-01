@@ -40,7 +40,6 @@ const Dashboard = () => {
         const res = await axios.get(`${baseURL}user_info`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("infoRes", res.data.timestamp_range); // Log timestamp for tracking
         setPersonalInfo(convertToObjArray(res?.data));
         setIsActiveUser(res?.data?.is_subscribed);
         setError((prev) => ({ ...prev, info: null }));

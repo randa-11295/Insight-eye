@@ -65,17 +65,21 @@ const ChartSearch = ({ chartData = [], loading }) => {
       legend: {
         position: "bottom",
       },
+      datalabels: {
+        display: false, // 👈 disable the labels
+      },
     },
     scales: {
       x: {
         ticks: {
-          autoSkip: true, // Prevents overcrowding on the x-axis
+          autoSkip: true,
           maxRotation: 45,
           minRotation: 20,
         },
       },
     },
   };
+  
 
   return (
     <>
