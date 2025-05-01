@@ -16,19 +16,10 @@ const TokenCheck = () => {
       const expireDate = new Date(expire).getTime(); // if in ms
       const now = new Date().getTime();
 
-      console.log(
-        "🔐 Token expires at:",
-        new Date(expireDate).toLocaleString("en-GB", {
-          timeZone: "Africa/Cairo",
-        })
-      );
-      console.log(
-        "🕒 Device time now:",
-        new Date(now).toLocaleString("en-GB", { timeZone: "Africa/Cairo" })
-      );
+    
 
       if (now > expireDate) {
-        console.log("🚨 Token has expired");
+        
         localStorage.removeItem("token");
         localStorage.removeItem("expire");
         resetAuth();

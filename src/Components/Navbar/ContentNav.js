@@ -37,7 +37,6 @@ const ContentNav = (props) => {
   const handelLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("expire");
-
     setAuthRecoil(null);
     axios
       .post(baseURL, "logout")
