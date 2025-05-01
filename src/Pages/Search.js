@@ -30,6 +30,7 @@ const Search = () => {
   const [searchChartData, setSearchChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(16);
   const [filter, setFilter] = useState({});
   const [total, setTotal] = useState(0);
   const [numOfPages, setNumOfPages] = useState(0);
@@ -37,7 +38,16 @@ const Search = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleToggleChange = (event, newValue) => {
-    if (newValue !== null) setSelectedShowMethod(newValue);
+    if (newValue) {
+      console.log("newValue", newValue);
+      setSelectedShowMethod(newValue);
+      if (newValue === "chart") {
+        setPage(1);
+        setLimit(total);
+      } else {
+        setLimit(16);
+      }
+    }
   };
 
   useEffect(() => {
@@ -65,8 +75,6 @@ const Search = () => {
       isOpen: true,
       title: "Select Date and Time Range",
       content: (
-      
-
         <PredictionFilter
           filter={filter}
           ref={childRef}
@@ -87,7 +95,7 @@ const Search = () => {
       .get(baseURL + "search_results", {
         params: {
           page,
-          per_page: "12",
+          per_page: limit,
           end_time: filter.endTime,
           start_time: filter.startTime,
           start_date: filter.startDate,
@@ -111,7 +119,7 @@ const Search = () => {
       })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, filter]);
+  }, [page, filter , limit]);
 
   return (
     <Box p={2}>
