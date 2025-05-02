@@ -31,7 +31,6 @@ const WebSocketComponent = ({ data }) => {
   const [imgSrc, setImgSrc] = useState(noImage);
 
   useEffect(() => {
-    console.log("WebSocketComponent data:", data);
     if (data.static_base64) {
       setImgSrc(BASE64_IMAGE_PREFIX + data.static_base64);
     }

@@ -2,8 +2,6 @@ import { IconButton, Toolbar, Typography, Stack, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import DesBtn from "../Reusable/DesBtn";
 import { drawerWidth } from "../../utils/StaticVariables";
 import NotificationMenu from "./NotificationSocket";
 const TopNav = (props) => {
