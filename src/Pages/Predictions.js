@@ -32,7 +32,6 @@ const Predictions = () => {
         },
       });
       setPredictions(data?.predictions);
-      console.log("api", data.predictions);
     } catch (err) {
       console.error("Error fetching predictions", err);
       setPredictions([]);
@@ -43,8 +42,7 @@ const Predictions = () => {
 
   // Fetch streams on mount if null
   useEffect(() => {
-    if (streams === null) {
-      console.log("null stream", streams);
+    if (!streams) {
       refetchStreams();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,7 +50,7 @@ const Predictions = () => {
 
   // Set default camera_id after streams load
   useEffect(() => {
-    if (streams.length <0) {
+    if (streams) {
       const allIds = streams?.map((s) => s.id).join(",");
       setFilter((prev) => ({ ...prev, camera_id: allIds }));
     }
@@ -100,7 +98,7 @@ const Predictions = () => {
         </Typography>
         <DesBtn
           text="Filter"
-          disabled={streams?.length < 0}
+          disabled={!streams?.length}
           handle={openPopup}
           customStyle={{ minWidth: "auto" }}
         >

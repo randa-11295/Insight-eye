@@ -14,6 +14,7 @@ const ChangePassword = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const { token } = useRecoilValue(authState);
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
 
   const formik = useFormik({
     initialValues: {
@@ -24,13 +25,24 @@ const ChangePassword = () => {
     },
     validationSchema: Yup.object({
       username: Yup.string().required("Username is required"),
-      current_password: Yup.string().required("Current password is required"),
-      new_password: Yup.string()
-        .required("New password is required")
-        .min(8, "Must be at least 8 characters"),
-      confirm_password: Yup.string()
-        .oneOf([Yup.ref("new_password")], "Passwords must match")
-        .required("Please confirm your new password"),
+      current_password: Yup.string()
+      .required("Current password is required"),
+  
+    new_password: Yup.string()
+      .required("New password is required")
+      .min(8, "Must be at least 8 characters")
+      .matches(
+        passwordRegex,
+        "Password must include uppercase, lowercase, and a special character"
+      )
+      .notOneOf(
+        [Yup.ref("current_password")],
+        "New password must be different from the current password"
+      ),
+  
+    confirm_password: Yup.string()
+      .oneOf([Yup.ref("new_password")], "Passwords must match")
+      .required("Please confirm your new password"),
     }),
     onSubmit: async (values) => {
       setLoading(true);
@@ -42,13 +54,20 @@ const ChangePassword = () => {
           response.data.message || "Password updated successfully",
           {
             variant: "success",
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "right",
+            },
           }
         );
         formik.resetForm();
       } catch (error) {
         enqueueSnackbar(
           error.response?.data?.detail || "Error updating password",
-          { variant: "error" }
+          { variant: "error" ,   anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "right",
+          },}
         );
       } finally {
         setLoading(false);
