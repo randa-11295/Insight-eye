@@ -8,11 +8,7 @@ const useNotificationWebSocket = ({ onMessage }) => {
   useEffect(() => {
     if (!token) return;
 
-    const ws = new WebSocket("wss://16.170.216.227/notify");
-
-    ws.onopen = () => {
-      ws.send(JSON.stringify({ type: "auth", token: `Bearer ${token}` }));
-    };
+    const ws = new WebSocket(`wss://16.170.216.227/notify?token=${token}`);
 
     ws.onmessage = (event) => {
       try {

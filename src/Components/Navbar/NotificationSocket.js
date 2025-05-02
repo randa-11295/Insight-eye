@@ -25,6 +25,7 @@ const NotificationMenu = ({ token }) => {
   // Handle new incoming WebSocket messages
   useNotificationWebSocket({
     onMessage: (data) => {
+     console.log("Notification data:", data);
       const message = {
         id: Date.now(),
         content: `${data.type} @ ${new Date().toLocaleTimeString()}`,
