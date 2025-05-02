@@ -13,7 +13,7 @@ const useNotificationWebSocket = ({ onMessage }) => {
     wsRef.current = ws;
 
     const handleClose = (reason) => {
-      console.error("WebSocket closed:", reason);
+      // console.error("WebSocket closed:", reason);
       ws.close();
     };
 

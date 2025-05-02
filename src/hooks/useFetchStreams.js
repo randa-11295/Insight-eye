@@ -8,10 +8,7 @@ import { baseURL } from "../utils/StaticVariables";
 const useFetchStreams = () => {
   const [streamRecoil, setStreamRecoil] = useRecoilState(streamState);
 
-  // Debug: log whenever any field in the atom changes
-  useEffect(() => {
-    console.log("streamRecoil change hook", streamRecoil);
-  }, [streamRecoil]);
+
 
   const fetchStreams = useCallback(async () => {
     try {

@@ -9,17 +9,19 @@ import {
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import useNotificationWebSocket from "../../hooks/useNotificationWebSocket";
-const NotificationMenu = ({ token }) => {
+
+const NotificationMenu = () => {
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
   const open = Boolean(anchorEl);
-  const wasOpened = useRef(false); // To track if the menu was opened
+  const wasOpened = useRef(false); 
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
-    setUnreadCount(0); // Reset unread count when opened
+    setUnreadCount(0); 
     wasOpened.current = true;
   };
 
@@ -29,7 +31,7 @@ const NotificationMenu = ({ token }) => {
 
   useNotificationWebSocket({
     onMessage: (data) => {
-     console.log("Notification data:", data);
+    //  console.log("Notification data:", data);
       const message = {
         id: Date.now(),
         content: data?.type,

@@ -37,9 +37,12 @@ const Search = () => {
   const childRef = useRef(null);
   const { enqueueSnackbar } = useSnackbar();
 
+  useEffect(()=>{
+    console.log("filterData", filter);
+  },[filter])
+
   const handleToggleChange = (event, newValue) => {
     if (newValue) {
-      console.log("newValue", newValue);
       setSelectedShowMethod(newValue);
       if (newValue === "chart") {
         setPage(1);
