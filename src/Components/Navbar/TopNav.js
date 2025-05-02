@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import DesBtn from "../Reusable/DesBtn";
 import { drawerWidth } from "../../utils/StaticVariables";
+import NotificationMenu from "./NotificationSocket";
 const TopNav = (props) => {
   let location = useLocation();
   const [route, setRoute] = useState("");
@@ -69,6 +70,7 @@ const TopNav = (props) => {
               sx={{ fontSize: { md: "2rem", lg: "2.5rem" } }}
             />
           </DesBtn>
+          <NotificationMenu /> 
         </Stack>
       </Box>
     </Toolbar>
