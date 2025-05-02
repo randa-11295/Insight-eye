@@ -65,11 +65,7 @@ const TopNav = (props) => {
           >
             {route}
           </Typography>
-          <DesBtn text="Notifications" noBoarder>
-            <NotificationsIcon
-              sx={{ fontSize: { md: "2rem", lg: "2.5rem" } }}
-            />
-          </DesBtn>
+         
           <NotificationMenu /> 
         </Stack>
       </Box>
