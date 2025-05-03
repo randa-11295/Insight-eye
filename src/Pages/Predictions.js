@@ -2,17 +2,15 @@ import { useEffect, useState, useRef } from "react";
 import { Box, Grid, Stack, CircularProgress, Typography } from "@mui/material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import PredictionsCard from "../Components/Prediction/PredictionsCard";
-import useFetchStreams from "../hooks/useFetchStreams";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { streamState, popupState } from "../Recoil/RecoilState";
-import PredictionFilter from "../Components/Prediction/PredictionFilter";
+import Filter from "../Components/PopUp/Filter";
 import DesBtn from "../Components/Reusable/DesBtn";
 import axios from "axios";
 import { baseURL } from "../utils/StaticVariables";
 import { convertKeysToKebabCase } from "../utils/helpers";
 
 const Predictions = () => {
-  const { refetchStreams } = useFetchStreams();
   const { data: streams, loading, error } = useRecoilValue(streamState);
   const setPopup = useSetRecoilState(popupState);
   const childRef = useRef(null);
@@ -39,8 +37,6 @@ const Predictions = () => {
       setPredictionLoading(false);
     }
   };
-
-
 
   // Set default camera_id after streams load
   useEffect(() => {
@@ -69,11 +65,7 @@ const Predictions = () => {
       isOpen: true,
       title: "Select Date and Time Range",
       content: (
-        <PredictionFilter
-          filter={filter}
-          ref={childRef}
-          changeFilterHandle={setFilter}
-        />
+        <Filter filter={filter} ref={childRef} changeFilterHandle={setFilter} />
       ),
       sendReq: handleClick,
     });

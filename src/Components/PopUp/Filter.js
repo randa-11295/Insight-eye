@@ -37,7 +37,7 @@ const makeInitial = (filter) => ({
     : null,
 });
 
-const PredictionFilter = forwardRef((props, ref) => {
+const Filter = forwardRef((props, ref) => {
   const { changeFilterHandle } = props;
   const { data: cameraOptions, loading, error } = useRecoilValue(streamState);
 
@@ -148,4 +148,4 @@ const PredictionFilter = forwardRef((props, ref) => {
   );
 });
 
-export default PredictionFilter;
+export default Filter;

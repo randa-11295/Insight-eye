@@ -6,7 +6,6 @@ import CardSearch from "../Components/Search/CardSearch";
 import GridContainer from "../Components/HOC/GridContainer";
 import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable";
 import TableReusable from "../Components/Reusable/TableReusable";
-import FilterSearch from "../Components/Search/FilterSearch";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DesBtn from "../Components/Reusable/DesBtn";
 import PrintBtn from "../Components/Reusable/PrintBtn";
@@ -14,7 +13,7 @@ import { Stack, Card, Pagination, Box, Typography } from "@mui/material";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { popupState, authState } from "../Recoil/RecoilState";
 import { useSnackbar } from "notistack";
-import PredictionFilter from "../Components/Prediction/PredictionFilter";
+import PredictionFilter from "../Components/PopUp/Filter";
 
 import {
   dataRenderTypeInSearchArr,
@@ -37,9 +36,9 @@ const Search = () => {
   const childRef = useRef(null);
   const { enqueueSnackbar } = useSnackbar();
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("filterData", filter);
-  },[filter])
+  }, [filter]);
 
   const handleToggleChange = (event, newValue) => {
     if (newValue) {
@@ -122,37 +121,59 @@ const Search = () => {
       })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, filter , limit]);
+  }, [page, filter, limit]);
 
   return (
     <Box p={2}>
       {!loading && (
-        <Stack
-          my={4}
-          direction={{ xs: "column", md: "row" }}
-          spacing={2}
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Typography variant="body1" color="textPrimary">
-            Available Recoded Frames : <strong> {total || 0}</strong>
-          </Typography>
-          <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-            <ReusableToggleBtns
-              options={dataRenderTypeInSearchArr}
-              value={selectedShowMethod}
-              handleToggleChange={handleToggleChange}
-            />
-            <DesBtn
-              text="Filter"
-              handle={openPopup}
-              customStyle={{ minWidth: "auto" }}
-            >
-              <FilterAltOutlinedIcon />
-            </DesBtn>
-            <PrintBtn data={searchData} columns={searchFramesColumns} />
-          </Stack>
-        </Stack>
+       <Stack my={4} spacing={2}>
+       {/* Info text centered on mobile */}
+       <Typography
+         variant="body1"
+         color="textPrimary"
+         textAlign={{ xs: "center", md: "left" }}
+       >
+         Available Recorded Frames: <strong>{total || 0}</strong>
+       </Typography>
+     
+       {/* Controls stack vertically on xs, horizontally on md */}
+       <Stack
+         direction={{ xs: "column", sm: "row" }}
+         spacing={2}
+         justifyContent="space-between"
+         alignItems={ "center" }
+         flexWrap="wrap"
+       >
+         {/* Toggle buttons take full width on small devices */}
+         <Box flex={1} >
+           <ReusableToggleBtns
+             options={dataRenderTypeInSearchArr}
+             value={selectedShowMethod}
+             handleToggleChange={handleToggleChange}
+           />
+         </Box>
+     
+         {/* Buttons grouped together and responsive */}
+         <Stack
+           direction="row"
+           spacing={2}
+           justifyContent="center"
+           flexWrap="wrap"
+           sx={{ mt: { xs: 2, md: 0 } }}
+         >
+           <DesBtn
+             text="Filter"
+             handle={openPopup}
+            //  customStyle={{ minWidth: "100px" }}
+           >
+             <FilterAltOutlinedIcon />
+           </DesBtn>
+     
+           <PrintBtn data={searchData} columns={searchFramesColumns} />
+         </Stack>
+       </Stack>
+     </Stack>
+     
       )}
 
       {selectedShowMethod === "cards" &&
