@@ -24,7 +24,6 @@ const OTP = () => {
     }),
     onSubmit: (values) => {
       setLoading(true);
-
       axios
         .post(baseURL + "otp/send-otp", { email: values.email, length: 6 })
         .then((response) => {
@@ -51,6 +50,7 @@ const OTP = () => {
 
     onSubmit: (values) => {
       setLoading(true);
+      console.log(baseURL)
       axios
         .post(baseURL + "otp/verify-otp", {
           email: sendOTPFormik.values.email,

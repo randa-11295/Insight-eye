@@ -110,3 +110,12 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - after get reload in stream 
 - is subscribed  no is active          -------------- done 
 - change no data with no massage on error handle 
+
+
+-- notifi ...
+-- id in search --
+-- alert in log out
+-- config production 
+-- passward
+-- config show 
+-- stream not open is it open 
