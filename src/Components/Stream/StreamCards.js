@@ -41,7 +41,7 @@ const WebSocketComponent = ({ data }) => {
 
   const startStream = useCallback(() => {
     const token = authRecoil.token;
-    const streamUrl = `wss://16.170.216.227/stream/user?stream_id=${data.id}&token=${token}`;
+    const streamUrl = `wss://16.170.216.227/insighteye/stream?stream_id=${data.id}&token=${token}`;
     const socket = new WebSocket(streamUrl);
 
     socket.onopen = () => {
