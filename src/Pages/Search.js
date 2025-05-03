@@ -36,10 +36,6 @@ const Search = () => {
   const childRef = useRef(null);
   const { enqueueSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    console.log("filterData", filter);
-  }, [filter]);
-
   const handleToggleChange = (event, newValue) => {
     if (newValue) {
       setSelectedShowMethod(newValue);
@@ -92,7 +88,6 @@ const Search = () => {
   useEffect(() => {
     setLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    console.log("Filter", filter);
     axios
       .get(baseURL + "search_results", {
         params: {

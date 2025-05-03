@@ -43,7 +43,6 @@ export default function UpdateStreams({ loading = false, onBack }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { resetForm }) => {
-      console.log("Form values:", values.streams);
 
       // Only keep the fields required by the backend
       const cleanedData = values.streams.map((stream) => ({

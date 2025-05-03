@@ -74,7 +74,6 @@ const WebSocketComponent = ({ data }) => {
     };
 
     socket.onclose = () => {
-      console.log("WebSocket Disconnected");
       setStreaming(false);
     };
 

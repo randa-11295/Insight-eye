@@ -8,7 +8,6 @@ import { baseURL } from "../utils/StaticVariables";
 const useFetchStreams = () => {
   const [streamRecoil, setStreamRecoil] = useRecoilState(streamState);
 
-  console.log("refreash stream");
 
   const fetchStreams = useCallback(async () => {
     try {

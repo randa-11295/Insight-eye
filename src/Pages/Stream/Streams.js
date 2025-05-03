@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Holder from "../../Components/HOC/Holder";
 import CustomBtn from "../../Components/Reusable/CustomBtn";
 import TableReusable from "../../Components/Reusable/TableReusable";
@@ -25,9 +24,6 @@ const Streams = () => {
   const { token } = useRecoilValue(authState);
   const { enqueueSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    console.log("Selected Data:", selectedData);
-  }, [selectedData]);
 
   // ⬇️ Handle checkbox selection
   const changeSelectDataRow = (selectedNewData) => {

@@ -47,7 +47,6 @@ const NotificationMenu = () => {
       });
 
       if (data.status === "success") {
-        console.log("Notification data:", data.notifications);
         const parsed = data.notifications.map((n) => ({
           id: n.id,
           message: n.message,
@@ -56,7 +55,6 @@ const NotificationMenu = () => {
         }));
 
         setNotifications(parsed);
-        console.log("Parsed notifications:", parsed);
         if (parsed.some((n) => !n.read)) {
           setHasUnread(true);
         }
