@@ -55,9 +55,7 @@ const NotificationMenu = () => {
         }));
 
         setNotifications(parsed);
-        if (parsed.some((n) => !n.read)) {
-          setHasUnread(true);
-        }
+  
       } else {
         setError("Failed to load notifications");
       }
