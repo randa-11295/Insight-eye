@@ -23,6 +23,7 @@ import useFetchStreams from "../../hooks/useFetchStreams";
 import noImage from "../../Images/no-image.jpeg";
 import { popupState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
+import { notificationHasUnread } from "../../Recoil/RecoilState";
 const WebSocketComponent = ({ data }) => {
   const [ws, setWs] = useState(null);
   const [authRecoil] = useRecoilState(authState);
@@ -31,27 +32,26 @@ const WebSocketComponent = ({ data }) => {
   const { refetchStreams } = useFetchStreams();
   const [imgSrc, setImgSrc] = useState(noImage);
   const setPopup = useSetRecoilState(popupState);
+  const  setHasUnread = useSetRecoilState(notificationHasUnread);
 
   useEffect(() => {
     if (data.static_base64) {
       setImgSrc(BASE64_IMAGE_PREFIX + data.static_base64);
     }
      
-  
     if (data.is_streaming === true) {
       startStream("useEffect");
     }
   }, [data]);
 
   const startStream = useCallback((test) => {
-    console.log("Starting stream:", test);
     const token = authRecoil.token;
     const streamUrl = `wss://16.170.216.227/insighteye/stream?stream_id=${data.id}&token=${token}`;
     const socket = new WebSocket(streamUrl);
-    console.log("try Connecting to WebSocket:", streamUrl);
+
     socket.onopen = () => {
-      console.log("WebSocket Connected");
       setStreaming(true);
+      setHasUnread(true); 
     };
 
     socket.onmessage = (event) => {
@@ -85,6 +85,7 @@ const WebSocketComponent = ({ data }) => {
     if (ws) ws.close();
     setWs(null);
     setStreaming(false);
+    setHasUnread(true)
 
     try {
       await axios.post(
@@ -109,7 +110,7 @@ const WebSocketComponent = ({ data }) => {
             Stopping stream will cause stopping the model from receiving frames
             from the cameras live stream. There is no more data will be stored
             for the number of people until you click on start stream button
-            again."
+            again.
           </Typography>
         </div>
       ),

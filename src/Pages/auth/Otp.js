@@ -55,7 +55,7 @@ const OTP = () => {
         .post(baseURL + "otp/verify-otp", {
           email: sendOTPFormik.values.email,
           otp: values.OTP,
-          expiration: "1000",
+          // expiration: "1000",
         })
         .then((response) => {
           setOtpSent("verify");

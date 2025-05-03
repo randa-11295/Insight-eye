@@ -65,3 +65,8 @@ export const streamState = atom({
     error: null,
   },
 });
+
+export const notificationHasUnread = atom({
+  key: 'notificationHasUnread',
+  default: true, // true = show red dot, false = hide it
+});
