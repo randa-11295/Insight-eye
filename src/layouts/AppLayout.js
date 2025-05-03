@@ -16,7 +16,7 @@ const AppLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authRecoil, setAuthRecoil] = useRecoilState(authState);
   const [isActiveUserRecoil] = useRecoilState(isActiveUserState);
-  
+
   useEffect(() => {
     if (localStorage?.token && !authRecoil?.token) {
       setAuthRecoil({
@@ -46,7 +46,9 @@ const AppLayout = () => {
         <TopNav openHandel={() => setMobileOpen(!mobileOpen)} />
         <Toolbar />
         {!isActiveUserRecoil && <SubscriptionWarningCard />}
-        <Outlet />
+        <Box sx={{ mt: 4 }}>
+          <Outlet />
+        </Box>
         <PopUpReusable />
       </Box>
     </Box>
