@@ -40,7 +40,6 @@ const WebSocketComponent = ({ data }) => {
       setImgSrc(BASE64_IMAGE_PREFIX + data.static_base64);
     }
 
-    console.log("data ", data.name, " streaming ", data.is_streaming);
     if (data.is_streaming === true) {
       startStream("useEffect");
     }
@@ -48,7 +47,6 @@ const WebSocketComponent = ({ data }) => {
 
   const startStream = useCallback(
     (test) => {
-      console.log("Stream try to started ", data.name);
       const token = authRecoil.token;
       const streamUrl = `wss://16.170.216.227/insighteye/stream?stream_id=${data.id}&token=${token}`;
       const socket = new WebSocket(streamUrl);
@@ -57,7 +55,6 @@ const WebSocketComponent = ({ data }) => {
       socket.onopen = () => {
         setStreaming(true);
         setHasUnread(true);
-        console.log("WebSocket connection opened", data.name);
         setLoader(false);
       };
 
@@ -70,14 +67,12 @@ const WebSocketComponent = ({ data }) => {
             setImgSrc(noImage);
           }
         } catch (err) {
-          console.log("WebSocket connection error", data.name);
           console.error("Error parsing JSON:", err);
           setImgSrc(noImage);
         }
       };
 
       socket.onerror = (err) => {
-        console.error("WebSocket Error:", err);
         setImgSrc(noImage);
       };
 
@@ -96,7 +91,6 @@ const WebSocketComponent = ({ data }) => {
     setWs(null);
     setStreaming(false);
     setHasUnread(true);
-    console.log("Stream try to stopped ", data.name);
     setLoader(true);
     try {
       await axios.post(
@@ -104,10 +98,8 @@ const WebSocketComponent = ({ data }) => {
         {},
         { headers: { Authorization: `Bearer ${authRecoil.token}` } }
       );
-      console.log("Stream stopped successfully", data.name);
       setLoader(false);
     } catch (err) {
-      console.error("Failed to stop stream:", err);
       setLoader(false);
       setImgSrc(noImage);
     }
