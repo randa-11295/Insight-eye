@@ -3,7 +3,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { drawerWidth } from "../../utils/StaticVariables";
-import NotificationMenu from "./NotificationSocket";
+import NotificationMenu from "./NotificationMenu";
+
 const TopNav = (props) => {
   let location = useLocation();
   const [route, setRoute] = useState("");
