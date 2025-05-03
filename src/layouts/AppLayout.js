@@ -4,17 +4,18 @@ import Toolbar from "@mui/material/Toolbar";
 import TopNav from "../Components/Navbar/TopNav";
 import SideNav from "../Components/Navbar/SideNav";
 import { Outlet, Navigate } from "react-router-dom";
-import SnackAlert from "../Components/PopUp/SnackAlert";
 import PopUpReusable from "../Components/PopUp/PopUpReusable";
 import { useRecoilState } from "recoil";
 import { authState } from "../Recoil/RecoilState";
-
-const drawerWidth = 280;
+import SubscriptionWarningCard from "../Components/Cards/SubscriptionWarningCard";
+import { drawerWidth } from "../utils/StaticVariables";
+import { isActiveUserState } from "../Recoil/RecoilState";
+import TokenCheck from "../Components/Auth/TokenCheck";
 
 const AppLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authRecoil, setAuthRecoil] = useRecoilState(authState);
-
+  const [isActiveUserRecoil] = useRecoilState(isActiveUserState);
 
   useEffect(() => {
     if (localStorage?.token && !authRecoil?.token) {
@@ -24,7 +25,7 @@ const AppLayout = () => {
         token: localStorage.token,
       });
     }
-  }, [authRecoil]);
+  }, [authRecoil, setAuthRecoil]);
 
   if (!authRecoil?.token) {
     return <Navigate to="/login" />;
@@ -32,18 +33,24 @@ const AppLayout = () => {
 
   return (
     <Box sx={{ display: "flex", overflow: "hidden" }}>
+      <TokenCheck />
       <SideNav
         openHandel={() => setMobileOpen(!mobileOpen)}
         mobileOpen={mobileOpen}
         drawerWidth={drawerWidth}
       />
-      <Box component="main" sx={{ flexGrow: 1, p: 3, width: "100vw" }}>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, width: "100vw", position: "relative" }}
+      >
         <TopNav openHandel={() => setMobileOpen(!mobileOpen)} />
         <Toolbar />
-        <Outlet />
+        {!isActiveUserRecoil && <SubscriptionWarningCard />}
+        <Box sx={{ mt: 4 }}>
+          <Outlet />
+        </Box>
         <PopUpReusable />
       </Box>
-      <SnackAlert />
     </Box>
   );
 };

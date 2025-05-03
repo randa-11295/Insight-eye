@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Holder from "../../Components/HOC/Holder";
 import CustomBtn from "../../Components/Reusable/CustomBtn";
 import TableReusable from "../../Components/Reusable/TableReusable";
@@ -10,26 +9,26 @@ import {
   streamState,
 } from "../../Recoil/RecoilState";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { streamColumns } from "../../utils/StaticVariables";
-import { useAxiosWithAuth } from "../../services/api";
-import useFetchStreams from "../../hooks/useFetchStreams"; // ✅ use your hook
+import { baseURL, streamColumns } from "../../utils/StaticVariables";
+import useFetchStreams from "../../hooks/useFetchStreams";
+import axios from "axios";
+import { authState } from "../../Recoil/RecoilState";
+import { useSnackbar } from "notistack";
+import { useEffect } from "react";
 
 const Streams = () => {
   const { data, loading } = useRecoilValue(streamState);
-  const setStream = useSetRecoilState(streamState);
   const [selectedData, setSelectedStream] = useRecoilState(selectedStreamState);
   const setPopup = useSetRecoilState(popupState);
-  const api = useAxiosWithAuth();
   const navigate = useNavigate();
-  const { refetchStreams } = useFetchStreams(); // ✅ Destructure the hook
+  const { refetchStreams } = useFetchStreams(); // Destructure the hook
+  const { token } = useRecoilValue(authState);
+  const { enqueueSnackbar } = useSnackbar();
 
-  // ✅ Refetch if there's no data loaded
   useEffect(() => {
-    console.log(data);
-    if (data === null) {
-      refetchStreams();
-    }
-  }, [data, refetchStreams]);
+    refetchStreams();
+    setSelectedStream([]);
+  }, [refetchStreams, setSelectedStream]); //
 
   // ⬇️ Handle checkbox selection
   const changeSelectDataRow = (selectedNewData) => {
@@ -43,19 +42,30 @@ const Streams = () => {
     );
   };
 
-  // ⬇️ Delete selected streams
+  useEffect(() => {
+    console.log("Selected data changed:", selectedData);
+  }, [selectedData]);
+  // ⬇ Delete selected streams
   const handelDeleteReqFromApi = async () => {
-    const selectedIDs = selectedData.map((el) => el.id);
-    setStream((prev) => ({ ...prev, loading: true }));
-
+    const selectedIDs = selectedData?.map((el) => el.id);
     try {
-      await api.delete("source", { data: { ids: selectedIDs } });
+      await axios.delete(`${baseURL}source`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          ids: selectedIDs,
+        },
+      });
       setSelectedStream([]);
-      refetchStreams(); // ✅ Refresh list after deletion
+      refetchStreams(); //  Refresh list after deletion
+      enqueueSnackbar("Stream deleted successfully", {
+        variant: "success",
+      });
     } catch (error) {
-      console.error("Delete Error:", error);
-    } finally {
-      setStream((prev) => ({ ...prev, loading: false }));
+      enqueueSnackbar("Delete failed " + error?.message, {
+        variant: "error",
+      });
     }
   };
 
@@ -63,7 +73,7 @@ const Streams = () => {
     setPopup({
       isOpen: true,
       title: "Remove Stream",
-      content: "Are you sure?",
+      content: "Are you sure you want to remove those camera streams?",
       sendReq: handelDeleteReqFromApi,
     });
   };
@@ -79,6 +89,7 @@ const Streams = () => {
     >
       <Box my={2}>
         <TableReusable
+          selected
           handelChangeSelect={changeSelectDataRow}
           showCheckbox
           data={data}

@@ -1,155 +1,115 @@
 import { useEffect, useState } from "react";
-import { Stack, Typography, CircularProgress } from "@mui/material";
-import Holder from "../Components/HOC/Holder";
-import HighlightedText from "../Components/Reusable/HighlightedText";
-import { useRecoilState } from "recoil";
-import { authState } from "../Recoil/RecoilState";
+import { Stack } from "@mui/material";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { authState, streamState, isActiveUserState } from "../Recoil/RecoilState";
+import useFetchStreams from "../hooks/useFetchStreams";
 import axios from "axios";
 import { convertToObjArray } from "../utils/helpers";
 import { baseURL } from "../utils/StaticVariables";
+import DashboardCards from "../Components/Cards/DashboardCards";
 
-// Reusable Section Renderer
-const RenderSection = ({ title, data, fullWidth = false, loading, error }) => (
-  <Stack sx={{ flex: fullWidth ? "1 1 100%" : "1 1 45%" }}>
-    <Holder title={title}>
-      {loading ? (
-        <Stack alignItems="center" justifyContent="center" minHeight="80px">
-          <CircularProgress size={24} />
-        </Stack>
-      ) : error ? (
-        <Typography color="error" fontSize="0.9rem">
-          {error}
-        </Typography>
-      ) : (
-        <Stack
-          gap={2}
-          direction={fullWidth ? "row" : "column"}
-          justifyContent={fullWidth ? "space-between" : "flex-start"}
-          sx={{ flex: 1 }}
-        >
-          {data.map((item, index) => (
-            <HighlightedText
-              key={item.id || index}
-              title={item.title}
-              val={item.val}
-            />
-          ))}
-        </Stack>
-      )}
-    </Holder>
-  </Stack>
-);
-
-// Dashboard Component
 const Dashboard = () => {
-  const [streamData, setStreamData] = useState([]);
-  const [paramStreamData, setParamStreamData] = useState([]);
+  const setIsActiveUser = useSetRecoilState(isActiveUserState);
+  const { token } = useRecoilValue(authState);
+  const streamAtom = useRecoilValue(streamState);
+  const {
+    data: streamData,
+    loading: streamLoading,
+    error: streamError,
+  } = streamAtom;
+  const { refetchStreams } = useFetchStreams();
+
   const [personalInfo, setPersonalInfo] = useState([]);
+  const [systemInfo, setSystemInfo] = useState([]);
+  const [newFormatOfStreamData, setNewFormatOfStreamData] = useState([]);
 
-  const [streamLoading, setStreamLoading] = useState(true);
-  const [paramLoading, setParamLoading] = useState(true);
-  const [infoLoading, setInfoLoading] = useState(true);
+  const [loading, setLoading] = useState({ info: true, system: true });
+  const [error, setError] = useState({ info: null, system: null });
 
-  const [streamError, setStreamError] = useState(null);
-  const [paramError, setParamError] = useState(null);
-  const [infoError, setInfoError] = useState(null);
-
-  const [authRecoil] = useRecoilState(authState);
-
-  // Get all streams
-  const getAllStreams = () => {
-    setStreamLoading(true);
-    axios
-      .get(`${baseURL}source`, {
-        headers: { Authorization: `Bearer ${authRecoil.token}` },
-      })
-      .then((response) => {
-        const res = response.data?.map((el) => ({
-          title: el.name,
-          val: el.status === "inactive" ? "Off" : "On",
-        }));
-        setStreamData(res);
-        setStreamError(null);
-      })
-      .catch((error) => {
-        setStreamError("Failed to load camera status");
-        console.error("Error fetching stream data:", error);
-      })
-      .finally(() => setStreamLoading(false));
-  };
-
-  // Get user personal info
-  const getUserInfo = () => {
-    setInfoLoading(true);
-    axios
-      .get(`${baseURL}user_info`, {
-        headers: { Authorization: `Bearer ${authRecoil.token}` },
-      })
-      .then((response) => {
-        setPersonalInfo(convertToObjArray(response.data));
-        setInfoError(null);
-      })
-      .catch((error) => {
-        setInfoError("Failed to load personal info");
-        console.error("Error fetching user info:", error);
-      })
-      .finally(() => setInfoLoading(false));
-  };
-
-  // Get param stream
-  const paramStream = () => {
-    setParamLoading(true);
-    axios
-      .get("param_stream/users", {
-        headers: { Authorization: `Bearer ${authRecoil.token}` },
-      })
-      .then((response) => {
-        console.log("info run" ,response);
-        const res = convertToObjArray(response.data?.[0] || {});
-        setParamStreamData(res);
-        setParamError(null);
-      })
-      .catch((error) => {
-        setParamError("Failed to load system information");
-        console.log("Error fetching param stream:", error);
-      })
-      .finally(() => setParamLoading(false));
-  };
-
+  // Refetch stream data and call APIs separately
   useEffect(() => {
-    if (authRecoil.token) {
-      getAllStreams();
-      paramStream();
-      getUserInfo();
-    }
-  }, [authRecoil.token]);
+    if (!token) return;
+
+    // Fetch stream data (via Recoil custom hook)
+    refetchStreams();
+
+    // Fetch personal user info
+    const fetchUserInfo = async () => {
+      setLoading((prev) => ({ ...prev, info: true }));
+      try {
+        const res = await axios.get(`${baseURL}user_info`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setPersonalInfo(convertToObjArray(res?.data));
+        setIsActiveUser(res?.data?.is_subscribed);
+        setError((prev) => ({ ...prev, info: null }));
+      } catch (err) {
+        setError((prev) => ({ ...prev, info: "Unable to load personal info." }));
+      } finally {
+        setLoading((prev) => ({ ...prev, info: false }));
+      }
+    };
+
+    // Fetch system info
+    const fetchSystemInfo = async () => {
+      setLoading((prev) => ({ ...prev, system: true }));
+      try {
+        const res = await axios.get(`${baseURL}param_stream/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setSystemInfo(convertToObjArray(res?.data || {}));
+        setError((prev) => ({ ...prev, system: null }));
+      } catch (err) {
+        setError((prev) => ({
+          ...prev,
+          system: "Unable to load system info.",
+        }));
+      } finally {
+        setLoading((prev) => ({ ...prev, system: false }));
+      }
+    };
+
+    // Run both separately
+    fetchUserInfo();
+    fetchSystemInfo();
+  }, [token, refetchStreams, setIsActiveUser]);
+
+  // Transform stream data into card-friendly format
+  useEffect(() => {
+    const res = streamData?.map((el) => ({
+      title: el?.name,
+      val: el?.status === "inactive" ? "Off" : "On",
+    }));
+    setNewFormatOfStreamData(res);
+  }, [streamData]);
 
   return (
     <Stack
-      direction="row"
+      direction={{ lg: "row" }}
       flexWrap="wrap"
       gap={4}
       justifyContent="space-between"
-      alignItems="stretch"
     >
-      <RenderSection
+      <DashboardCards
         title="Personal Info"
         data={personalInfo}
-        loading={infoLoading}
-        error={infoError}
+        loading={loading.info}
+        error={error.info}
       />
-      <RenderSection
+
+      <DashboardCards
         title="Camera Status"
-        data={streamData}
+        data={newFormatOfStreamData}
         loading={streamLoading}
         error={streamError}
       />
-      <RenderSection
+
+      <DashboardCards
         title="System Information"
-        data={paramStreamData}
+        data={systemInfo}
         fullWidth
-        loading={paramLoading}
-        error={paramError}
+        loading={loading.system}
+        error={error.system}
       />
     </Stack>
   );

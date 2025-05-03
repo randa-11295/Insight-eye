@@ -1,35 +1,48 @@
 import { useFormik } from "formik";
 import { useState } from "react";
-import { snackAlertState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
 import AuthContentReusable from "../../Components/Auth/AuthContentReusable";
 import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
+import * as Yup from "yup";
+import { useSnackbar } from "notistack";
+
 const LogIn = () => {
+  
   const [loading, setLoading] = useState(false);
-  const setSnackAlert = useSetRecoilState(snackAlertState);
   const setAuthRecoil = useSetRecoilState(authState);
-
-
-  const showError = () => {
-    setSnackAlert({
-      open: true,
-      message: "Email or Password is wrong",
-      severity: "error",
-    });
-  };
-
+  const { enqueueSnackbar } = useSnackbar();
   const formik = useFormik({
     initialValues: {
-      username: "",
+      "user name / email": "",
       password: "",
     },
+    validationSchema: Yup.object({
+      "user name / email": Yup.string().required(
+        "Username or Email is required"
+      ),
+      password: Yup.string()
+        .required("Password is required")
+        .min(8, "Password must be at least 8 characters"),
+    }),
     onSubmit: (values) => {
       setLoading(true);
 
+      // Regular expression to validate email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const inputValue = values["user name / email"];
+
+      // Dynamically choose either 'email' or 'username'
+      const payload = {
+        password: values.password,
+        ...(emailRegex.test(inputValue)
+          ? { email: inputValue }
+          : { username: inputValue }),
+      };
+
       axios
-        .post(baseURL + "login", values)
+        .post(baseURL + "login", payload)
         .then((response) => {
           localStorage.setItem("token", response.data.access_token);
           localStorage.setItem("refresh_token", response.data.refresh_token);
@@ -40,11 +53,11 @@ const LogIn = () => {
             refreshToken: response.data.refresh_token,
             expire: response.data.expires_at,
           });
-          window.location.reload();
         })
         .catch((error) => {
-          console.log("his error", error);
-          showError();
+          enqueueSnackbar(error?.message || "some thing want wrong", {
+            variant: "error",
+          });
         })
         .finally(() => {
           setLoading(false);
@@ -55,18 +68,17 @@ const LogIn = () => {
   return (
     <AuthContentReusable
       formik={formik}
-      title="Login"
-      btnText={"Send Massage"}
-      des="login to your account  to access all features in INSIGHT EYE"
-      // contentRoute={{ linkText: " Forget your password ?", route: "/" }}
+      title="LOGIN"
+      btnText={"Login"}
+      des="Login to your account to access all features in INSIGHTEYE"
+      contentRoute={{ linkText: "Forget your password?", route: "/otp" }}
       loading={loading}
       footerRoute={{
-        title: "  New user ?",
-        linkText: " Contact us",
+        title: "New user?",
+        linkText: "Contact us",
         route: "/contact",
       }}
     />
-   
   );
 };
 

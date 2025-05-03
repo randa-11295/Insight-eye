@@ -1,50 +1,64 @@
-import { TextField, Typography } from "@mui/material";
-
+import { useState } from "react";
+import {
+  TextField,
+  Typography,
+  IconButton,
+  InputAdornment,
+  Box
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const InputTextCustom = (props) => {
-  
-  let isError =
+  const [showPassword, setShowPassword] = useState(false);
+
+  const isError =
     props.formik?.touched[props.name] &&
     Boolean(props.formik?.errors[props.name]);
 
-  let textHelp =
-    (props.formik?.touched[props.name] && props.formik.errors[props.name])?.replace("." , "_")||
-    " ";
+  const textHelp =
+    (
+      props.formik?.touched[props.name] && props.formik.errors[props.name]
+    )?.replace(".", "_") || " ";
 
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
-  const styleInput = {
-    my: 1,
-    " & .MuiOutlinedInput-root ": props.phone && {
-      p: "0 ",
-    },
-    
-  };
+  const isPassword = props.type === "password";
 
   return (
-    <div>
+    <Box sx={{flexGrow: 1, }}>
       <Typography
-      
         variant="h6"
-        sx={{ fontSize: ".9rem", fontWeight: 600 , textTransform : "capitalize" }}
+        sx={{ fontSize: ".9rem", fontWeight: 600, textTransform: "capitalize" }}
       >
-        {props.label} : 
+        {props.label?.replaceAll("_", " ")}:
       </Typography>
       <TextField
         fullWidth
-        placeholder={props.placeholder || props.label}
+        placeholder={
+          props.placeholder?.replaceAll("_", " ") ||
+          props.label?.replaceAll("_", " ")
+        }
         value={props.formik?.values[props.name]}
         onChange={props.formik?.handleChange}
         onBlur={props.formik?.handleBlur}
         error={isError}
         helperText={textHelp}
         name={props.name}
-        type={props.type || "text"}
-        sx={styleInput}
+        size={props.small ? "small" : "medium"}
+        type={isPassword && !showPassword ? "password" : "text"}
         multiline={props.multi || false}
-        minRows={6}
-       
+        minRows={props.multi ? 6 : undefined}
+        InputProps={{
+          endAdornment: isPassword && (
+            <InputAdornment position="end">
+              <IconButton onClick={handleClickShowPassword} edge="end">
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
-    </div>
+    </Box>
   );
 };
 

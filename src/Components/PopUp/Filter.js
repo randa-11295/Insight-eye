@@ -1,4 +1,5 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+// PredictionFilter.jsx
+import React, { forwardRef, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -13,37 +14,44 @@ import {
   Alert,
 } from "@mui/material";
 import { useRecoilValue } from "recoil";
-import { streamState } from "../../Recoil/RecoilState"; // ✅ Make sure the path is correct
+import { streamState } from "../../Recoil/RecoilState";
 
-const PredictionFilter = forwardRef((props, ref) => {
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
+
+// Helper: turn incoming filter strings into Dayjs (or null)
+const makeInitial = (filter) => ({
+  camera_id: filter.camera_id ?? "",
+  startDate: filter.startDate
+    ? dayjs(filter.startDate, "DD/MM/YYYY")
+    : null,
+  endDate: filter.endDate
+    ? dayjs(filter.endDate, "DD/MM/YYYY")
+    : null,
+  startTime: filter.startTime
+    ? dayjs(filter.startTime, "HH:mm")
+    : null,
+  endTime: filter.endTime
+    ? dayjs(filter.endTime, "HH:mm")
+    : null,
+});
+
+const Filter = forwardRef((props, ref) => {
   const { changeFilterHandle } = props;
-  const { data: cameraOptions, loading, error } = useRecoilValue(streamState); // ✅ use streamState
+  const { data: cameraOptions, loading, error } = useRecoilValue(streamState);
 
   const formik = useFormik({
-    initialValues: props.filter,
+    initialValues: makeInitial(props.filter),
+    enableReinitialize: true,
     onSubmit: (values) => {
-      const formattedValues = {
-        ...values,
-        startDate: values.startDate
-          ? new Intl.DateTimeFormat("en-GB").format(values.startDate.$d)
-          : null,
-        endDate: values.endDate
-          ? new Intl.DateTimeFormat("en-GB").format(values.endDate.$d)
-          : null,
-        startTime: values.startTime
-          ? `${String(values.startTime.$H).padStart(2, "0")}:${String(
-              values.startTime.$m
-            ).padStart(2, "0")}`
-          : null,
-        endTime: values.endTime
-          ? `${String(values.endTime.$H).padStart(2, "0")}:${String(
-              values.endTime.$m
-            ).padStart(2, "0")}`
-          : null,
-      };
-
-      console.log("Submitted Filter:", formattedValues);
-      changeFilterHandle(formattedValues);
+      changeFilterHandle({
+        camera_id: values.camera_id,
+        startDate: values.startDate?.format("DD/MM/YYYY") ?? null,
+        endDate: values.endDate?.format("DD/MM/YYYY") ?? null,
+        startTime: values.startTime?.format("HH:mm") ?? null,
+        endTime: values.endTime?.format("HH:mm") ?? null,
+      });
     },
   });
 
@@ -121,8 +129,8 @@ const PredictionFilter = forwardRef((props, ref) => {
           label="Start"
           dateValue={formik.values.startDate}
           timeValue={formik.values.startTime}
-          onDateChange={(date) => formik.setFieldValue("startDate", date)}
-          onTimeChange={(time) => formik.setFieldValue("startTime", time)}
+          onDateChange={(d) => formik.setFieldValue("startDate", d)}
+          onTimeChange={(t) => formik.setFieldValue("startTime", t)}
           maxDate={formik.values.endDate}
         />
 
@@ -131,8 +139,8 @@ const PredictionFilter = forwardRef((props, ref) => {
           label="End"
           dateValue={formik.values.endDate}
           timeValue={formik.values.endTime}
-          onDateChange={(date) => formik.setFieldValue("endDate", date)}
-          onTimeChange={(time) => formik.setFieldValue("endTime", time)}
+          onDateChange={(d) => formik.setFieldValue("endDate", d)}
+          onTimeChange={(t) => formik.setFieldValue("endTime", t)}
           minDate={formik.values.startDate}
         />
       </Stack>
@@ -140,4 +148,4 @@ const PredictionFilter = forwardRef((props, ref) => {
   );
 });
 
-export default PredictionFilter;
+export default Filter;

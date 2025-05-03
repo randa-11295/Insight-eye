@@ -1,46 +1,33 @@
 // src/hooks/useFetchStreams.js
 import { useEffect, useCallback } from "react";
 import axios from "axios";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { streamState } from "../Recoil/RecoilState";
 import { baseURL } from "../utils/StaticVariables";
 
 const useFetchStreams = () => {
-  
-  const setStreamRecoil = useSetRecoilState(streamState);
+  const [streamRecoil, setStreamRecoil] = useRecoilState(streamState);
+
 
   const fetchStreams = useCallback(async () => {
-    console.log("call stream api now")
-    // Start fresh
-    setStreamRecoil({
-      data: [],
-      selected: [],
-      loading: true,
-      error: null,
-    });
-
     try {
-      const { data } = await axios.get(`${baseURL}source`, {
+      const { data } = await axios.get(`${baseURL}source/user`, {
         headers: { Authorization: `Bearer ${localStorage.token}` },
       });
 
-      // First, update the data (keep loading true)
+      // Single update: load data, set selected IDs, flip loading off, clear previous error
       setStreamRecoil((prev) => ({
         ...prev,
         data,
-        selected: data.map((s) => s.id),
+        selected: data?.map((s) => s.id),
+        loading: false,
+        error: null,
       }));
-
-      // Then, stop loading after a tiny delay (in the next tick)
-      setTimeout(() => {
-        setStreamRecoil((prev) => ({
-          ...prev,
-          loading: false,
-        }));
-      }, 0);
-
+      console.log("Fetched stream data from hook:", data);
     } catch (err) {
       console.error("Error fetching stream data:", err);
+
+      // Single update on error: flip loading off and record error message
       setStreamRecoil((prev) => ({
         ...prev,
         loading: false,
@@ -49,9 +36,10 @@ const useFetchStreams = () => {
     }
   }, [setStreamRecoil]);
 
+  // Kick off the fetch on mount
   useEffect(() => {
-    fetchStreams(); // Auto-fetch on mount
-  }, [fetchStreams]);
+    if (streamRecoil.data === null) fetchStreams();
+  }, [fetchStreams, streamRecoil.data]);
 
   return { refetchStreams: fetchStreams };
 };

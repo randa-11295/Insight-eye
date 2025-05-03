@@ -3,6 +3,8 @@ import Info from "../Components/Auth/Info";
 import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
+
+
   return (
     <Stack
       direction={{ xs: "column", md: "row" }}

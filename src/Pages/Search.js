@@ -6,43 +6,53 @@ import CardSearch from "../Components/Search/CardSearch";
 import GridContainer from "../Components/HOC/GridContainer";
 import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable";
 import TableReusable from "../Components/Reusable/TableReusable";
-import FilterSearch from "../Components/Search/FilterSearch";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DesBtn from "../Components/Reusable/DesBtn";
 import PrintBtn from "../Components/Reusable/PrintBtn";
 import { Stack, Card, Pagination, Box, Typography } from "@mui/material";
-import { useSetRecoilState } from "recoil";
-import { popupState, snackAlertState } from "../Recoil/RecoilState";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { popupState, authState } from "../Recoil/RecoilState";
+import { useSnackbar } from "notistack";
+import PredictionFilter from "../Components/PopUp/Filter";
+
 import {
   dataRenderTypeInSearchArr,
   searchFramesColumns,
   baseURL,
 } from "../utils/StaticVariables";
-import { useAxiosWithAuth } from "../services/api";
 
 const Search = () => {
   const setPopup = useSetRecoilState(popupState);
-  const setSnackAlert = useSetRecoilState(snackAlertState);
+  const { token } = useRecoilValue(authState);
   const [selectedShowMethod, setSelectedShowMethod] = useState("cards");
   const [searchData, setSearchData] = useState([]);
   const [searchChartData, setSearchChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(18);
   const [filter, setFilter] = useState({});
   const [total, setTotal] = useState(0);
   const [numOfPages, setNumOfPages] = useState(0);
-  const api = useAxiosWithAuth();
   const childRef = useRef(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleToggleChange = (event, newValue) => {
-    if (newValue !== null) setSelectedShowMethod(newValue);
+    if (newValue) {
+      setSelectedShowMethod(newValue);
+      if (newValue === "chart") {
+        setPage(1);
+        setLimit(total);
+      } else {
+        setLimit(18);
+      }
+    }
   };
 
   useEffect(() => {
     if (!searchData.length) return;
 
-    const chartDataFormat = searchData.map((el) => ({
-      camera_id: el.metadata?.camera_id,
+    const chartDataFormat = searchData?.map((el) => ({
+      camera_id: el.metadata?.name,
       date: el.metadata?.date || 0,
       time: el.metadata?.time || 0,
       person_count: el.metadata?.person_count || 0,
@@ -63,10 +73,10 @@ const Search = () => {
       isOpen: true,
       title: "Select Date and Time Range",
       content: (
-        <FilterSearch
+        <PredictionFilter
+          filter={filter}
           ref={childRef}
           changeFilterHandle={setFilter}
-          total={total}
         />
       ),
       sendReq: handleClick,
@@ -75,26 +85,22 @@ const Search = () => {
 
   const changePageHandle = (event, newPage) => setPage(newPage);
 
-  const showError = () =>
-    setSnackAlert({
-      open: true,
-      message: "Something went wrong!",
-      severity: "error",
-    });
-
   useEffect(() => {
     setLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    api
-      .get(`search_results`, {
+    axios
+      .get(baseURL + "search_results", {
         params: {
           page,
-          per_page: filter.limit,
+          per_page: limit,
           end_time: filter.endTime,
           start_time: filter.startTime,
           start_date: filter.startDate,
           end_date: filter.endDate,
-          camera_id: filter.id,
+          camera_id: filter.camera_id,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
@@ -102,41 +108,60 @@ const Search = () => {
         setNumOfPages(response.data.num_of_pages);
         setTotal(response.data.total_count);
       })
-      .catch(() => {
+      .catch((error) => {
         setSearchData([]);
-        showError();
+        enqueueSnackbar(error.massage || "some thing want wrong", {
+          variant: "error",
+        });
       })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, filter]);
+  }, [page, filter, limit]);
 
   return (
     <Box p={2}>
       {!loading && (
-        <Stack
-          my={4}
-          direction={{ xs: "column", md: "row" }}
-          spacing={2}
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Typography variant="body1" color="textPrimary">
-            Avertible Recoded Frames : <strong> {total || 0}</strong>
+        <Stack my={4} spacing={2}>
+          {/* Info text centered on mobile */}
+          <Typography
+            variant="body1"
+            color="textPrimary"
+            textAlign={{ xs: "center", md: "left" }}
+          >
+            Available Recorded Frames: <strong>{total || 0}</strong>
           </Typography>
-          <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-            <ReusableToggleBtns
-              options={dataRenderTypeInSearchArr}
-              value={selectedShowMethod}
-              handleToggleChange={handleToggleChange}
-            />
-            <DesBtn
-              text="Filter"
-              handle={openPopup}
-              customStyle={{ minWidth: "auto" }}
+
+          {/* Controls stack vertically on xs, horizontally on md */}
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+            justifyContent="space-between"
+            alignItems={"center"}
+            flexWrap="wrap"
+          >
+            {/* Toggle buttons take full width on small devices */}
+            <Box flex={1}>
+              <ReusableToggleBtns
+                options={dataRenderTypeInSearchArr}
+                value={selectedShowMethod}
+                handleToggleChange={handleToggleChange}
+              />
+            </Box>
+
+            {/* Buttons grouped together and responsive */}
+            <Stack
+              direction="row"
+              spacing={2}
+              justifyContent="center"
+              flexWrap="wrap"
+              sx={{ mt: { xs: 2, md: 0 } }}
             >
-              <FilterAltOutlinedIcon />
-            </DesBtn>
-            <PrintBtn data={searchData} columns={searchFramesColumns} />
+              <DesBtn text="Filter" handle={openPopup}>
+                <FilterAltOutlinedIcon />
+              </DesBtn>
+
+              <PrintBtn data={searchData} columns={searchFramesColumns} />
+            </Stack>
           </Stack>
         </Stack>
       )}
@@ -164,7 +189,6 @@ const Search = () => {
           loading={loading}
           page={page}
           count={total}
-          onPageChange={changePageHandle}
         />
       )}
 
@@ -172,7 +196,7 @@ const Search = () => {
         <ChartSearch loading={loading} chartData={searchChartData} />
       )}
 
-      {!loading && (
+      {!loading && numOfPages > 1 && (
         <Stack justifyContent="center" sx={{ mt: 4 }}>
           <Pagination
             count={numOfPages}

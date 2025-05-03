@@ -25,4 +25,5 @@ const btnStyle = {
   borderRadius: "4px",
   minWidth: "auto",
   px: 1,
+  m:"auto",
 };

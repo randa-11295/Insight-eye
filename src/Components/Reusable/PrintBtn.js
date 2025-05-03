@@ -7,7 +7,7 @@ const PrintBtn = ({ data, columns}) => {
 
      const exportToExcel = () => {
           // Process data: truncate long text fields
-          const processedData = data.map(row => {
+          const processedData = data?.map(row => {
             let newRow = {};
             columns.forEach(col => {
               let value = row[col.field] || row.metadata?.[col.field] || "—";

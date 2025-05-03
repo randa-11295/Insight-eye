@@ -43,6 +43,12 @@ export const filterResultState = atom({
   },
 });
 
+export const isActiveUserState = atom({
+  key: "isActiveUserState",
+  default: true,
+});
+
+
 
 
 export const authState = atom({
@@ -53,9 +59,14 @@ export const authState = atom({
 export const streamState = atom({
   key: "streamState",
   default: {
-    data: null,
+    data: [],
     selected: [],
-    loading: false,
+    loading: true,
     error: null,
   },
+});
+
+export const notificationHasUnread = atom({
+  key: 'notificationHasUnread',
+  default: true, // true = show red dot, false = hide it
 });

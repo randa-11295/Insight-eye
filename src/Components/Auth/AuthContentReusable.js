@@ -37,13 +37,19 @@ const AuthContentReusable = ({
         </Typography>
       </Box>
 
-      <Box component="form" onSubmit={formik.handleSubmit}>
+      <Box component="form" onSubmit={formik.handleSubmit} noValidate>
         {Object.keys(formik.initialValues).map((fieldName) => (
           <InputTextCustom
             key={fieldName}
             label={fieldName}
             placeholder={`Enter your ${fieldName}`}
-            type={fieldName === "password" ? "password" : "text"}
+            type={
+              fieldName === "password" ||
+              fieldName === "new_password" ||
+              fieldName === "confirm_password"
+                ? "password"
+                : "text"
+            }
             formik={formik}
             name={fieldName}
             value={formik.values[fieldName]}
@@ -55,12 +61,12 @@ const AuthContentReusable = ({
           submit
           fullWidth
           text={btnText}
-          handle={() => formik.handleSubmit()}
           loading={loading}
         />
 
         {contentRoute && (
           <Link
+            to={contentRoute.route}
             component={RouterLink}
             underline="hover"
             sx={{

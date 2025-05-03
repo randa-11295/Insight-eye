@@ -1,17 +1,16 @@
 import { useEffect, useState, useRef } from "react";
-import { Box, Grid, Stack, CircularProgress, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import PredictionsCard from "../Components/Prediction/PredictionsCard";
-import useFetchStreams from "../hooks/useFetchStreams";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { streamState, popupState } from "../Recoil/RecoilState";
-import PredictionFilter from "../Components/Prediction/PredictionFilter";
+import Filter from "../Components/PopUp/Filter";
 import DesBtn from "../Components/Reusable/DesBtn";
 import axios from "axios";
 import { baseURL } from "../utils/StaticVariables";
 import { convertKeysToKebabCase } from "../utils/helpers";
+import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable";
 const Predictions = () => {
-  const { refetchStreams } = useFetchStreams();
   const { data: streams, loading, error } = useRecoilValue(streamState);
   const setPopup = useSetRecoilState(popupState);
   const childRef = useRef(null);
@@ -22,7 +21,6 @@ const Predictions = () => {
 
   // Fetch predictions from API
   const fetchPredictions = async (filterParams) => {
-    console.log("run predictions api ");
     setPredictionLoading(true);
     try {
       const { data } = await axios.get(`${baseURL}prediction_data`, {
@@ -31,8 +29,7 @@ const Predictions = () => {
           Authorization: `Bearer ${localStorage.token}`,
         },
       });
-      setPredictions(data.predictions);
-      console.log("api", data.predictions);
+      setPredictions(data?.predictions);
     } catch (err) {
       console.error("Error fetching predictions", err);
       setPredictions([]);
@@ -41,19 +38,10 @@ const Predictions = () => {
     }
   };
 
-  // Fetch streams on mount if null
-  useEffect(() => {
-    if (streams === null) {
-      console.log("null stream", streams);
-      refetchStreams();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [streams]);
-
   // Set default camera_id after streams load
   useEffect(() => {
-    if (streams?.length) {
-      const allIds = streams.map((s) => s.id).join(",");
+    if (streams) {
+      const allIds = streams?.map((s) => s.id).join(",");
       setFilter((prev) => ({ ...prev, camera_id: allIds }));
     }
   }, [streams]);
@@ -77,11 +65,7 @@ const Predictions = () => {
       isOpen: true,
       title: "Select Date and Time Range",
       content: (
-        <PredictionFilter
-          filter={filter}
-          ref={childRef}
-          changeFilterHandle={setFilter}
-        />
+        <Filter filter={filter} ref={childRef} changeFilterHandle={setFilter} />
       ),
       sendReq: handleClick,
     });
@@ -91,16 +75,17 @@ const Predictions = () => {
     <>
       <Stack
         mb={4}
-        direction={{ md: "row" }}
+        direction="row"
         justifyContent="space-between"
+        alignItems="start"
         gap={2}
       >
-        <Typography>
+        <Typography sx={{ flexGrow: 1, fontSize: "1.2rem" }}>
           Predictions show charts based on the cameras and time you choose
         </Typography>
         <DesBtn
           text="Filter"
-          disabled={streams?.length < 0}
+          disabled={!streams?.length}
           handle={openPopup}
           customStyle={{ minWidth: "auto" }}
         >
@@ -116,19 +101,13 @@ const Predictions = () => {
         </Typography>
       )}
 
-      {loading && !predictionLoading && (
+      {(loading || predictionLoading) && (
         <Box display="flex" justifyContent="center" my={4}>
-          <CircularProgress />
+          <SkeletonLoaderReusable />
         </Box>
       )}
-
-      {!loading && predictionLoading && (
-        <Box display="flex" justifyContent="center" my={4}>
-          <CircularProgress />
-        </Box>
-      )}
-
-      {!predictionLoading && predictions.length > 0 && (
+  
+      {!predictionLoading && predictions?.length > 0 && (
         <Grid container spacing={3}>
           {predictions.map((item, index) => (
             <Grid item xs={12} sm={6} key={item.camera_id}>
@@ -138,7 +117,7 @@ const Predictions = () => {
         </Grid>
       )}
 
-      {!predictionLoading && predictions.length === 0 && (
+      {!predictionLoading && predictions?.length === 0 && (
         <Typography textAlign="center" mt={4}>
           No prediction data found.
         </Typography>
