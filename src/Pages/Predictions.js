@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Box, Grid, Stack, CircularProgress, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import PredictionsCard from "../Components/Prediction/PredictionsCard";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -9,7 +9,7 @@ import DesBtn from "../Components/Reusable/DesBtn";
 import axios from "axios";
 import { baseURL } from "../utils/StaticVariables";
 import { convertKeysToKebabCase } from "../utils/helpers";
-
+import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable";
 const Predictions = () => {
   const { data: streams, loading, error } = useRecoilValue(streamState);
   const setPopup = useSetRecoilState(popupState);
@@ -75,11 +75,12 @@ const Predictions = () => {
     <>
       <Stack
         mb={4}
-        direction={{ md: "row" }}
+        direction="row"
         justifyContent="space-between"
+        alignItems="start"
         gap={2}
       >
-        <Typography>
+        <Typography sx={{ flexGrow: 1, fontSize: "1.2rem" }}>
           Predictions show charts based on the cameras and time you choose
         </Typography>
         <DesBtn
@@ -100,18 +101,12 @@ const Predictions = () => {
         </Typography>
       )}
 
-      {loading && !predictionLoading && (
+      {(loading || predictionLoading) && (
         <Box display="flex" justifyContent="center" my={4}>
-          <CircularProgress />
+          <SkeletonLoaderReusable />
         </Box>
       )}
-
-      {!loading && predictionLoading && (
-        <Box display="flex" justifyContent="center" my={4}>
-          <CircularProgress />
-        </Box>
-      )}
-
+  
       {!predictionLoading && predictions?.length > 0 && (
         <Grid container spacing={3}>
           {predictions.map((item, index) => (
