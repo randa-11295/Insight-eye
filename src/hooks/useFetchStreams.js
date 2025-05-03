@@ -8,7 +8,7 @@ import { baseURL } from "../utils/StaticVariables";
 const useFetchStreams = () => {
   const [streamRecoil, setStreamRecoil] = useRecoilState(streamState);
 
-
+  console.log("refreash stream");
 
   const fetchStreams = useCallback(async () => {
     try {
@@ -38,7 +38,7 @@ const useFetchStreams = () => {
 
   // Kick off the fetch on mount
   useEffect(() => {
-    if(streamRecoil.data === null) fetchStreams();
+    if (streamRecoil.data === null) fetchStreams();
   }, [fetchStreams, streamRecoil.data]);
 
   return { refetchStreams: fetchStreams };

@@ -23,7 +23,6 @@ import useFetchStreams from "../../hooks/useFetchStreams";
 import noImage from "../../Images/no-image.jpeg";
 import { popupState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
-
 const WebSocketComponent = ({ data }) => {
   const [ws, setWs] = useState(null);
   const [authRecoil] = useRecoilState(authState);
@@ -37,18 +36,21 @@ const WebSocketComponent = ({ data }) => {
     if (data.static_base64) {
       setImgSrc(BASE64_IMAGE_PREFIX + data.static_base64);
     }
+     
+  
     if (data.is_streaming === true) {
-      startStream();
+      startStream("useEffect");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  const startStream = useCallback(() => {
+  const startStream = useCallback((test) => {
+    console.log("Starting stream:", test);
     const token = authRecoil.token;
     const streamUrl = `wss://16.170.216.227/insighteye/stream?stream_id=${data.id}&token=${token}`;
     const socket = new WebSocket(streamUrl);
-
+    console.log("try Connecting to WebSocket:", streamUrl);
     socket.onopen = () => {
+      console.log("WebSocket Connected");
       setStreaming(true);
     };
 
@@ -169,7 +171,7 @@ const WebSocketComponent = ({ data }) => {
               <PauseCircleIcon />
             </DesBtn>
           ) : (
-            <DesBtn text="Start Stream" noBoarder handle={startStream}>
+            <DesBtn text="Start Stream" noBoarder handle={() => startStream("event")}>
               <PlayCircleFilledIcon />
             </DesBtn>
           )}

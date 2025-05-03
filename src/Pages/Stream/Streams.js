@@ -23,13 +23,11 @@ const Streams = () => {
   const navigate = useNavigate();
   const { refetchStreams } = useFetchStreams(); // Destructure the hook
   const { token } = useRecoilValue(authState);
- const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    if (data === null) {
-      refetchStreams();
-    }
-  }, [data, refetchStreams]);
+    console.log("Selected Data:", selectedData);
+  }, [selectedData]);
 
   // ⬇️ Handle checkbox selection
   const changeSelectDataRow = (selectedNewData) => {
@@ -59,7 +57,7 @@ const Streams = () => {
       refetchStreams(); //  Refresh list after deletion
       enqueueSnackbar("Stream deleted successfully", {
         variant: "success",
-      });      
+      });
     } catch (error) {
       enqueueSnackbar("Delete failed " + error?.message, {
         variant: "error",

@@ -1,8 +1,8 @@
-import LoadingButton from "@mui/lab/LoadingButton";
+import Button from "@mui/material/Button";
 
 export default function LoadBtn(props) {
   return (
-    <LoadingButton
+    <Button
       loading={props.loading || false}
       variant="contained"
       fullWidth={props.fullWidth}
@@ -10,6 +10,6 @@ export default function LoadBtn(props) {
       type={"submit"}
     >
       {props.text || "confirm"}
-    </LoadingButton>
+    </Button>
   );
 }

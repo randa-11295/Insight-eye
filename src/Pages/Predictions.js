@@ -40,13 +40,7 @@ const Predictions = () => {
     }
   };
 
-  // Fetch streams on mount if null
-  useEffect(() => {
-    if (!streams) {
-      refetchStreams();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [streams]);
+
 
   // Set default camera_id after streams load
   useEffect(() => {

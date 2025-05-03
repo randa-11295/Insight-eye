@@ -3,11 +3,16 @@ import StreamCards from "../../Components/Stream/StreamCards";
 import { selectedStreamState } from "../../Recoil/RecoilState";
 import { useRecoilState } from "recoil";
 import ParamStream from "../../Components/Stream/PramStream";
+import { useEffect } from "react";
+
 const ShowStream = () => {
   const [selectedData] = useRecoilState(selectedStreamState);
 
+  useEffect(() => {
+    console.log("Selected Data:", selectedData);
+  }, [selectedData]);
   return (
-    <>
+    <div>
       <ParamStream />
       <Grid container spacing={2}  mt={2}>
         {selectedData?.map((el) => (
@@ -16,7 +21,7 @@ const ShowStream = () => {
           </Grid>
         ))}
       </Grid>
-    </>
+    </div>
   );
 };
 

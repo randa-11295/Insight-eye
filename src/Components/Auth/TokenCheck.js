@@ -24,9 +24,7 @@ const TokenCheck = () => {
         localStorage.removeItem("expire");
         resetAuth();
         navigate("/login");
-      } else {
-        console.log("✅ Token still valid");
-      }
+      } 
     }
   }, [authRecoil?.expire, navigate, resetAuth]);
 
