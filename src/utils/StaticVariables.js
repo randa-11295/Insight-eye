@@ -54,6 +54,7 @@ export const chartColors = ["rgb(75, 192, 192)", "rgb(255, 99, 132)", "rgb(54, 1
 
 
 export const BASE64_IMAGE_PREFIX = "data:image/jpeg;base64,";
-export const baseURL = "https://16.170.216.227/insighteye/" // local 8000
+export const baseURL = process.env.NODE_ENV === "production"? process.env.REACT_APP_API_URL_PROD: process.env.REACT_APP_API_URL_DEV;
+
 
 
