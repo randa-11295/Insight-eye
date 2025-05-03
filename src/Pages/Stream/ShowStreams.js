@@ -7,6 +7,7 @@ import ParamStream from "../../Components/Stream/PramStream";
 const ShowStream = () => {
   const [selectedData] = useRecoilState(selectedStreamState);
 
+
   return (
     <div>
       <ParamStream />

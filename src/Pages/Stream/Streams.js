@@ -14,6 +14,7 @@ import useFetchStreams from "../../hooks/useFetchStreams";
 import axios from "axios";
 import { authState } from "../../Recoil/RecoilState";
 import { useSnackbar } from "notistack";
+import { useEffect } from "react";
 
 const Streams = () => {
   const { data, loading } = useRecoilValue(streamState);
@@ -24,6 +25,10 @@ const Streams = () => {
   const { token } = useRecoilValue(authState);
   const { enqueueSnackbar } = useSnackbar();
 
+  useEffect(() => {
+    refetchStreams();
+    setSelectedStream([]);
+  }, [refetchStreams, setSelectedStream]); //
 
   // ⬇️ Handle checkbox selection
   const changeSelectDataRow = (selectedNewData) => {
@@ -37,6 +42,9 @@ const Streams = () => {
     );
   };
 
+  useEffect(() => {
+    console.log("Selected data changed:", selectedData);
+  }, [selectedData]);
   // ⬇ Delete selected streams
   const handelDeleteReqFromApi = async () => {
     const selectedIDs = selectedData?.map((el) => el.id);
