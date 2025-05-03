@@ -1,5 +1,5 @@
 // NotificationMenu.jsx
-import React, { useState, useRef } from "react";
+import  { useState } from "react";
 import {
   IconButton,
   Badge,
@@ -105,7 +105,7 @@ const NotificationMenu = () => {
           )}
 
           {notifications.map((note) => (
-            <React.Fragment key={note.id}>
+            <div key={note.id}>
               <ListItem
                 alignItems="flex-start"
                 sx={{
@@ -135,7 +135,7 @@ const NotificationMenu = () => {
                 />
               </ListItem>
               <Divider component="li" />
-            </React.Fragment>
+            </div>
           ))}
         </List>
       </Menu>

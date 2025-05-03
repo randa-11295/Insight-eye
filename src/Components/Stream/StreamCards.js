@@ -21,6 +21,8 @@ import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import useFetchStreams from "../../hooks/useFetchStreams";
 import noImage from "../../Images/no-image.jpeg";
+import { popupState } from "../../Recoil/RecoilState";
+import { useSetRecoilState } from "recoil";
 
 const WebSocketComponent = ({ data }) => {
   const [ws, setWs] = useState(null);
@@ -29,6 +31,7 @@ const WebSocketComponent = ({ data }) => {
   const [streaming, setStreaming] = useState(false);
   const { refetchStreams } = useFetchStreams();
   const [imgSrc, setImgSrc] = useState(noImage);
+  const setPopup = useSetRecoilState(popupState);
 
   useEffect(() => {
     if (data.static_base64) {
@@ -92,6 +95,26 @@ const WebSocketComponent = ({ data }) => {
     }
   };
 
+  const openReusablePopup = () => {
+    setPopup({
+      isOpen: true,
+      title: "Stop Stream",
+      content: (
+        <div>
+          <h3>Are you sure you want to stop the stream?</h3>
+          <Typography variant="body2" color="text.secondary" mt={2}>
+            Stopping stream will cause stopping the model from receiving frames
+            from the cameras live stream. There is no more data will be stored
+            for the number of people until you click on start stream button
+            again."
+          </Typography>
+        </div>
+      ),
+
+      sendReq: stopStream,
+    });
+  };
+
   useEffect(() => {
     return () => {
       if (ws) {
@@ -123,16 +146,25 @@ const WebSocketComponent = ({ data }) => {
             alignItems: "center",
           }}
         >
-          <Typography variant="body2" color="text.secondary" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ flexGrow: 1 }}
+          >
             Live video feed from <b>{data.name}</b> Camera
           </Typography>
 
-          <DesBtn text="Open Full Screen" noBoarder handle={openFullScreen} disabled={!imgSrc}>
+          <DesBtn
+            text="Open Full Screen"
+            noBoarder
+            handle={openFullScreen}
+            disabled={!imgSrc}
+          >
             <FullscreenIcon />
           </DesBtn>
 
           {streaming ? (
-            <DesBtn text="Stop Stream" noBoarder handle={stopStream}>
+            <DesBtn text="Stop Stream" noBoarder handle={openReusablePopup}>
               <PauseCircleIcon />
             </DesBtn>
           ) : (
@@ -143,7 +175,12 @@ const WebSocketComponent = ({ data }) => {
         </CardContent>
       </Card>
 
-      <Dialog open={openPopup} onClose={closeFullScreen} fullWidth maxWidth="md">
+      <Dialog
+        open={openPopup}
+        onClose={closeFullScreen}
+        fullWidth
+        maxWidth="md"
+      >
         <DialogTitle>Full Screen {data.name} Video</DialogTitle>
         <DialogContent>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
