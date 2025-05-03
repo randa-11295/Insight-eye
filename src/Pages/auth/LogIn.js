@@ -53,7 +53,6 @@ const LogIn = () => {
             refreshToken: response.data.refresh_token,
             expire: response.data.expires_at,
           });
-          window.location.reload();
         })
         .catch((error) => {
           enqueueSnackbar(error?.message || "some thing want wrong", {
