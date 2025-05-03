@@ -18,12 +18,13 @@ const ParamStream = () => {
 
   const fetchParams = async () => {
     try {
-      const { data } = await axios.get(baseURL + "param_stream/users", {
+      const { data } = await axios.get(baseURL + "param_stream/user", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log("data", data);
       formik.setValues({
-        frame_skip: data[0]?.frame_skip ?? 0,
-        conf: data[0]?.conf ?? 0.1,
+        frame_skip: data?.frame_skip ?? 0,
+        conf: data?.conf ?? 0.1,
       });
     } catch (error) {
       enqueueSnackbar(

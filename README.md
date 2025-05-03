@@ -112,10 +112,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - change no data with no massage on error handle 
 
 
--- notifi ...
+-- notifi ...        
 -- id in search --
--- alert in log out
--- config production 
+-- alert in log out           --------- done
+-- config production  
 -- passward
--- config show 
--- stream not open is it open 
+-- config show      ------- done 
+-- stream not open is it open   

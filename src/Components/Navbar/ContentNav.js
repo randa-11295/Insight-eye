@@ -17,6 +17,7 @@ import axios from "axios";
 import { baseURL } from "../../utils/StaticVariables";
 import { popupState } from "../../Recoil/RecoilState";
 import { useSnackbar } from "notistack";
+import { useRecoilValue } from "recoil";
 
 const ContentNav = (props) => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const ContentNav = (props) => {
   const setAuthRecoil = useSetRecoilState(authState);
   const setPopup = useSetRecoilState(popupState);
   const { enqueueSnackbar } = useSnackbar();
+  const token = useRecoilValue(authState)?.token;
 
   const openPopup = () => {
     setPopup({
@@ -39,16 +41,16 @@ const ContentNav = (props) => {
     localStorage.removeItem("expire");
     setAuthRecoil(null);
     axios
-      .post(baseURL, "logout")
+      .post(baseURL, "logout", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then(() => {
         enqueueSnackbar("you log out successfully", {
           variant: "success",
         });
       })
       .catch((error) => {
-        enqueueSnackbar(error.massage || "some thing want wrong", {
-          variant: "error",
-        });
+        console.log(error);
       });
   };
 
