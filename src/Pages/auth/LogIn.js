@@ -69,9 +69,9 @@ const LogIn = () => {
   return (
     <AuthContentReusable
       formik={formik}
-      title="Login"
+      title="LOGIN"
       btnText={"Login"}
-      des="Login to your account to access all features in INSIGHT EYE"
+      des="Login to your account to access all features in INSIGHTEYE"
       contentRoute={{ linkText: "Forget your password?", route: "/otp" }}
       loading={loading}
       footerRoute={{

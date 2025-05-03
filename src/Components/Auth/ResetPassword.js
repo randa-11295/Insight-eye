@@ -16,7 +16,7 @@ const ResetPassword = ({ email }) => {
     new_password: Yup.string()
       .min(6, "Password must be at least 6 characters")
       .required("New password is required"),
-    conform_password: Yup.string()
+    confirm_password: Yup.string()
       .oneOf([Yup.ref("new_password")], "Passwords must match")
       .required("Confirm your password"),
   });
@@ -24,7 +24,7 @@ const ResetPassword = ({ email }) => {
   const formik = useFormik({
     initialValues: {
       new_password: "",
-      conform_password: "",
+      confirm_password: "",
     },
     validationSchema,
     onSubmit: (values) => {

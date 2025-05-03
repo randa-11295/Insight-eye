@@ -31,7 +31,7 @@ const NotificationMenu = () => {
 
   useNotificationWebSocket({
     onMessage: (data) => {
-    //  console.log("Notification data:", data);
+     console.log("Notification data:", data);
       const message = {
         id: Date.now(),
         content: data?.type,

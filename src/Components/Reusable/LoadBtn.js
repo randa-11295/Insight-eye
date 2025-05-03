@@ -9,7 +9,7 @@ export default function LoadBtn(props) {
       size="large"
       type={"submit"}
     >
-      {props.text || "Conform"}
+      {props.text || "confirm"}
     </LoadingButton>
   );
 }

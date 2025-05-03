@@ -46,7 +46,7 @@ const AuthContentReusable = ({
             type={
               fieldName === "password" ||
               fieldName === "new_password" ||
-              fieldName === "conform_password"
+              fieldName === "confirm_password"
                 ? "password"
                 : "text"
             }
