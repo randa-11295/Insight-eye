@@ -29,7 +29,7 @@ const Search = () => {
   const [searchChartData, setSearchChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(16);
+  const [limit, setLimit] = useState(18);
   const [filter, setFilter] = useState({});
   const [total, setTotal] = useState(0);
   const [numOfPages, setNumOfPages] = useState(0);
@@ -47,7 +47,7 @@ const Search = () => {
         setPage(1);
         setLimit(total);
       } else {
-        setLimit(16);
+        setLimit(18);
       }
     }
   };
@@ -126,54 +126,49 @@ const Search = () => {
   return (
     <Box p={2}>
       {!loading && (
-       <Stack my={4} spacing={2}>
-       {/* Info text centered on mobile */}
-       <Typography
-         variant="body1"
-         color="textPrimary"
-         textAlign={{ xs: "center", md: "left" }}
-       >
-         Available Recorded Frames: <strong>{total || 0}</strong>
-       </Typography>
-     
-       {/* Controls stack vertically on xs, horizontally on md */}
-       <Stack
-         direction={{ xs: "column", sm: "row" }}
-         spacing={2}
-         justifyContent="space-between"
-         alignItems={ "center" }
-         flexWrap="wrap"
-       >
-         {/* Toggle buttons take full width on small devices */}
-         <Box flex={1} >
-           <ReusableToggleBtns
-             options={dataRenderTypeInSearchArr}
-             value={selectedShowMethod}
-             handleToggleChange={handleToggleChange}
-           />
-         </Box>
-     
-         {/* Buttons grouped together and responsive */}
-         <Stack
-           direction="row"
-           spacing={2}
-           justifyContent="center"
-           flexWrap="wrap"
-           sx={{ mt: { xs: 2, md: 0 } }}
-         >
-           <DesBtn
-             text="Filter"
-             handle={openPopup}
-            //  customStyle={{ minWidth: "100px" }}
-           >
-             <FilterAltOutlinedIcon />
-           </DesBtn>
-     
-           <PrintBtn data={searchData} columns={searchFramesColumns} />
-         </Stack>
-       </Stack>
-     </Stack>
-     
+        <Stack my={4} spacing={2}>
+          {/* Info text centered on mobile */}
+          <Typography
+            variant="body1"
+            color="textPrimary"
+            textAlign={{ xs: "center", md: "left" }}
+          >
+            Available Recorded Frames: <strong>{total || 0}</strong>
+          </Typography>
+
+          {/* Controls stack vertically on xs, horizontally on md */}
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+            justifyContent="space-between"
+            alignItems={"center"}
+            flexWrap="wrap"
+          >
+            {/* Toggle buttons take full width on small devices */}
+            <Box flex={1}>
+              <ReusableToggleBtns
+                options={dataRenderTypeInSearchArr}
+                value={selectedShowMethod}
+                handleToggleChange={handleToggleChange}
+              />
+            </Box>
+
+            {/* Buttons grouped together and responsive */}
+            <Stack
+              direction="row"
+              spacing={2}
+              justifyContent="center"
+              flexWrap="wrap"
+              sx={{ mt: { xs: 2, md: 0 } }}
+            >
+              <DesBtn text="Filter" handle={openPopup}>
+                <FilterAltOutlinedIcon />
+              </DesBtn>
+
+              <PrintBtn data={searchData} columns={searchFramesColumns} />
+            </Stack>
+          </Stack>
+        </Stack>
       )}
 
       {selectedShowMethod === "cards" &&
@@ -206,7 +201,7 @@ const Search = () => {
         <ChartSearch loading={loading} chartData={searchChartData} />
       )}
 
-      {!loading && (
+      {!loading && numOfPages > 1 && (
         <Stack justifyContent="center" sx={{ mt: 4 }}>
           <Pagination
             count={numOfPages}
