@@ -103,7 +103,7 @@ const Search = () => {
           start_time: filter.startTime,
           start_date: filter.startDate,
           end_date: filter.endDate,
-          camera_id: filter.id,
+          camera_id: filter.camera_id,
         },
         headers: {
           Authorization: `Bearer ${token}`,

@@ -81,10 +81,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 4- update responsive in tablet          ------------ done 
 5- clean code                         ----------------------- done 
 6- add forget password                  ---------------------  done 
-7- handle refresh token 
-8- fix search bugs 
+7- handle refresh token               -------------- done 
+8- fix search bugs                     ------------- done 
 9- system information error              ----------------- done
-10 -fix chart at search frames
+10 -fix chart at search frames          --------------- done
 11 -handle date filtration on  predictions    --------- add limit to date filter
 13- be sure from stop stream               ------ done
 14- handle errors in login                ---------------- done
@@ -102,8 +102,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 26- handle no data stream flow
 27- handel selected nav in sup pages           ------------------ done 
 28 -pop up stop stream and log out           ------------------ done 
-29 - window.location.reload(); remove this way from auth
-30 - fix- update stream
+29 - window.location.reload(); --------------------- done
+30 - fix- update stream              ---------------------- done
 31- fix add stream                   ------------------ done 
 
 300 in frame       ---------------------- done
@@ -116,6 +116,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 -- id in search --
 -- alert in log out           --------- done
 -- config production  
--- passward
+-- passward           ----- back 
 -- config show      ------- done 
 -- stream not open is it open   
