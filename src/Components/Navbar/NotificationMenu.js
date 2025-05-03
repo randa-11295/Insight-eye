@@ -8,43 +8,52 @@ import {
   Divider,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import useNotificationWebSocket from "../../hooks/useNotificationWebSocket";
+import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../Recoil/RecoilState";
 
 const NotificationMenu = () => {
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const wasOpened = useRef(false);
 
+  const { token } = useRecoilValue(authState);
   const open = Boolean(anchorEl);
-  const wasOpened = useRef(false); 
 
-  const handleOpen = (event) => {
+  const handleOpen = async (event) => {
     setAnchorEl(event.currentTarget);
-    setUnreadCount(0); 
     wasOpened.current = true;
+    await fetchNotifications();
+    setUnreadCount(0);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    wasOpened.current = false;
   };
 
-  useNotificationWebSocket({
-    onMessage: (data) => {
-     console.log("Notification data:", data);
-      const message = {
-        id: Date.now(),
-        content: data?.type,
-        timestamp: new Date().toLocaleTimeString(),
-      };
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get("/notify", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      setNotifications((prev) => [message, ...prev]);
+      if (Array.isArray(response.data)) {
+        const newItems = response.data.map((item) => ({
+          id: item.id || Date.now(),
+          content: item.type,
+          timestamp: new Date().toLocaleTimeString(),
+        }));
 
-      if (!wasOpened.current || anchorEl === null) {
-        setUnreadCount((prev) => prev + 1);
+        setNotifications(newItems);
       }
-    },
-  });
+    } catch (error) {
+      console.error("Failed to fetch notifications:", error);
+    }
+  };
 
   return (
     <>
@@ -55,14 +64,10 @@ const NotificationMenu = () => {
       </IconButton>
 
       <Menu
-      sx={{height: "65vh", overflowY: "auto"}}
         anchorEl={anchorEl}
         open={open}
-        onClose={() => {
-          handleClose();
-          wasOpened.current = false;
-        }}
-        PaperProps={{ sx: { width: 320 } }}
+        onClose={handleClose}
+        PaperProps={{ sx: { width: 320, height: "65vh", overflowY: "auto" } }}
       >
         <Typography variant="subtitle1" sx={{ px: 2, py: 1 }}>
           Notifications
@@ -72,9 +77,9 @@ const NotificationMenu = () => {
         {notifications.length === 0 ? (
           <MenuItem disabled>No new notifications</MenuItem>
         ) : (
-          notifications.map((note , indx) => (
+          notifications.map((note, index) => (
             <MenuItem
-              key={note.type + note.timestamp + indx}
+              key={note.id + "-" + index}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -84,7 +89,7 @@ const NotificationMenu = () => {
               }}
             >
               <Typography variant="body2" fontWeight={600}>
-                🔔 {note.content ||  "No content available"}
+                🔔 {note.content || "No content available"}
               </Typography>
               <Typography
                 variant="caption"
