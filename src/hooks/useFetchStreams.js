@@ -12,7 +12,7 @@ const useFetchStreams = () => {
 
   const fetchStreams = useCallback(async () => {
     try {
-      const { data } = await axios.get(`${baseURL}source`, {
+      const { data } = await axios.get(`${baseURL}source/user`, {
         headers: { Authorization: `Bearer ${localStorage.token}` },
       });
 
