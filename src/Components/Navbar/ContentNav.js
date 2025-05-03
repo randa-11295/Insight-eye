@@ -19,7 +19,7 @@ import { popupState } from "../../Recoil/RecoilState";
 import { useSnackbar } from "notistack";
 import { useRecoilValue } from "recoil";
 
-const ContentNav = (props) => {
+const ContentNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const setAuthRecoil = useSetRecoilState(authState);

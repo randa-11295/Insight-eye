@@ -1,48 +1,22 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useCallback } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import InputTextCustom from "../Inputs/InputTextCustom";
 import { Stack } from "@mui/material";
+import InputTextCustom from "../Inputs/InputTextCustom";
 import LoadBtn from "../Reusable/LoadBtn";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../Recoil/RecoilState";
 import { baseURL } from "../../utils/StaticVariables";
 import { useSnackbar } from "notistack";
+
 const ParamStream = () => {
   const { token } = useRecoilValue(authState);
-
-  const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const fetchParams = async () => {
-    try {
-      const { data } = await axios.get(baseURL + "param_stream/user", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log("data", data);
-      formik.setValues({
-        frame_skip: data?.frame_skip ?? 0,
-        conf: data?.conf ?? 0.1,
-      });
-    } catch (error) {
-      enqueueSnackbar(
-        error?.response?.data?.message ||
-          error?.message ||
-          "Failed to fetch config",
-        {
-          variant: "error",
-        }
-      );
-    }
-  };
-
+  // Formik setup
   const formik = useFormik({
-    initialValues: {
-      frame_skip: 0,
-      conf: 0.1,
-    },
+    initialValues: { frame_skip: 0, conf: 0.1 },
     validationSchema: Yup.object({
       frame_skip: Yup.number()
         .min(300, "Minimum 300")
@@ -52,56 +26,81 @@ const ParamStream = () => {
         .max(1, "Maximum 1")
         .required("Confidence is required"),
     }),
-    onSubmit: async (values) => {
-      console.log("values", values);
-      setLoading(true);
-
+    onSubmit: async (values, { setSubmitting }) => {
       try {
-        await axios.put(baseURL + "param_stream/user", values, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.put(
+          `${baseURL}param_stream/user`,
+          values,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
         enqueueSnackbar("Stream configuration updated successfully", {
           variant: "success",
         });
       } catch (error) {
         enqueueSnackbar(
-          error?.response?.data?.message || error?.message || "Update failed",
+          error?.response?.data?.message || error.message || "Update failed",
           { variant: "error" }
         );
       } finally {
-        setLoading(false);
+        setSubmitting(false);
       }
     },
   });
 
-  useEffect(() => {
+  // Fetch existing parameters
+  const fetchParams = useCallback(async () => {
     if (!token) return;
+    formik.setSubmitting(true);
 
-    if (token) {
-      fetchParams();
+    try {
+      const { data } = await axios.get(
+        `${baseURL}param_stream/user`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      formik.setValues({
+        frame_skip: data.frame_skip ?? formik.initialValues.frame_skip,
+        conf: data.conf ?? formik.initialValues.conf,
+      });
+    } catch (error) {
+      enqueueSnackbar(
+        error?.response?.data?.message || error.message || "Failed to fetch config",
+        { variant: "error" }
+      );
+    } finally {
+      formik.setSubmitting(false);
     }
   }, [token]);
+
+  useEffect(() => {
+    fetchParams();
+  }, [fetchParams]);
 
   return (
     <Stack
       component="form"
-      direction={"row"}
-      alignItems={"center"}
-      gap={2}
+      direction="row"
+      spacing={2}
+      alignItems="center"
       onSubmit={formik.handleSubmit}
       noValidate
     >
-      {["frame_skip", "conf"].map((field) => (
-        <InputTextCustom
-          key={field}
-          label={field.replace("_", " ")}
-          name={field}
-          formik={formik}
-          small={true}
-        />
-      ))}
+      <InputTextCustom
+        label="Frame Skip"
+        name="frame_skip"
+        formik={formik}
+        small={true}
+        disabled={formik.isSubmitting}
+      />
 
-      <LoadBtn loading={loading} text="Send" />
+      <InputTextCustom
+       small={true}
+        label="Confidence"
+        name="conf"
+        formik={formik}
+        disabled={formik.isSubmitting}
+      />
+
+      <LoadBtn loading={formik.isSubmitting} text="Save" />
     </Stack>
   );
 };

@@ -40,6 +40,7 @@ const WebSocketComponent = ({ data }) => {
     if (data.is_streaming === true) {
       startStream();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const startStream = useCallback(() => {
