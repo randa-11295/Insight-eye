@@ -1,18 +1,18 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
+import { Box, Stack, Typography, Card, Pagination } from "@mui/material";
+import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSnackbar } from "notistack";
+
 import ReusableToggleBtns from "../Components/Reusable/ReusableToggleBtns";
 import ChartSearch from "../Components/Search/ChartSearch";
 import CardSearch from "../Components/Search/CardSearch";
 import GridContainer from "../Components/HOC/GridContainer";
 import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable";
 import TableReusable from "../Components/Reusable/TableReusable";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DesBtn from "../Components/Reusable/DesBtn";
 import PrintBtn from "../Components/Reusable/PrintBtn";
-import { Stack, Card, Pagination, Box, Typography } from "@mui/material";
-import { useSetRecoilState, useRecoilValue } from "recoil";
-import { popupState, authState } from "../Recoil/RecoilState";
-import { useSnackbar } from "notistack";
 import PredictionFilter from "../Components/PopUp/Filter";
 
 import {
@@ -20,119 +20,121 @@ import {
   searchFramesColumns,
   baseURL,
 } from "../utils/StaticVariables";
+import { popupState, authState } from "../Recoil/RecoilState";
 
-const Search = () => {
+// --- Helper to build axios params from filter + pagination ---
+const buildParams = ({ filter, page, limit }) => ({
+  ...filter,
+  end_time: filter.endTime,
+  start_time: filter.startTime,
+  start_date: filter.startDate,
+  end_date: filter.endDate,
+  camera_id: filter.camera_id,
+  page,
+  per_page: limit,
+});
+
+// --- Custom hook encapsulating all data fetching + state ---
+function useSearchResults({ filter, page, limit, token }) {
+  const [paginated, setPaginated] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [pages, setPages] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const fetcher = useCallback(async () => {
+    setLoading(true);
+    const params = buildParams({ filter, page, limit });
+
+    try {
+      // 1️⃣ paginated fetch
+      const { data: pageRes } = await axios.get(`${baseURL}search_results`, {
+        params,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const { data: pageData, total_count, num_of_pages } = pageRes;
+      setPaginated(pageData);
+      setTotal(total_count);
+      setPages(num_of_pages);
+
+      // 2️⃣ full fetch for chart & download
+      const { data: fullRes } = await axios.get(`${baseURL}search_results`, {
+        params: { ...params, page: 1, per_page: total_count },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setAllData(fullRes.data);
+
+      // 3️⃣ derive chart payload
+      setChartData(
+        fullRes.data.map((el) => ({
+          camera_id: el.metadata?.name,
+          date: el.metadata?.date || 0,
+          time: el.metadata?.time || 0,
+          person_count: el.metadata?.person_count || 0,
+        }))
+      );
+    } catch (err) {
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [filter, page, limit, token]);
+
+  useEffect(() => {
+    fetcher().catch(() => {}); // let caller handle errors
+  }, [fetcher]);
+
+  return { paginated, allData, chartData, total, pages, loading };
+}
+
+export default function Search() {
   const setPopup = useSetRecoilState(popupState);
   const { token } = useRecoilValue(authState);
   const { enqueueSnackbar } = useSnackbar();
-
-  // display mode
-  const [selectedShowMethod, setSelectedShowMethod] = useState("cards");
-
-  // paginated data + meta
-  const [searchData, setSearchData] = useState([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(18);
-  const [total, setTotal] = useState(0);
-  const [numOfPages, setNumOfPages] = useState(0);
-
-  // full data for download/chart
-  const [allData, setAllData] = useState([]);
-  const [allChartData, setAllChartData] = useState([]);
-
-  // filter & loading
-  const [filter, setFilter] = useState({});
-  const [loading, setLoading] = useState(true);
-
   const childRef = useRef(null);
 
-  // toggle between cards/table/chart
-  const handleToggleChange = (e, val) => {
-    if (!val) return;
-    setSelectedShowMethod(val);
-    if (val === "chart") {
-      // ensure paginated view will fetch _all_ so pagination disappears
-      setPage(1);
-      setLimit(total);
-    } else {
-      setLimit(18);
-    }
+  // UI state
+  const [filter, setFilter] = useState({});
+  const [page, setPage] = useState(1);
+  const [limit] = useState(18);
+  const [viewMode, setViewMode] = useState("cards");
+
+  // fetch data
+  const { paginated, allData, chartData, total, pages, loading } =
+    useSearchResults({ filter, page, limit, token });
+
+  // handle toggle between views
+  const onViewChange = (_, mode) => {
+    if (!mode) return;
+    setViewMode(mode);
   };
 
-  // open your filter pop-up
-  const handleClick = () => childRef.current?.submit();
-  const openPopup = () => {
+  // open filter dialog
+  const openFilter = () => {
     setPopup({
       isOpen: true,
       title: "Select Date and Time Range",
       content: (
         <PredictionFilter
-          filter={filter}
           ref={childRef}
+          filter={filter}
           changeFilterHandle={setFilter}
         />
       ),
-      sendReq: handleClick,
+      sendReq: () => childRef.current?.submit(),
     });
   };
 
-  // when page/filter/limit change, fetch paginated + full
+  // catch and show errors from hook
   useEffect(() => {
-    const paramsBase = {
-      end_time: filter.endTime,
-      start_time: filter.startTime,
-      start_date: filter.startDate,
-      end_date: filter.endDate,
-      camera_id: filter.camera_id,
-    };
-
-    setLoading(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-
-    // 1️⃣ paginated
-    axios
-      .get(baseURL + "search_results", {
-        params: { page, per_page: limit, ...paramsBase },
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(({ data }) => {
-        setSearchData(data.data);
-        setNumOfPages(data.num_of_pages);
-        setTotal(data.total_count);
-
-        // 2️⃣ full fetch for charts/download
-        return axios.get(baseURL + "search_results", {
-          params: { page: 1, per_page: data.total_count, ...paramsBase },
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      })
-      .then(({ data }) => {
-        setAllData(data.data);
-        // derive chart dataset
-        const chartFmt = data.data.map((el) => ({
-          camera_id: el.metadata?.name,
-          date: el.metadata?.date || 0,
-          time: el.metadata?.time || 0,
-          person_count: el.metadata?.person_count || 0,
-        }));
-        setAllChartData(chartFmt);
-      })
-      .catch((err) => {
-        enqueueSnackbar(err.message || "Something went wrong", {
-          variant: "error",
-        });
-        // clear on error
-        setSearchData([]);
-        setAllData([]);
-      })
-      .finally(() => setLoading(false));
-
-    // disable exhaustive-deps warning for token/filter/page/limit
-  }, [page, filter, limit]);
+    if (!loading && paginated.length === 0 && total !== 0) {
+      enqueueSnackbar("No results found", { variant: "warning" });
+    }
+  }, [loading, paginated, total, enqueueSnackbar]);
 
   return (
     <Box p={2}>
-      {/* Info & Controls */}
       {!loading && (
         <Stack my={4} spacing={2}>
           <Typography variant="body1" textAlign={{ xs: "center", md: "left" }}>
@@ -148,29 +150,27 @@ const Search = () => {
             <Box flex={1}>
               <ReusableToggleBtns
                 options={dataRenderTypeInSearchArr}
-                value={selectedShowMethod}
-                handleToggleChange={handleToggleChange}
+                value={viewMode}
+                handleToggleChange={onViewChange}
               />
             </Box>
 
-            <Stack direction="row" spacing={2} justifyContent="center">
-              <DesBtn text="Filter" handle={openPopup}>
+            <Stack direction="row" spacing={2}>
+              <DesBtn text="Filter" handle={openFilter}>
                 <FilterAltOutlinedIcon />
               </DesBtn>
-              {/* always pass full data for download */}
               <PrintBtn data={allData} columns={searchFramesColumns} />
             </Stack>
           </Stack>
         </Stack>
       )}
 
-      {/* CARD VIEW */}
-      {selectedShowMethod === "cards" &&
+      {viewMode === "cards" &&
         (loading ? (
           <SkeletonLoaderReusable />
-        ) : searchData.length > 0 ? (
+        ) : paginated.length ? (
           <GridContainer
-            items={searchData.map((el) => (
+            items={paginated.map((el) => (
               <CardSearch key={el.frame} data={el} />
             ))}
           />
@@ -180,11 +180,10 @@ const Search = () => {
           </Card>
         ))}
 
-      {/* TABLE VIEW */}
-      {selectedShowMethod === "table" && (
+      {viewMode === "table" && (
         <TableReusable
           print
-          data={searchData}
+          data={paginated}
           columns={searchFramesColumns}
           loading={loading}
           page={page}
@@ -192,23 +191,19 @@ const Search = () => {
         />
       )}
 
-      {/* CHART VIEW (uses full dataset) */}
-      {selectedShowMethod === "chart" && (
-        <ChartSearch loading={loading} chartData={allChartData} />
+      {viewMode === "chart" && (
+        <ChartSearch loading={loading} chartData={chartData} />
       )}
 
-      {/* PAGINATION (hide when chart mode has taken over with limit=total) */}
-      {!loading && numOfPages > 1 && selectedShowMethod !== "chart" && (
+      {!loading && pages > 1 && viewMode !== "chart" && (
         <Stack justifyContent="center" sx={{ mt: 4 }}>
           <Pagination
-            count={numOfPages}
+            count={pages}
             page={page}
-            onChange={(e, p) => setPage(p)}
+            onChange={(_, p) => setPage(p)}
           />
         </Stack>
       )}
     </Box>
   );
-};
-
-export default Search;
+}
