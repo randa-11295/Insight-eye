@@ -55,6 +55,7 @@ export const chartColors = ["rgb(75, 192, 192)", "rgb(255, 99, 132)", "rgb(54, 1
 
 export const BASE64_IMAGE_PREFIX = "data:image/jpeg;base64,";
 export const baseURL = process.env.NODE_ENV === "production"? process.env.REACT_APP_API_URL_PROD: process.env.REACT_APP_API_URL_DEV;
+export const StreamURL = process.env.NODE_ENV === "production"? process.env.REACT_APP_API_STREAM_PROD: process.env.REACT_APP_API_STREAM_DEV;
 
 
 

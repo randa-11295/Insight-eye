@@ -42,10 +42,6 @@ const Streams = () => {
     );
   };
 
-  useEffect(() => {
-    console.log("Selected data changed:", selectedData);
-  }, [selectedData]);
-  // ⬇ Delete selected streams
   const handelDeleteReqFromApi = async () => {
     const selectedIDs = selectedData?.map((el) => el.id);
     try {

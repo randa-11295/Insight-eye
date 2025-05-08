@@ -24,7 +24,7 @@ import loaderSrc from "../../Images/loading.jpg";
 import { popupState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
 import { notificationHasUnread } from "../../Recoil/RecoilState";
-
+import { streamUrl } from "../../utils/StaticVariables";
 const WebSocketComponent = ({ data }) => {
   const [ws, setWs] = useState(null);
   const [authRecoil] = useRecoilState(authState);
@@ -41,15 +41,15 @@ const WebSocketComponent = ({ data }) => {
     }
 
     if (data.is_streaming === true) {
-      startStream("useEffect");
+      startStream()
     }
   }, [data]);
 
   const startStream = useCallback(
-    (test) => {
+    () => {
       const token = authRecoil.token;
-      const streamUrl = `wss://16.170.216.227/insighteye/stream?stream_id=${data.id}&token=${token}`;
-      const socket = new WebSocket(streamUrl);
+      const newStreamUrl = `wss://16.170.216.227/insighteye/stream?stream_id=${data.id}&token=${token}`;
+      const socket = new WebSocket(newStreamUrl);
       setLoader(true);
 
       socket.onopen = () => {
@@ -181,7 +181,7 @@ const WebSocketComponent = ({ data }) => {
             <DesBtn
               text="Start Stream"
               noBoarder
-              handle={() => startStream("event")}
+              handle={startStream}
               disabled={loader}
             >
               <PlayCircleFilledIcon />

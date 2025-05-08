@@ -23,7 +23,6 @@ const useFetchStreams = () => {
         loading: false,
         error: null,
       }));
-      console.log("Fetched stream data from hook:", data);
     } catch (err) {
       console.error("Error fetching stream data:", err);
 
