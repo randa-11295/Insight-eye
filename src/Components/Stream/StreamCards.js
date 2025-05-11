@@ -24,7 +24,8 @@ import loaderSrc from "../../Images/loading.jpg";
 import { popupState } from "../../Recoil/RecoilState";
 import { useSetRecoilState } from "recoil";
 import { notificationHasUnread } from "../../Recoil/RecoilState";
-import { streamUrl } from "../../utils/StaticVariables";
+import { StreamURL } from "../../utils/StaticVariables";
+
 const WebSocketComponent = ({ data }) => {
   const [ws, setWs] = useState(null);
   const [authRecoil] = useRecoilState(authState);
@@ -48,7 +49,7 @@ const WebSocketComponent = ({ data }) => {
   const startStream = useCallback(
     () => {
       const token = authRecoil.token;
-      const newStreamUrl = `wss://16.170.216.227/insighteye/stream?stream_id=${data.id}&token=${token}`;
+      const newStreamUrl = StreamURL + `/stream?stream_id=${data.id}&token=${token}`;
       const socket = new WebSocket(newStreamUrl);
       setLoader(true);
 

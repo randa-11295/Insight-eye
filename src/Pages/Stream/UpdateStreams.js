@@ -131,7 +131,7 @@ export default function UpdateStreams({ loading = false, onBack }) {
 
               <div>
                 <Typography variant="h6" sx={textStyle}>
-                  Source:
+                  Type:
                 </Typography>
                 <FormControl
                   fullWidth
