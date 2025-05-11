@@ -6,7 +6,7 @@ const SendOTP = (props) => {
       formik={props.formik}
       title="Send OTP"
       btnText={"Send OTP Code"}
-      des="OTP to your account  to access all features in INSIGHT EYE"
+      des="OTP to your account  to access all features in INSIGHTEYE"
       contentRoute={{ linkText: " Back to login ", route: "/login" }}
       loading={props.loading}
       footerRoute={{

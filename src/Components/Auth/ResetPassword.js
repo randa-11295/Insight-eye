@@ -59,7 +59,7 @@ const ResetPassword = ({ email }) => {
       formik={formik}
       title="Reset Password"
       btnText="Reset"
-      des="Reset your password to access all features in INSIGHT EYE"
+      des="Reset your password to access all features in INSIGHTEYE"
       contentRoute={{ linkText: "Back to log in", route: "/login" }}
       loading={loading}
       footerRoute={{
