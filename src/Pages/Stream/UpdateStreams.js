@@ -20,11 +20,13 @@ import { useRecoilValue } from "recoil";
 import LoadBtn from "../../Components/Reusable/LoadBtn";
 import { useNavigate } from "react-router-dom";
 import CustomBtn from "../../Components/Reusable/CustomBtn";
+import { useSnackbar } from "notistack";
 
 export default function UpdateStreams({ loading = false, onBack }) {
   const selectedData = useRecoilValue(selectedStreamState);
   const navigate = useNavigate();
   const { token } = useRecoilValue(authState);
+  const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = yup.object({
     streams: yup.array().of(
@@ -42,8 +44,7 @@ export default function UpdateStreams({ loading = false, onBack }) {
       streams: selectedData,
     },
     validationSchema: validationSchema,
-    onSubmit: async (values, { resetForm }) => {
-
+    onSubmit: async (values) => {
       // Only keep the fields required by the backend
       const cleanedData = values.streams.map((stream) => ({
         id: stream.id,
@@ -61,11 +62,14 @@ export default function UpdateStreams({ loading = false, onBack }) {
           },
         });
 
-        resetForm();
-        // Optionally show success notification
+        enqueueSnackbar("You update your stream  Successful", {
+          variant: "success",
+        });
       } catch (error) {
-        // Optionally show error notification
-        console.error("Error updating stream:", error);
+        enqueueSnackbar(
+          "Error updating stream:" + error?.message || "some thing want wrong",
+          { variant: "error" }
+        );
       }
     },
   });
