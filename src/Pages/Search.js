@@ -165,9 +165,9 @@ export default function Search() {
               </DesBtn>
 
               {/* ✅ Only show PrintBtn when allData is fully loaded */}
-              {!allDataLoading && (
-                <PrintBtn data={allData} columns={searchFramesColumns} />
-              )}
+              {/* {!allDataLoading && ( */}
+                <PrintBtn loading={allDataLoading} data={allData} columns={searchFramesColumns} />
+              {/* )} */}
             </Stack>
           </Stack>
         </Stack>
