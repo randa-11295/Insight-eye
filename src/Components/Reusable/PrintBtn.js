@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { LoadingButton } from "@mui/lab";
@@ -26,7 +25,7 @@ const PrintBtn = ({ loading, data, columns }) => {
 
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const file = new Blob([excelBuffer], { type: "application/octet-stream" });
-    saveAs(file, "table_data.xlsx");
+    saveAs(file, "frames_search.xlsx");
   };
 
   return (

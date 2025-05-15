@@ -8,10 +8,10 @@ export default function CardSearch({ data }) {
       
         <CardMedia
           component="img"
-          height="200"
+          height="220"
           image={BASE64_IMAGE_PREFIX + data?.frame}
           alt={data?.metadata?.camera_id}
-          sx={{ objectFit: "cover" }}
+          sx={{  objectPosition:"top left" }}
         />
 
         <CardContent>

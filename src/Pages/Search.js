@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
-import {
-  Box,
-  Stack,
-  Typography,
-  Card,
-  Pagination,
-} from "@mui/material";
+import { Box, Stack, Typography, Card, Pagination } from "@mui/material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { useSnackbar } from "notistack";
@@ -163,11 +157,12 @@ export default function Search() {
               <DesBtn text="Filter" handle={openFilter}>
                 <FilterAltOutlinedIcon />
               </DesBtn>
-
-              {/* ✅ Only show PrintBtn when allData is fully loaded */}
-              {/* {!allDataLoading && ( */}
-                <PrintBtn loading={allDataLoading} data={allData} columns={searchFramesColumns} />
-              {/* )} */}
+              <PrintBtn
+                loading={allDataLoading}
+                data={allData}
+                columns={searchFramesColumns}
+              />
+              
             </Stack>
           </Stack>
         </Stack>
@@ -203,13 +198,17 @@ export default function Search() {
 
       {/* 📊 Chart View */}
       {viewMode === "chart" && (
-        <ChartSearch loading={loading} chartData={chartData} />
+        <ChartSearch loading={allDataLoading} chartData={chartData} />
       )}
 
       {/* 📄 Pagination (skip on chart) */}
       {!loading && pages > 1 && viewMode !== "chart" && (
         <Stack justifyContent="center" sx={{ mt: 4 }}>
-          <Pagination count={pages} page={page} onChange={(_, p) => setPage(p)} />
+          <Pagination
+            count={pages}
+            page={page}
+            onChange={(_, p) => setPage(p)}
+          />
         </Stack>
       )}
     </Box>

@@ -42,50 +42,48 @@ const WebSocketComponent = ({ data }) => {
     }
 
     if (data.is_streaming === true) {
-      startStream()
+      startStream();
     }
   }, [data]);
 
-  const startStream = useCallback(
-    () => {
-      const token = authRecoil.token;
-      const newStreamUrl = StreamURL + `/stream?stream_id=${data.id}&token=${token}`;
-      const socket = new WebSocket(newStreamUrl);
-      setLoader(true);
+  const startStream = useCallback(() => {
+    const token = authRecoil.token;
+    const newStreamUrl =
+      StreamURL + `/stream?stream_id=${data.id}&token=${token}`;
+    const socket = new WebSocket(newStreamUrl);
+    setLoader(true);
 
-      socket.onopen = () => {
-        setStreaming(true);
-        setHasUnread(true);
-        setLoader(false);
-      };
+    socket.onopen = () => {
+      setStreaming(true);
+      setHasUnread(true);
+      setLoader(false);
+    };
 
-      socket.onmessage = (event) => {
-        try {
-          const messageObj = JSON.parse(event.data);
-          if (messageObj?.frame) {
-            setImgSrc(BASE64_IMAGE_PREFIX + messageObj.frame);
-          } else {
-            setImgSrc(noImage);
-          }
-        } catch (err) {
-          console.error("Error parsing JSON:", err);
+    socket.onmessage = (event) => {
+      try {
+        const messageObj = JSON.parse(event.data);
+        if (messageObj?.frame) {
+          setImgSrc(BASE64_IMAGE_PREFIX + messageObj.frame);
+        } else {
           setImgSrc(noImage);
         }
-      };
-
-      socket.onerror = (err) => {
+      } catch (err) {
+        console.error("Error parsing JSON:", err);
         setImgSrc(noImage);
-      };
+      }
+    };
 
-      socket.onclose = () => {
-        setStreaming(false);
-        setLoader(false);
-      };
+    socket.onerror = (err) => {
+      setImgSrc(noImage);
+    };
 
-      setWs(socket);
-    },
-    [authRecoil, data]
-  );
+    socket.onclose = () => {
+      setStreaming(false);
+      setLoader(false);
+    };
+
+    setWs(socket);
+  }, [authRecoil, data]);
 
   const stopStream = async () => {
     if (ws) ws.close();
@@ -147,7 +145,7 @@ const WebSocketComponent = ({ data }) => {
           image={loader ? loaderSrc : imgSrc}
           onError={() => setImgSrc(noImage)}
           alt={`Live video from ${data.name}`}
-          sx={{ objectFit: "cover" }}
+          sx={{ objectPosition: "top left" }}
         />
 
         <CardContent
