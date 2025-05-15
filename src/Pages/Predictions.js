@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid, Stack, Card, Typography } from "@mui/material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import PredictionsCard from "../Components/Prediction/PredictionsCard";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -10,6 +10,7 @@ import axios from "axios";
 import { baseURL } from "../utils/StaticVariables";
 import { convertKeysToKebabCase } from "../utils/helpers";
 import SkeletonLoaderReusable from "../Components/Reusable/SkeletonLoaderReusable";
+
 const Predictions = () => {
   const { data: streams, loading, error } = useRecoilValue(streamState);
   const setPopup = useSetRecoilState(popupState);
@@ -29,7 +30,7 @@ const Predictions = () => {
           Authorization: `Bearer ${localStorage.token}`,
         },
       });
-      setPredictions(data?.predictions);
+      setPredictions(data?.predictions || []);
     } catch (err) {
       console.error("Error fetching predictions", err);
       setPredictions([]);
@@ -65,11 +66,28 @@ const Predictions = () => {
       isOpen: true,
       title: "Select Date and Time Range",
       content: (
-        <Filter filter={filter} ref={childRef} changeFilterHandle={setFilter} />
+        <Filter
+          filter={filter}
+          ref={childRef}
+          changeFilterHandle={setFilter}
+        />
       ),
       sendReq: handleClick,
     });
   };
+
+  // Centralized render state logic
+  let renderState = "loading";
+
+  if (error && !loading) {
+    renderState = "error";
+  } else if (!loading && streams?.length === 0) {
+    renderState = "noStreams";
+  } else if (!predictionLoading && predictions?.length === 0) {
+    renderState = "noData";
+  } else if (!predictionLoading && predictions?.length > 0) {
+    renderState = "data";
+  }
 
   return (
     <>
@@ -93,34 +111,36 @@ const Predictions = () => {
         </DesBtn>
       </Stack>
 
-      {error && <Typography color="error">Something went wrong</Typography>}
+      {renderState === "loading" && (
+        <Box display="flex" justifyContent="center" my={4}>
+          <SkeletonLoaderReusable />
+        </Box>
+      )}
 
-      {!loading && streams?.length === 0 && (
+      {renderState === "error" && (
+        <Typography color="error">Something went wrong</Typography>
+      )}
+
+      {renderState === "noStreams" && (
         <Typography color="warning.main" textAlign="center" mt={4}>
           You must add at least one camera stream.
         </Typography>
       )}
 
-      {(loading || predictionLoading) && (
-        <Box display="flex" justifyContent="center" my={4}>
-          <SkeletonLoaderReusable />
-        </Box>
+      {renderState === "noData" && (
+        <Card sx={{ p: 3, my: 4, textAlign: "center" }}>
+          No prediction data found.
+        </Card>
       )}
-  
-      {!predictionLoading && predictions?.length > 0 && (
+
+      {renderState === "data" && (
         <Grid container spacing={3}>
-          {predictions.map((item, index) => (
+          {predictions.map((item) => (
             <Grid item xs={12} sm={6} key={item.camera_id}>
               <PredictionsCard data={item} />
             </Grid>
           ))}
         </Grid>
-      )}
-
-      {!predictionLoading && predictions?.length === 0 && (
-        <Typography textAlign="center" mt={4}>
-          No prediction data found.
-        </Typography>
       )}
     </>
   );

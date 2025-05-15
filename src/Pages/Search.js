@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
-import { Box, Stack, Typography, Card, Pagination } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Typography,
+  Card,
+  Pagination,
+} from "@mui/material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { useSnackbar } from "notistack";
@@ -34,60 +40,6 @@ const buildParams = ({ filter, page, limit }) => ({
   per_page: limit,
 });
 
-// --- Custom hook encapsulating all data fetching + state ---
-function useSearchResults({ filter, page, limit, token }) {
-  const [paginated, setPaginated] = useState([]);
-  const [allData, setAllData] = useState([]);
-  const [chartData, setChartData] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [pages, setPages] = useState(0);
-  const [loading, setLoading] = useState(true);
-
-  const fetcher = useCallback(async () => {
-    setLoading(true);
-    const params = buildParams({ filter, page, limit });
-
-    try {
-      // 1️⃣ paginated fetch
-      const { data: pageRes } = await axios.get(`${baseURL}search_results`, {
-        params,
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const { data: pageData, total_count, num_of_pages } = pageRes;
-      setPaginated(pageData);
-      setTotal(total_count);
-      setPages(num_of_pages);
-
-      // 2️⃣ full fetch for chart & download
-      const { data: fullRes } = await axios.get(`${baseURL}search_results`, {
-        params: { ...params, page: 1, per_page: total_count },
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setAllData(fullRes.data);
-
-      // 3️⃣ derive chart payload
-      setChartData(
-        fullRes.data.map((el) => ({
-          camera_id: el.metadata?.name,
-          date: el.metadata?.date || 0,
-          time: el.metadata?.time || 0,
-          person_count: el.metadata?.person_count || 0,
-        }))
-      );
-    } catch (err) {
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [filter, page, limit, token]);
-
-  useEffect(() => {
-    fetcher().catch(() => {}); // let caller handle errors
-  }, [fetcher]);
-
-  return { paginated, allData, chartData, total, pages, loading };
-}
-
 export default function Search() {
   const setPopup = useSetRecoilState(popupState);
   const { token } = useRecoilValue(authState);
@@ -97,20 +49,72 @@ export default function Search() {
   // UI state
   const [filter, setFilter] = useState({});
   const [page, setPage] = useState(1);
-  const [limit] = useState(18);
+  const [limit] = useState(8);
   const [viewMode, setViewMode] = useState("cards");
 
-  // fetch data
-  const { paginated, allData, chartData, total, pages, loading } =
-    useSearchResults({ filter, page, limit, token });
+  // Data states
+  const [paginated, setPaginated] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [pages, setPages] = useState(0);
+  const [loading, setLoading] = useState(true); // For paginated
+  const [allDataLoading, setAllDataLoading] = useState(true); // For full data (download/chart)
 
-  // handle toggle between views
+  // --- Fetching Logic ---
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setAllDataLoading(true);
+
+    const params = buildParams({ filter, page, limit });
+
+    try {
+      // 1️⃣ Fetch paginated data
+      const { data: pageRes } = await axios.get(`${baseURL}search_results`, {
+        params,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const { data: pageData, total_count, num_of_pages } = pageRes;
+      setPaginated(pageData);
+      setTotal(total_count);
+      setPages(num_of_pages);
+      setLoading(false); // paginated fetch complete
+
+      // 2️⃣ Fetch all data for chart and download
+      const { data: fullRes } = await axios.get(`${baseURL}search_results`, {
+        params: { ...params, page: 1, per_page: total_count },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setAllData(fullRes.data);
+
+      // 3️⃣ Prepare chart data
+      setChartData(
+        fullRes.data.map((el) => ({
+          camera_id: el.metadata?.name,
+          date: el.metadata?.date || 0,
+          time: el.metadata?.time || 0,
+          person_count: el.metadata?.person_count || 0,
+        }))
+      );
+    } catch (err) {
+      enqueueSnackbar("Failed to fetch data", { variant: "error" });
+    } finally {
+      setAllDataLoading(false); // full data fetch complete
+    }
+  }, [filter, page, limit, token, enqueueSnackbar]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  // 🔁 View toggle
   const onViewChange = (_, mode) => {
-    if (!mode) return;
-    setViewMode(mode);
+    if (mode) setViewMode(mode);
   };
 
-  // open filter dialog
+  // 🧭 Open filter popup
   const openFilter = () => {
     setPopup({
       isOpen: true,
@@ -126,7 +130,7 @@ export default function Search() {
     });
   };
 
-  // catch and show errors from hook
+  // ⚠️ Notify when no results
   useEffect(() => {
     if (!loading && paginated.length === 0 && total !== 0) {
       enqueueSnackbar("No results found", { variant: "warning" });
@@ -134,7 +138,7 @@ export default function Search() {
   }, [loading, paginated, total, enqueueSnackbar]);
 
   return (
-    <Box p={2}>
+    <Box>
       {!loading && (
         <Stack my={4} spacing={2}>
           <Typography variant="body1" textAlign={{ xs: "center", md: "left" }}>
@@ -159,12 +163,17 @@ export default function Search() {
               <DesBtn text="Filter" handle={openFilter}>
                 <FilterAltOutlinedIcon />
               </DesBtn>
-              <PrintBtn data={allData} columns={searchFramesColumns} />
+
+              {/* ✅ Only show PrintBtn when allData is fully loaded */}
+              {!allDataLoading && (
+                <PrintBtn data={allData} columns={searchFramesColumns} />
+              )}
             </Stack>
           </Stack>
         </Stack>
       )}
 
+      {/* 🔳 Cards View */}
       {viewMode === "cards" &&
         (loading ? (
           <SkeletonLoaderReusable />
@@ -180,6 +189,7 @@ export default function Search() {
           </Card>
         ))}
 
+      {/* 🧾 Table View */}
       {viewMode === "table" && (
         <TableReusable
           print
@@ -191,17 +201,15 @@ export default function Search() {
         />
       )}
 
+      {/* 📊 Chart View */}
       {viewMode === "chart" && (
         <ChartSearch loading={loading} chartData={chartData} />
       )}
 
+      {/* 📄 Pagination (skip on chart) */}
       {!loading && pages > 1 && viewMode !== "chart" && (
         <Stack justifyContent="center" sx={{ mt: 4 }}>
-          <Pagination
-            count={pages}
-            page={page}
-            onChange={(_, p) => setPage(p)}
-          />
+          <Pagination count={pages} page={page} onChange={(_, p) => setPage(p)} />
         </Stack>
       )}
     </Box>
