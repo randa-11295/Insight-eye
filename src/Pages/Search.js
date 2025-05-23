@@ -77,7 +77,7 @@ export default function Search() {
 
       // 2️⃣ Fetch all data for chart and download
       const { data: fullRes } = await axios.get(`${baseURL}search_results`, {
-        params: { ...params, page: 1, per_page: total_count },
+        params: { ...params, page: 1, per_page: limit, full_data: true },
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -162,7 +162,6 @@ export default function Search() {
                 data={allData}
                 columns={searchFramesColumns}
               />
-              
             </Stack>
           </Stack>
         </Stack>
